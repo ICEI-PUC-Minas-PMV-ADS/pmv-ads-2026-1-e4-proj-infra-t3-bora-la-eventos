@@ -1,8 +1,9 @@
 # Introdução
 
 Com o crescimento da oferta de eventos presenciais, como festas, shows, apresentações culturais e encontros em bares, observa-se que a divulgação dessas atividades ocorre de forma fragmentada em múltiplas plataformas digitais, como redes sociais, grupos de mensagens e páginas isoladas. Esse cenário dificulta que potenciais participantes encontrem opções de lazer de forma simples e centralizada, especialmente em contextos urbanos onde há grande volume de atividades acontecendo simultaneamente.
-Nesse contexto, surge a necessidade de uma solução que facilite a conexão entre estabelecimentos e organizadores de eventos e o público interessado, considerando critérios como localização, data e tipo de atividade.
-O presente projeto tem como objetivo desenvolver um software que auxilie na descoberta de eventos locais, promovendo maior visibilidade para organizadores e facilitando o acesso à informação por parte dos usuários.
+
+Nesse contexto, surge a necessidade de uma solução que facilite a conexão entre estabelecimentos e organizadores de eventos e o público interessado, considerando critérios como localização, data e tipo de atividade. O presente projeto tem como objetivo desenvolver um software que auxilie na descoberta de eventos locais, promovendo maior visibilidade para organizadores e facilitando o acesso à informação por parte dos usuários.
+
 A proposta se justifica pela crescente dependência de meios digitais para organização da vida social e pelo desafio enfrentado principalmente por públicos mais jovens em encontrar opções de lazer de forma eficiente.
 O público-alvo da solução inclui frequentadores de eventos e estabelecimentos que desejam divulgar suas atividades de maneira mais estruturad
 
