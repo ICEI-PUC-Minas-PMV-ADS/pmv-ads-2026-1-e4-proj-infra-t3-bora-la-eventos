@@ -2,25 +2,15 @@
 
 <span style="color:red">Pré-requisitos: <a href="1-Documentação de Contexto.md"> Documentação de Contexto</a></span>
 
-Definição do problema e ideia de solução a partir da perspectiva do usuário. É composta pela definição do  diagrama de personas, histórias de usuários, requisitos funcionais e não funcionais além das restrições do projeto.
-
-Apresente uma visão geral do que será abordado nesta parte do documento, enumerando as técnicas e/ou ferramentas utilizadas para realizar a especificações do projeto
+Esta seção detalha a definição do problema e a proposta de solução sob a ótica dos usuários. O documento abrange o mapeamento de personas, a redação de histórias de usuários, a elicitação de requisitos funcionais e não funcionais, além das restrições tecnológicas. Para a elaboração desta especificação, foram utilizadas técnicas de design thinking para criação de perfis, o método MoSCoW para priorização de requisitos e a modelagem UML para o diagrama de casos de uso
 
 ## Personas
 
-Pedro Paulo tem 26 anos, é arquiteto recém-formado e autônomo. Pensa em se desenvolver profissionalmente através de um mestrado fora do país, pois adora viajar, é solteiro e sempre quis fazer um intercâmbio. Está buscando uma agência que o ajude a encontrar universidades na Europa que aceitem alunos estrangeiros.
+**Pedro Paulo:** 26 anos, arquiteto recém-formado e autônomo. Adora viajar e é solteiro. Sente dificuldade em encontrar eventos culturais e opções de lazer em sua cidade de forma centralizada. Busca uma ferramenta que o ajude a descobrir o que fazer no tempo livre sem precisar filtrar dezenas de redes sociais.
 
-Enumere e detalhe as personas da sua solução. Para tanto, baseie-se tanto nos documentos disponibilizados na disciplina e/ou nos seguintes links:
+**Mariana Costa:** 34 anos, proprietária de um bar com música ao vivo. Precisa divulgar a programação semanal do seu estabelecimento para atrair novos clientes, mas sente que suas postagens em redes sociais comuns possuem alcance limitado pelos algoritmos. Busca uma plataforma onde seu público-alvo já esteja procurando por eventos.
 
-> **Links Úteis**:
-> - [Rock Content](https://rockcontent.com/blog/personas/)
-> - [Hotmart](https://blog.hotmart.com/pt-br/como-criar-persona-negocio/)
-> - [O que é persona?](https://resultadosdigitais.com.br/blog/persona-o-que-e/)
-> - [Persona x Público-alvo](https://flammo.com.br/blog/persona-e-publico-alvo-qual-a-diferenca/)
-> - [Mapa de Empatia](https://resultadosdigitais.com.br/blog/mapa-da-empatia/)
-> - [Mapa de Stalkeholders](https://www.racecomunicacao.com.br/blog/como-fazer-o-mapeamento-de-stakeholders/)
->
-Lembre-se que você deve ser enumerar e descrever precisamente e personalizada todos os clientes ideais que sua solução almeja.
+**Lucas Silva:** 21 anos, estudante universitário. Utiliza o celular para organizar toda sua vida social. Valoriza a rapidez e quer encontrar festas e shows próximos à sua localização atual, podendo interagir com o que encontra através de curtidas e comentários.
 
 ## Histórias de Usuários
 
@@ -28,17 +18,13 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 
 |EU COMO... `PERSONA`| QUERO/PRECISO ... `FUNCIONALIDADE` |PARA ... `MOTIVO/VALOR`                 |
 |--------------------|------------------------------------|----------------------------------------|
-|Usuário do sistema  | Registrar minhas tarefas           | Não esquecer de fazê-las               |
-|Administrador       | Alterar permissões                 | Permitir que possam administrar contas |
+|Frequentador  | Visualizar eventos em um mapa           | Identificar atividades de lazer próximas à minha localização |
+|Frequentador       | Filtrar eventos por categoria (show, teatro, bar) | Encontrar rapidamente experiências que combinem com meu gosto |
+| Frequentador  | Curtir e comentar em eventos | Interagir com a comunidade e salvar interesses para consulta |
+| Organizador | Cadastrar e editar informações de eventos | Divulgar a agenda do meu estabelecimento de forma estruturada | 
+| Organizador | Visualizar o engajamento (curtidas/comentários) | Entender o interesse do público nas atividades propostas |
+| Administrador | Moderar comentários e excluir eventos impróprios | Manter a integridade e segurança da plataforma |
 
-Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão e elicitação dos requisitos funcionais e não funcionais da sua aplicação. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
-
-> **Links Úteis**:
-> - [Histórias de usuários com exemplos e template](https://www.atlassian.com/br/agile/project-management/user-stories)
-> - [Como escrever boas histórias de usuário (User Stories)](https://medium.com/vertice/como-escrever-boas-users-stories-hist%C3%B3rias-de-usu%C3%A1rios-b29c75043fac)
-> - [User Stories: requisitos que humanos entendem](https://www.luiztools.com.br/post/user-stories-descricao-de-requisitos-que-humanos-entendem/)
-> - [Histórias de Usuários: mais exemplos](https://www.reqview.com/doc/user-stories-example.html)
-> - [9 Common User Story Mistakes](https://airfocus.com/blog/user-story-mistakes/)
 
 ## Requisitos
 
@@ -50,30 +36,30 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade | Responsável |
 |------|-----------------------------------------|----|----|
-|RF-001| Permitir que o usuário cadastre tarefas | ALTA | Pedro |
-|RF-002| Emitir um relatório de tarefas no mês   | MÉDIA | João |
+|RF-001 |Permitir o cadastro e login de usuários (comum e organizador) |ALTA | *A definir* |
+| RF-002 | Permitir que organizadores cadastrem eventos com data, hora e local | ALTA |  *A definir* |
+| RF-003| Exibir feed de eventos disponíveis com base na data e relevância| ALTA| *A definir*|
+| RF-004| Implementar busca de eventos por nome ou categoria| ALTA| *A definir* |
+| RF-005| Permitir a edição e exclusão de eventos pelo organizador| ALTA| *A definir*|
+| RF-006| Painel de gestão para o estabelecimento gerenciar seu perfil| ALTA| *A definir* |
+|RF-007 |Permitir que o usuário curta um evento |MÉDIA |*A definir* |
+|RF-008|Permitir a inserção de comentários nas páginas de eventos|MÉDIA|*A definir* |
+|RF-009|Implementar visualização de eventos em mapa integrado|MÉDIA|*A definir* |
+|RF-010|Disponibilizar filtros por geolocalização (raio de distância)|MÉDIA|*A definir* |
+| RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
+| RF-012| Implementar sistema de denúncia de eventos ou comentários| BAIXA| *A definir* |
 
 ### Requisitos não Funcionais
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
-|RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel | MÉDIA | 
-|RNF-002| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
+|RNF-001| O frontend de gestão deve ser responsivo para dispositivos móveis| ALTA|
+|RNF-002 |A interface deve ser desenvolvida em Next.js com TypeScript |ALTA |
+|RNF-003 |As senhas devem ser armazenadas utilizando criptografia forte (hash) |ALTA |
+|RNF-004| O backend deve processar requisições em no máximo 3 segundos| MÉDIA
+|RNF-005 |O sistema deve utilizar arquitetura distribuída para suportar escalabilidade |MÉDIA |
+|RNF-006 |A aplicação deve garantir 99% de disponibilidade online |BAIXA |
 
-Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
-
-- [Requisitos Funcionais
- (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
- correspondem a uma funcionalidade que deve estar presente na
-  plataforma (ex: cadastro de usuário).
-- [Requisitos Não Funcionais
-  (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
-  correspondem a uma característica técnica, seja de usabilidade,
-  desempenho, confiabilidade, segurança ou outro (ex: suporte a
-  dispositivos iOS e Android).
-Lembre-se que cada requisito deve corresponder à uma e somente uma
-característica alvo da sua solução. Além disso, certifique-se de que
-todos os aspectos capturados nas Histórias de Usuário foram cobertos.
 
 ## Restrições
 
@@ -81,16 +67,12 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 
 |ID| Restrição                                             |
 |--|-------------------------------------------------------|
-|01| O projeto deverá ser entregue até o final do semestre |
-|02| Não pode ser desenvolvido um módulo de backend        |
+| 01 | O projeto deve utilizar Node.js ou .NET no ecossistema do backend| 
+| 02 | O frontend administrativo deve ser restrito ao uso de Next.js e TypeScript |
+| 03 | Não poderá ser desenvolvido um módulo de backend que não siga os princípios de sistemas distribuídos |
 
-Enumere as restrições à sua solução. Lembre-se de que as restrições geralmente limitam a solução candidata.
 
-> **Links Úteis**:
-> - [O que são Requisitos Funcionais e Requisitos Não Funcionais?](https://codificar.com.br/requisitos-funcionais-nao-funcionais/)
-> - [O que são requisitos funcionais e requisitos não funcionais?](https://analisederequisitos.com.br/requisitos-funcionais-e-requisitos-nao-funcionais-o-que-sao/)
-
-## Diagrama de Casos de Uso
+## Diagrama de Casos de Uso (WiP)
 
 O diagrama de casos de uso é o próximo passo após a elicitação de requisitos, que utiliza um modelo gráfico e uma tabela com as descrições sucintas dos casos de uso e dos atores. Ele contempla a fronteira do sistema e o detalhamento dos requisitos funcionais com a indicação dos atores, casos de uso e seus relacionamentos. 
 
@@ -104,11 +86,11 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de
 > - [Diagrams](https://app.diagrams.net/)
 
 
-# Gerenciamento de Projeto
+# Gerenciamento de Projeto (WiP)
 
 De acordo com o PMBoK v6 as dez áreas que constituem os pilares para gerenciar projetos, e que caracterizam a multidisciplinaridade envolvida, são: Integração, Escopo, Cronograma (Tempo), Custos, Qualidade, Recursos, Comunicações, Riscos, Aquisições, Partes Interessadas. Para desenvolver projetos um profissional deve se preocupar em gerenciar todas essas dez áreas. Elas se complementam e se relacionam, de tal forma que não se deve apenas examinar uma área de forma estanque. É preciso considerar, por exemplo, que as áreas de Escopo, Cronograma e Custos estão muito relacionadas. Assim, se eu amplio o escopo de um projeto eu posso afetar seu cronograma e seus custos.
 
-## Gerenciamento de Tempo
+## Gerenciamento de Tempo (WiP)
 
 Com diagramas bem organizados que permitem gerenciar o tempo nos projetos, o gerente de projetos agenda e coordena tarefas dentro de um projeto para estimar o tempo necessário de conclusão.
 
@@ -118,7 +100,7 @@ O gráfico de Gantt ou diagrama de Gantt também é uma ferramenta visual utiliz
 
 ![Gráfico de Gantt](img/02-grafico-gantt.png)
 
-## Gerenciamento de Equipe
+## Gerenciamento de Equipe (WiP)
 
 O gerenciamento adequado de tarefas contribuirá para que o projeto alcance altos níveis de produtividade. Por isso, é fundamental que ocorra a gestão de tarefas e de pessoas, de modo que os times envolvidos no projeto possam ser facilmente gerenciados. 
 
