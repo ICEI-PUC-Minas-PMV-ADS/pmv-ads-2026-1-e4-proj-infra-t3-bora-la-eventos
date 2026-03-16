@@ -100,9 +100,26 @@ O gráfico de Gantt ou diagrama de Gantt também é uma ferramenta visual utiliz
 
 ![Gráfico de Gantt](img/02-grafico-gantt.png)
 
-## Gerenciamento de Equipe (WiP)
+## Gerenciamento de Equipe
 
-O gerenciamento adequado de tarefas contribuirá para que o projeto alcance altos níveis de produtividade. Por isso, é fundamental que ocorra a gestão de tarefas e de pessoas, de modo que os times envolvidos no projeto possam ser facilmente gerenciados. 
+Para assegurar a produtividade e organização do projeto, a equipe foi dividida em papéis e responsabilidades, simulando a prática adotada no mercado. A composição da equipe é a seguinte:
 
-![Simple Project Timeline](img/02-project-timeline.png)
+- **Scrum Master:** Michelle Lourenço Mendonça
+- **Product Owner:** Willy Christian de Oliveira Teixeira
+- **Time de Desenvolvimento:** Michelle Lourenço Mendonça e Samuel Ribeiro
+- **Equipe de Design:** Gustavo Viana e Miréia Torres Lima
+
+Contudo, como se trata de um trabalho acadêmico, todos os membros atuarão de forma colaborativa em todas as atividades, e a divisão formal de papéis existe apenas como exercício didático.
+
+O acompanhamento das entregas será feito por meio do cronograma de atividades (timeline), que distribui claramente os entregáveis em intervalos de datas predefinidos. O cronograma contempla:
+
+- **Tarefa 1 (09/02 a 08/03):** Documento de Contexto e Especificação do Problema.
+- **Tarefa 2 (09/03 a 12/04):** Metodologia, Arquitetura da Solução, Projeto de Interface, Programação de Funcionalidades e Dashboards.
+- **Tarefa 3 (13/04 a 10/05):** Programação de Funcionalidades, Planos e Registros de Testes de Funcionalidade e Usabilidade.
+- **Tarefa 4 (11/05 a 31/05):** Continuidade na Programação de Funcionalidades, Planos e Registros de Testes.
+- **Tarefa 5 (01/06 a 21/06):** Considerações Finais, Vídeo + PDF da Apresentação Final e Realização da Apresentação.
+
+A comunicação da equipe ocorrerá por WhatsApp e reuniões no Discord, garantindo alinhamentos rápidos e eficientes. Além disso, o uso do GitHub Projects permitirá controle e transparência das tarefas. Essa organização visual e temporal assegura que o grupo acompanhe o progresso, mantenha prazos e conclua as entregas conforme os objetivos definidos.
+
+![Timeline do Projeto](img/02-project-timeline.png)
 
