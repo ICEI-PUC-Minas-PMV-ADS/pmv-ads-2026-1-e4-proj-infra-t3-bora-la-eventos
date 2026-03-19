@@ -9,6 +9,62 @@ Definição de como o software é estruturado em termos dos componentes que faze
 ## Diagrama de Classes
 
 O diagrama de classes ilustra graficamente como será a estrutura do software, e como cada uma das classes da sua estrutura estarão interligadas. Essas classes servem de modelo para materializar os objetos que executarão na memória.
+```mermaid
+classDiagram
+
+class User {
+  +string id
+  +string name
+  +number document
+  +string email
+  +string password
+  +string role
+  +Date createdAt
+  +Date updatedAt
+  +CreateUser()
+  +GetUserById(int id)
+  +GetUsers(int range, int page)
+  +UpdateUser(int id)
+}
+
+class Event {
+  +string id
+  +string title
+  +string description
+  +Collection address
+  +string location
+  +Date date
+  +string organizerId
+  +int capacity
+  +List<string> participants
+  +Date createdAt
+  +Date updatedAt
+  +CreateEvent()
+  +GetEventById(int id)
+  +ListEvents(int range, int page)
+  +UpdateEvent(int id)
+  +DeleteEvent(int id)
+}
+
+class Review {
+  +string id
+  +string userId
+  +string eventId
+  +int rating
+  +string comment
+  +Date createdAt
+  +CreateReview()
+  +GetReviewById(int id)
+  +ListReviews(int range, int page)
+  +UpdateReview(int id)
+  +DeleteReview(int id)
+}
+
+User "1" --> "many" Event : organizes
+User "many" --> "many" Event : participates
+Event "1" --> "many" Review : receives
+User "1" --> "many" Review : writes
+```
 
 As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de Classes”.
 
