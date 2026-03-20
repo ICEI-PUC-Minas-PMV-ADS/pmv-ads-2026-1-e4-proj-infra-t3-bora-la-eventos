@@ -25,7 +25,7 @@
       "package": "com.puc_studies.borala",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyA6-9uodO5n96PoJhNxoXu0fyWfB4DOfTM"
+          "apiKey": ""
         }
       }
     },
