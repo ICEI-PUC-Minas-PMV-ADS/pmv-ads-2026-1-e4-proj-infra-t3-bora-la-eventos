@@ -42,9 +42,9 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 | RF-004| Implementar busca de eventos por nome ou categoria| ALTA| *A definir* |
 | RF-005| Permitir a edição e exclusão de eventos pelo organizador| ALTA| *A definir*|
 | RF-006| Painel de gestão para o estabelecimento gerenciar seu perfil| ALTA| *A definir* |
-|RF-007 |Permitir que o usuário curta um evento |MÉDIA |*A definir* |
-|RF-008|Permitir a inserção de comentários nas páginas de eventos|MÉDIA|*A definir* |
-|RF-009|Implementar visualização de eventos em mapa integrado|MÉDIA|*A definir* |
+|RF-007 |Permitir que o usuário curta um evento |BAIXA |*A definir* |
+|RF-008|Permitir a inserção de comentários nas páginas de eventos|BAIXA|*A definir* |
+|RF-009|Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
 |RF-010|Disponibilizar filtros por geolocalização (raio de distância)|MÉDIA|*A definir* |
 | RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
 | RF-012| Implementar sistema de denúncia de eventos ou comentários| BAIXA| *A definir* |
