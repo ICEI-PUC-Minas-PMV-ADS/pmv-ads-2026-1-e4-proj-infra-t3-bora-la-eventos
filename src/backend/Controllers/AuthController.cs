@@ -21,6 +21,7 @@ namespace AuthControllerAPI
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
     {
+            Console.WriteLine("Entrou aqui");
             try
             {
                 await _users.InsertOneAsync(user);
