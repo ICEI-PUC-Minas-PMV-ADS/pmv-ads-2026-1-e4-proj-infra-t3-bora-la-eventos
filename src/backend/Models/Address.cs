@@ -1,4 +1,4 @@
-namespace Models
+namespace BoraLaBackend.Models
 {
     public class Address
     {

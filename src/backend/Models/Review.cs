@@ -2,7 +2,7 @@ using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Models
+namespace BoraLaBackend.Models
 {
     public class Review
     {
