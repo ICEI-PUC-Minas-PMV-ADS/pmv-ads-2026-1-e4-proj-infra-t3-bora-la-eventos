@@ -27,7 +27,7 @@ namespace Models
         public int Capacity { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> Participants { get; set; } = new List<string>();
+        public List<ObjectId> Participants { get; set; } = new List<ObjectId>();
 
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime CreatedAt { get; set; }

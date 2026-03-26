@@ -1,10 +1,10 @@
 using BoraLaBackend.Infrastructure.Database;
-using BoraLaBackend.Models;
 using BoraLaBackend.Feature.Authentication.DTO;
 using BoraLaBackend.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Models;
 
 namespace BoraLaBackend.Feature.Authentication
 {
