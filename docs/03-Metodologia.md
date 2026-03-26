@@ -47,8 +47,19 @@ A ferramenta de controle de versão adotada no projeto foi o [Git](https://git-s
 |---|---|
 | `main` | Versão estável já testada do software |
 | `develop` | Branch principal de desenvolvimento; base para features e fixes |
-| `feat/[nome-da-issue]` | Desenvolvimento de novas funcionalidades, criada a partir de `develop` |
-| `fix/[nome-da-issue]` | Correção de erros, criada a partir de `develop` |
+| `feat/[RFXXX]-[ID do card]-[ID do sub-item]` | Desenvolvimento de novas funcionalidades, criada a partir de `develop` |
+| `fix/[RFXXX]-[ID do card]-[ID do sub-item]` | Correção de erros, criada a partir de `develop` |
+
+O nome da branch é composto por:
+- **TAG**: `feat` para funcionalidades ou `fix` para correções
+- **RFXXX**: identificador do requisito funcional relacionado (ex: `RF001`)
+- **ID do card**: número do card no GitHub Issues correspondente ao requisito (ex: `15`)
+- **ID do sub-item**: número do sub-issue no GitHub, quando a branch se refere a uma tarefa específica dentro do card (ex: `52`). Omitir se não houver sub-issue.
+
+Exemplos:
+- `feat/RF001-15-52` — funcionalidade do RF-001, card #15, sub-issue #52
+- `feat/RF001-15` — funcionalidade do RF-001, card #15, sem sub-issue
+- `fix/RF003-20-61` — correção do RF-003, card #20, sub-issue #61
 
 O fluxo segue o seguinte padrão: branches de feature e fix são criadas a partir de `develop`, e após conclusão são mescladas de volta em `develop` via Pull Request. Periodicamente, `develop` é mesclada em `main` após validação.
 

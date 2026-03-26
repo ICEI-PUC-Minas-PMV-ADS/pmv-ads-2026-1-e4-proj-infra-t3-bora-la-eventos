@@ -1,14 +1,16 @@
+using BoraLaBackend.Infrastructure.Database;
 using MongoDB.Driver;
-using MongoDBSettings;
+using BoraLaBackend.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddControllers();
-
 // configuring OpenAPI (Swegger)
 builder.Services.AddOpenApi();
+
+// Inject dependencies
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 // Configure MongoDB
 builder.Services.Configure<MongoSettings>(
