@@ -82,8 +82,8 @@ User "1" --> "many" Event : organizes
 User "many" --> "many" Event : participates
 Event "1" --> "1" Address : receives
 Event "many" --> "many" Activity : receives
-Event "1" --> "many" Review : receives
-User "1" --> "many" Review : writes
+Event "1" --> "many" Comment : receives
+User "1" --> "many" Comment : writes
 ```
 
 ## Documentação do Banco de Dados MongoDB
