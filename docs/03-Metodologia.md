@@ -3,85 +3,153 @@
 
 <span style="color:red">Pré-requisitos: <a href="2-Especificação do Projeto.md"> Documentação de Especificação</a></span>
 
-Descreva aqui a metodologia de trabalho do grupo para atacar o problema. Definições sobre os ambiente de trabalho utilizados pela  equipe para desenvolver o projeto. Abrange a relação de ambientes utilizados, a estrutura para gestão do código fonte, além da definição do processo e ferramenta através dos quais a equipe se organiza (Gestão de Times).
+Está descrito aqui a metodologia de trabalho do grupo para atacar o problema. Definições sobre os ambientes de trabalho utilizados pela equipe para desenvolver o projeto. Abrange a relação de ambientes utilizados, a estrutura para gestão do código fonte, além da definição do processo e ferramentas através dos quais a equipe se organiza.
 
 ## Relação de Ambientes de Trabalho
 
-Os artefatos do projeto são desenvolvidos a partir de diversas plataformas e a relação dos ambientes com seu respectivo propósito deverá ser apresentada em uma tabela que especifica que detalha Ambiente, Plataforma e Link de Acesso. 
-Nota: Vide documento modelo do estudo de caso "Portal de Notícias" e defina também os ambientes e frameworks que serão utilizados no desenvolvimento de aplicações móveis.
+| Ambiente | Plataforma | Link de Acesso |
+|---|---|---|
+| Repositório de código fonte | GitHub | [github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2026-1-e4-proj-infra-t3-bora-la-eventos](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2026-1-e4-proj-infra-t3-bora-la-eventos) |
+| Gerenciamento do projeto | GitHub Projects | Disponível no repositório |
+| Comunicação da equipe | WhatsApp / Discord | — |
+| Editor de código | Visual Studio Code | [code.visualstudio.com](https://code.visualstudio.com) |
+| IDE Backend | Visual Studio / Rider | — |
+| Banco de Dados | MongoDB Atlas | [mongodb.com/atlas](https://www.mongodb.com/atlas) |
+| Design e Wireframes | Figma | [figma.com](https://www.figma.com) |
+| Diagramas | draw.io (diagrams.net) | [diagrams.net](https://www.diagrams.net) |
+
+### Ambientes de Desenvolvimento
+
+**Backend:**
+O backend é desenvolvido em C# com .NET, utilizando o Visual Studio ou Visual Studio Code como editor. O banco de dados utilizado é o MongoDB, acessado via MongoDB Driver para .NET.
+
+**Frontend Web:**
+A aplicação web administrativa é desenvolvida em Next.js com TypeScript, utilizando o Visual Studio Code como editor principal.
+
+**Mobile:**
+O aplicativo mobile é desenvolvido em React Native, também com Visual Studio Code como editor principal.
+
+### Ambiente de Testes
+
+Os testes são realizados localmente em cada máquina dos desenvolvedores. O mobile é testado via emuladores Android/iOS e dispositivos físicos.
+
+### Ambiente de Produção
+
+A definição do ambiente de produção será realizada ao longo do projeto, com possibilidade de uso de serviços de nuvem compatíveis com .NET e MongoDB.
 
 ## Controle de Versão
 
-A ferramenta de controle de versão adotada no projeto foi o
-[Git](https://git-scm.com/), sendo que o [Github](https://github.com)
-foi utilizado para hospedagem do repositório.
+A ferramenta de controle de versão adotada no projeto foi o [Git](https://git-scm.com/), sendo que o [GitHub](https://github.com) foi utilizado para hospedagem do repositório.
 
-O projeto segue a seguinte convenção para o nome de branches:
+### Estrutura de Branches
 
-- `main`: versão estável já testada do software
-- `unstable`: versão já testada do software, porém instável
-- `testing`: versão em testes do software
-- `dev`: versão de desenvolvimento do software
+| Branch | Descrição |
+|---|---|
+| `main` | Versão estável já testada do software |
+| `develop` | Branch principal de desenvolvimento; base para features e fixes |
+| `feat/[nome-da-issue]` | Desenvolvimento de novas funcionalidades, criada a partir de `develop` |
+| `fix/[nome-da-issue]` | Correção de erros, criada a partir de `develop` |
 
-Quanto à gerência de issues, o projeto adota a seguinte convenção para
-etiquetas:
+O fluxo segue o seguinte padrão: branches de feature e fix são criadas a partir de `develop`, e após conclusão são mescladas de volta em `develop` via Pull Request. Periodicamente, `develop` é mesclada em `main` após validação.
 
+### Gerenciamento de Issues
+
+**Tipos de issue:**
+- `bug`: problema em uma funcionalidade existente
+- `feature`: nova funcionalidade a ser introduzida
+- `task`: tarefa geral, como configuração de ambiente ou organização de arquivos
 - `documentation`: melhorias ou acréscimos à documentação
-- `bug`: uma funcionalidade encontra-se com problemas
-- `enhancement`: uma funcionalidade precisa ser melhorada
-- `feature`: uma nova funcionalidade precisa ser introduzida
 
-Discuta como a configuração do projeto foi feita na ferramenta de versionamento escolhida. Exponha como a gerência de tags, merges, commits e branchs é realizada. Discuta como a gerência de issues foi realizada.
-
-> **Links Úteis**:
-> - [Microfundamento: Gerência de Configuração](https://pucminas.instructure.com/courses/87878/)
-> - [Tutorial GitHub](https://guides.github.com/activities/hello-world/)
-> - [Git e Github](https://www.youtube.com/playlist?list=PLHz_AreHm4dm7ZULPAmadvNhH6vk9oNZA)
->  - [Comparando fluxos de trabalho](https://www.atlassian.com/br/git/tutorials/comparing-workflows)
-> - [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)
-> - [The gitflow workflow - in less than 5 mins](https://www.youtube.com/watch?v=1SXpE08hvGs)
+**Categorias de atividades:**
+- **Arquitetura**: modelagem do sistema, diagramas e estrutura da aplicação
+- **Desenvolvimento**: implementação de código e integração
+- **Documentação**: atualização de documentos no GitHub
+- **Gestão de Projeto**: organização de sprints, reuniões e acompanhamento
+- **Qualidade**: testes de software e validação antes da entrega
+- **UX/UI**: atividades voltadas para design e experiência do usuário
 
 ## Gerenciamento de Projeto
 
 ### Divisão de Papéis
 
-Apresente a divisão de papéis entre os membros do grupo.
+A equipe utiliza metodologias ágeis, tendo escolhido o **Scrum** como base para definição do processo de desenvolvimento. A equipe está organizada da seguinte maneira:
 
-Exemplificação: A equipe utiliza metodologias ágeis, tendo escolhido o Scrum como base para definição do processo de desenvolvimento. A equipe está organizada da seguinte maneira:
-- Scrum Master: Felipe Domingos;
-- Product Owner: Rommel Carneiro;
-- Equipe de Desenvolvimento: Pedro Penna, Pedro Ivo, Rodrigo Richard;
-- Equipe de Design: Simone Nogueira.
-
-> **Links Úteis**:
-> - [11 Passos Essenciais para Implantar Scrum no seu Projeto](https://mindmaster.com.br/scrum-11-passos/)
-> - [Scrum em 9 minutos](https://www.youtube.com/watch?v=XfvQWnRgxG0)
-> - [Os papéis do Scrum e a verdade sobre cargos nessa técnica](https://www.atlassian.com/br/agile/scrum/roles)
+- **Scrum Master:** Michelle Lourenço Mendonça
+- **Product Owner:** Willy Christian de Oliveira Teixeira
+- **Equipe de Desenvolvimento:** Michelle Lourenço Mendonça e Samuel Ribeiro
+- **Equipe de Design:** Gustavo Viana e Miréia Torres Lima
 
 ### Processo
 
-Coloque  informações sobre detalhes da implementação do Scrum seguido pelo grupo. O grupo deverá fazer uso do recurso de gerenciamento de projeto oferecido pelo GitHub, que permite acompanhar o andamento do projeto, a execução das tarefas e o status de desenvolvimento da solução.
- 
-> **Links Úteis**:
-> - [Planejamento e Gestáo Ágil de Projetos](https://pucminas.instructure.com/courses/87878/pages/unidade-2-tema-2-utilizacao-de-ferramentas-para-controle-de-versoes-de-software)
-> - [Sobre quadros de projeto](https://docs.github.com/pt/issues/organizing-your-work-with-project-boards/managing-project-boards/about-project-boards)
-> - [Project management, made simple](https://github.com/features/project-management/)
-> - [Sobre quadros de projeto](https://docs.github.com/pt/github/managing-your-work-on-github/about-project-boards)
-> - [Como criar Backlogs no Github](https://www.youtube.com/watch?v=RXEy6CFu9Hk)
-> - [Tutorial Slack](https://slack.com/intl/en-br/)
+O processo Scrum é organizado em 5 sprints, cada uma com objetivo e entregas definidos:
+
+**Sprint 1 — Concepção e Proposta de Solução**
+- Objetivo: Definir o problema e desenvolver a proposta de solução.
+- Tarefas: Documentação de Contexto, Especificação do Projeto, vídeo de apresentação.
+- Duração: 25 dias.
+
+**Sprint 2 — Projeto da Solução e Início do Desenvolvimento**
+- Objetivo: Projetar a solução tecnológica e planejar os testes.
+- Tarefas: Metodologia, Projeto de Interface, Arquitetura da Solução, Plano de Testes de Software e Usabilidade.
+- Duração: 28 dias.
+
+**Sprint 3 — Desenvolvimento da Solução (Parte 1)**
+- Objetivo: Implementar as funcionalidades base e críticas.
+- Tarefas: Template padrão da aplicação, funcionalidades fase 1, Registro de Testes.
+- Duração: 35 dias.
+
+**Sprint 4 — Desenvolvimento da Solução (Parte 2)**
+- Objetivo: Implementar as funcionalidades restantes.
+- Tarefas: Funcionalidades fase 2, atualização dos Registros de Testes.
+- Duração: 28 dias.
+
+**Sprint 5 — Diagnóstico, Entrega e Apresentação**
+- Objetivo: Finalizar relatórios e entregar a versão final da solução.
+- Tarefas: Relatórios finais de testes, apresentação, vídeo de demonstração, referências.
+- Duração: 14 dias.
+
+O acompanhamento das tarefas é feito pelo **GitHub Projects**, onde as issues são organizadas em colunas (Backlog, In Progress, Done).
+
+**Daily Scrum:** realizado via aplicativos de mensagens (WhatsApp/Discord). Quando necessário, reuniões em formato de call são agendadas conforme disponibilidade dos membros.
+
+**Sprint Review:** ocorre durante a semana de entrega, com revisão dos itens da sprint e alinhamento com a professora orientadora. Após o feedback, são realizadas as correções necessárias.
+
+**Sprint Retrospective:** realizada após a entrega, com reflexão sobre melhorias no processo para a sprint seguinte.
+
+### Product Backlog
+
+| Prioridade | Item |
+|---|---|
+| 1 | Documentação de Contexto |
+| 2 | Especificação do Projeto |
+| 3 | Metodologia |
+| 4 | Projeto de Interface |
+| 5 | Arquitetura da Solução |
+| 6 | Template Padrão da Aplicação |
+| 7 | Programação de Funcionalidades |
+| 8 | Plano de Testes de Software |
+| 9 | Registro de Testes de Software |
+| 10 | Plano de Testes de Usabilidade |
+| 11 | Registro de Testes de Usabilidade |
+| 12 | Apresentação do Projeto |
+| 13 | Referências |
+
+Os itens foram priorizados com base nas datas de entrega e dependências entre artefatos.
 
 ### Ferramentas
 
-As ferramentas empregadas no projeto são:
+| Ferramenta | Finalidade |
+|---|---|
+| Visual Studio Code | Editor principal para backend (C#), frontend web (Next.js) e mobile (React Native) |
+| .NET 9.0 | Framework do backend |
+| Next.js + TypeScript | Framework da aplicação web |
+| React Native | Framework do aplicativo mobile |
+| MongoDB Atlas | Banco de dados NoSQL em nuvem |
+| Git + GitHub | Controle de versão e hospedagem do repositório |
+| GitHub Projects | Gerenciamento de tarefas e sprints |
+| WhatsApp / Discord | Comunicação entre os membros da equipe |
+| Figma | Criação de wireframes e protótipos de interface |
+| draw.io | Criação de diagramas de arquitetura e fluxos |
 
-- Editor de código.
-- Ferramentas de comunicação
-- Ferramentas de desenho de tela (_wireframing_)
-
-O editor de código foi escolhido porque ele possui uma integração com o sistema de versão. As ferramentas de comunicação utilizadas possuem integração semelhante e por isso foram selecionadas. Por fim, para criar diagramas utilizamos essa ferramenta por melhor captar as necessidades da nossa solução.
-
-Liste quais ferramentas foram empregadas no desenvolvimento do projeto, justificando a escolha delas, sempre que possível.
- 
-> **Possíveis Ferramentas que auxiliarão no gerenciamento**: 
-> - [Slack](https://slack.com/)
-> - [Github](https://github.com/)
+**Justificativa das escolhas:**
+O Visual Studio Code foi escolhido por sua versatilidade — suporta tanto C# (com extensão C# Dev Kit) quanto JavaScript/TypeScript, centralizando o ambiente de desenvolvimento da equipe. O MongoDB foi escolhido por sua flexibilidade de esquema, adequada ao modelo de dados do projeto (eventos, usuários, pedidos). O GitHub Projects foi adotado por já estar integrado ao repositório, evitando ferramentas externas. Figma e draw.io foram selecionados por permitirem colaboração em tempo real no design e nos diagramas.
