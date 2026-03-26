@@ -49,11 +49,10 @@ class Event {
   +DeleteEvent(int id)
 }
 
-class Review {
+class Comment {
   +string id
   +string userId
   +string eventId
-  +int rating
   +string comment
   +Date createdAt
   +CreateReview()
