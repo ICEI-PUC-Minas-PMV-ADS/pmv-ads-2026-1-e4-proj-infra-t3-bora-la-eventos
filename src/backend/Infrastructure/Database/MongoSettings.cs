@@ -1,4 +1,4 @@
-namespace MongoDBSettings
+namespace BoraLaBackend.Infrastructure.Database
 {
     public class MongoSettings
     {

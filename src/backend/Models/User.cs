@@ -1,7 +1,8 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace UserModel{
+namespace BoraLaBackend.Models
+{
   public class User
   {
       [BsonId]
