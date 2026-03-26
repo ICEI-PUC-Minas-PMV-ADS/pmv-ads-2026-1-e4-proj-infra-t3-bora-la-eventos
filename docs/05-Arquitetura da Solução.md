@@ -9,6 +9,7 @@ Definição de como o software é estruturado em termos dos componentes que faze
 ## Diagrama de Classes
 
 O diagrama de classes ilustra graficamente como será a estrutura do software, e como cada uma das classes da sua estrutura estarão interligadas. Essas classes servem de modelo para materializar os objetos que executarão na memória.
+
 ```mermaid
 classDiagram
 
@@ -36,7 +37,9 @@ class Event {
   +Date date
   +string organizerId
   +int capacity
-  +List<string> participants
+  +int rate
+  +List<Review> reviews
+  +List<Activity> activities
   +Date createdAt
   +Date updatedAt
   +CreateEvent()
@@ -60,8 +63,26 @@ class Review {
   +DeleteReview(int id)
 }
 
+class Activity {
+    +string type
+    +string description
+    +string title
+    +DateTime startTime
+}
+
+class Address {
+    +string postalCode
+    +string street
+    +int number
+    +string neighbour
+    +string city
+    +string state
+}
+
 User "1" --> "many" Event : organizes
 User "many" --> "many" Event : participates
+Event "1" --> "1" Address : receives
+Event "many" --> "many" Activity : receives
 Event "1" --> "many" Review : receives
 User "1" --> "many" Review : writes
 ```
@@ -76,7 +97,9 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de
 Este documento descreve a estrutura e o esquema do banco de dados não relacional utilizado por nosso projeto, baseado em MongoDB. O MongoDB é um banco de dados NoSQL que armazena dados em documentos JSON (ou BSON, internamente), permitindo uma estrutura flexível e escalável para armazenar e consultar dados.
 
 ## Esquema do Banco de Dados
+
 ### Coleção: users
+
 Armazena as informações dos usuários do sistema.
 
 Estrutura do Documento
@@ -94,7 +117,8 @@ Estrutura do Documento
 ```
 
 #### Descrição dos Campos
-> - <strong>_id:</strong> Identificador único do usuário gerado automaticamente pelo MongoDB.
+
+> - <strong>\_id:</strong> Identificador único do usuário gerado automaticamente pelo MongoDB.
 > - <strong>name:</strong> Nome completo do usuário.
 > - <strong>email:</strong> Endereço de email do usuário.
 > - <strong>passwordHash:</strong> Hash da senha do usuário.
@@ -103,6 +127,7 @@ Estrutura do Documento
 > - <strong>updatedAt:</strong> Data e hora da última atualização dos dados do usuário.
 
 ### Coleção: products
+
 Armazena as informações dos produtos disponíveis no sistema.
 
 ```Json
@@ -119,7 +144,8 @@ Armazena as informações dos produtos disponíveis no sistema.
 ```
 
 #### Descrição dos Campos
-> - <strong>_id:</strong> Identificador único do usuário gerado automaticamente pelo MongoDB.
+
+> - <strong>\_id:</strong> Identificador único do usuário gerado automaticamente pelo MongoDB.
 > - <strong>name:</strong> Nome completo do usuário.
 > - <strong>email:</strong> Endereço de email do usuário.
 > - <strong>passwordHash:</strong> Hash da senha do usuário.
@@ -128,6 +154,7 @@ Armazena as informações dos produtos disponíveis no sistema.
 > - <strong>updatedAt:</strong> Data e hora da última atualização dos dados do usuário.
 
 ### Coleção: products
+
 Armazena as informações dos produtos disponíveis no sistema.
 
 Estrutura do Documento
@@ -146,7 +173,8 @@ Estrutura do Documento
 ```
 
 #### Descrição dos Campos
-> - <strong>_id:</strong> Identificador único do produto gerado automaticamente pelo MongoDB.
+
+> - <strong>\_id:</strong> Identificador único do produto gerado automaticamente pelo MongoDB.
 > - <strong>name:</strong> Nome do produto.
 > - <strong>description:</strong> Descrição detalhada do produto.
 > - <strong>price:</strong> Preço do produto.
@@ -156,6 +184,7 @@ Estrutura do Documento
 > - <strong>updatedAt:</strong> Data e hora da última atualização dos dados do produto.
 
 ### Coleção: orders
+
 Armazena as informações dos pedidos feitos pelos usuários.
 
 Estrutura do Documento
@@ -179,7 +208,8 @@ Estrutura do Documento
 ```
 
 #### Descrição dos Campos
-> - <strong>_id:</strong> Identificador único do pedido gerado automaticamente pelo MongoDB.
+
+> - <strong>\_id:</strong> Identificador único do pedido gerado automaticamente pelo MongoDB.
 > - <strong>userId:</strong> Referência ao identificador do usuário que fez o pedido.
 > - <strong>products:</strong> Lista de produtos incluídos no pedido, cada um com:
 > - <strong>productId:</strong> Identificador do produto.
@@ -202,7 +232,6 @@ Escalabilidade: Considere estratégias de sharding e replicação para lidar com
 
 Na etapa 2, em máterial de apoio, estão disponíveis vídeos com a configuração do mongo.db e a utilização com Bson no C#
 
-
 ## Modelo ER (Somente se tiver mais de um banco e outro for relacional)
 
 O Modelo ER representa através de um diagrama como as entidades (coisas, objetos) se relacionam entre si na aplicação interativa.
@@ -214,7 +243,7 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Modelo ER�
 ## Esquema Relacional (Somente se tiver mais de um banco e outro for relacional)
 
 O Esquema Relacional corresponde à representação dos dados em tabelas juntamente com as restrições de integridade e chave primária.
- 
+
 As referências abaixo irão auxiliá-lo na geração do artefato “Esquema Relacional”.
 
 > - [Criando um modelo relacional - Documentação da IBM](https://www.ibm.com/docs/pt-br/cognos-analytics/10.2.2?topic=designer-creating-relational-model)
