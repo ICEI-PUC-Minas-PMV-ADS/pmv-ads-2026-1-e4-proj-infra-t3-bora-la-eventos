@@ -47,7 +47,6 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |RF-009|Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
 |RF-010|Disponibilizar filtros por geolocalização (raio de distância)|MÉDIA|*A definir* |
 | RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
-| RF-012| Implementar sistema de denúncia de eventos ou comentários| BAIXA| *A definir* |
 
 ### Requisitos não Funcionais
 
