@@ -54,7 +54,7 @@ class Comment {
   +string id
   +string userId
   +string eventId
-  +string comment
+  +string text
   +Date createdAt
   +CreateComment()
   +GetCommentById(int id)
