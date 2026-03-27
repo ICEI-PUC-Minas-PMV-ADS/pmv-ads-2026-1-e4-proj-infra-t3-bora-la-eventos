@@ -37,7 +37,7 @@ class Event {
   +Date date
   +string organizerId
   +int capacity
-  +int rate
+  +List<string> likes
   +List<Review> reviews
   +List<Activity> activities
   +Date createdAt
