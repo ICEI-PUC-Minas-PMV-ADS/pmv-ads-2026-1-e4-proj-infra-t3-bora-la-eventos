@@ -16,7 +16,8 @@ classDiagram
 class User {
   +string id
   +string name
-  +number document
+  +number cpf
+  +number cnpj
   +string email
   +string password
   +string role
@@ -38,7 +39,7 @@ class Event {
   +string organizerId
   +int capacity
   +List<string> likes
-  +List<Review> reviews
+  +List<comments> comments
   +List<Activity> activities
   +Date createdAt
   +Date updatedAt
@@ -55,11 +56,11 @@ class Comment {
   +string eventId
   +string comment
   +Date createdAt
-  +CreateReview()
-  +GetReviewById(int id)
-  +ListReviews(int range, int page)
-  +UpdateReview(int id)
-  +DeleteReview(int id)
+  +CreateComment()
+  +GetCommentById(int id)
+  +ListComments(int range, int page)
+  +UpdateComment(int id)
+  +DeleteComment(int id)
 }
 
 class Activity {
