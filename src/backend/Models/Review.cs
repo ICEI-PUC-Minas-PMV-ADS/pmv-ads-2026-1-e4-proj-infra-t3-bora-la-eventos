@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BoraLaBackend.Models
 {
-    public class Review
+    public class Comment
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -17,7 +17,7 @@ namespace BoraLaBackend.Models
         public string EventId { get; set; }
 
         public int Rating { get; set; }
-        public string Comment { get; set; }
+        public string Text { get; set; }
 
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime CreatedAt { get; set; }

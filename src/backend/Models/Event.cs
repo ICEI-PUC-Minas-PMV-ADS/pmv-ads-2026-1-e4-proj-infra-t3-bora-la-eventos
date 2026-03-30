@@ -12,6 +12,7 @@ namespace BoraLaBackend.Models
         public string Id { get; set; }
 
         public string Title { get; set; }
+
         public string Description { get; set; }
         
         public Address Address { get; set; }
@@ -25,6 +26,7 @@ namespace BoraLaBackend.Models
         public string OrganizerId { get; set; }
 
         public int Capacity { get; set; }
+        public List<string> Comments { get; set; } = new List<string>();
 
         [BsonRepresentation(BsonType.ObjectId)]
         public List<ObjectId> Participants { get; set; } = new List<ObjectId>();

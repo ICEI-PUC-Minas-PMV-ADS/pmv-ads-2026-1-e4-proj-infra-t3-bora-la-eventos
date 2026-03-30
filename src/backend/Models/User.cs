@@ -10,13 +10,22 @@ namespace BoraLaBackend.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        [BsonRequired]
         public string Name { get; set; }
-        
-        public long Document { get; set; } 
-        
+
+        [BsonRequired]
+        public string Document { get; set; }
+
+        [BsonRequired]
         public string Email { get; set; }
+
+        [BsonRequired]
         public string Password { get; set; }
+
+        [BsonRequired]
         public Role Role { get; set; }
+        
+        public int TokenVersion { get; set; } = 0;
 
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime CreatedAt { get; set; }
