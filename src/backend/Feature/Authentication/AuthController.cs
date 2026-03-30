@@ -1,7 +1,8 @@
-using BoraLaBackend.Infrastructure.Database;
-using BoraLaBackend.Models;
 using BoraLaBackend.Feature.Authentication.DTO;
+using BoraLaBackend.Infrastructure.Database;
 using BoraLaBackend.Infrastructure.Security;
+using BoraLaBackend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -28,9 +29,11 @@ namespace BoraLaBackend.Feature.Authentication
       _config = config;
       _jwtService = jwtService;
     }
-
-    [HttpPost("token")]
-    public IActionResult Authentication([FromBody] AuthTokenReqDto request)
+    
+    // POST /auth/pre-login
+    [HttpPost("pre-login")]
+    [AllowAnonymous]
+    public IActionResult AppAuthorization([FromBody] AuthTokenReqDto request)
     {
 
       if (string.IsNullOrEmpty(request.ClientSecret) || string.IsNullOrEmpty(request.ClientID))
@@ -49,6 +52,21 @@ namespace BoraLaBackend.Feature.Authentication
       string token = _jwtService.GenerateToken(_clientId, null);
 
       return Ok(new { token = $"Bearer {token}" });
+    }
+
+    // POST: /auth/validate
+    [HttpPost("validate")]
+    [AllowAnonymous]
+    public IActionResult Validate([FromBody] ValidateTokenRequestDto request)
+    {
+
+        if (string.IsNullOrEmpty(request.token))
+            return BadRequest(new { error = "Token is required" });
+        string validToken = request.token.Split(' ')[1];
+
+        bool isValid = _jwtService.ValidateToken(validToken);
+
+        return Ok(new { isValid });
     }
   }
 }
