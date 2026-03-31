@@ -75,7 +75,6 @@ namespace BoraLaBackend.Feature.Authentication
 
             var user = new User
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = registerRequest.Name,
                 Document = registerRequest.Document,
                 Email = registerRequest.Email,

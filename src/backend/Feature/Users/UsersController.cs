@@ -9,7 +9,7 @@ using MongoDB.Driver;
 
 namespace BoraLaBackend.Feature.Users
 {
-    [Route("api/[controller]")]
+    [Route("users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -32,6 +32,17 @@ namespace BoraLaBackend.Feature.Users
             return Ok(Users);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetUserById(string id)
+        {
+            var user = _users.Find(u => u.Id == id).FirstOrDefault();
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+            return Ok(user);
+        }
+
         [HttpPut("{id}")]
         public IActionResult UpdateUser(string id, [FromBody] UpdateUserRequest request)
         {
@@ -52,17 +63,17 @@ namespace BoraLaBackend.Feature.Users
             return Ok(user);
         }
 
-        [HttpDelete]
-        public IActionResult DeleteUser([FromBody] DeleteUserRequest request)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(string id)
         {
-            var user = _users.Find(u => u.Id == request.Id).FirstOrDefault();
+            var user = _users.Find(u => u.Id == id).FirstOrDefault();
 
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            _users.DeleteOne(u => u.Id == request.Id);
+            _users.DeleteOne(u => u.Id == id);
 
             return Ok(new { message = "User deleted successfully" });
         }

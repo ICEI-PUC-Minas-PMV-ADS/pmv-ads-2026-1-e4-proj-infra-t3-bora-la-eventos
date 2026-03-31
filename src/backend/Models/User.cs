@@ -23,6 +23,7 @@ namespace BoraLaBackend.Models
         public string Password { get; set; }
 
         [BsonRequired]
+        [BsonRepresentation(BsonType.String)]
         public Role Role { get; set; }
         
         public int TokenVersion { get; set; } = 0;
