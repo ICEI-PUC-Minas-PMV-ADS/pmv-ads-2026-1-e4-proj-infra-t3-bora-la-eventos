@@ -1,6 +1,8 @@
-﻿using BoraLaBackend.Feature.Users.DTO;
+﻿using BoraLaBackend.Feature.Authentication.DTO;
+using BoraLaBackend.Feature.Users.DTO;
 using BoraLaBackend.Infrastructure.Database;
 using BoraLaBackend.Models;
+using BoraLaBackend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -14,7 +16,7 @@ namespace BoraLaBackend.Feature.Users
         private readonly IMongoCollection<User> _users;
 
         public UsersController(
-          MongoClient client,
+          IMongoClient client,
           IOptions<MongoSettings> settings
         )
         {
@@ -22,12 +24,48 @@ namespace BoraLaBackend.Feature.Users
             _users = db.GetCollection<User>("users");
         }
 
+        [HttpPost]
+        public IActionResult Register([FromBody] RegisterRequest registerRequest)
+        {
+            if (string.IsNullOrEmpty(registerRequest.Email) || string.IsNullOrEmpty(registerRequest.Password))
+            {
+                return BadRequest(new { message = "MISSING_PROPERTIES" });
+            }
+
+            if (!DocumentValidator.GetRoleFromDocument(registerRequest.Document, out var role))
+            {
+                return BadRequest(new { message = "INVALID_DOCUMENT" });
+            }
+
+            var existingUser = _users.Find(u => u.Email == registerRequest.Email).FirstOrDefault();
+            if (existingUser != null)
+            {
+                return Conflict(new { message = "EMAIL_ALREADY_EXISTS" });
+            }
+
+            var user = new User
+            {
+                Name = registerRequest.Name,
+                Document = registerRequest.Document,
+                Email = registerRequest.Email,
+                Role = role,
+                TokenVersion = 0,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password);
+
+            _users.InsertOne(user);
+            return Ok(new { message = "USER_REGISTERED_SUCCESSFULLY" });
+        }
+
         [HttpGet]
         public IActionResult GetUsers()
         {
-            List<User> Users = _users.Find(user => true).ToList();
+            List<User> users = _users.Find(user => true).ToList();
 
-            return Ok(Users);
+            return Ok(users);
         }
 
         [HttpGet("{id}")]

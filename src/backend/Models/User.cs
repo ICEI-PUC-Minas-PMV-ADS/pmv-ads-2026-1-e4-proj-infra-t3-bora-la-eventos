@@ -37,7 +37,7 @@ namespace BoraLaBackend.Models
 
     public enum Role
     {
-        User,
-        Organizer
+        user,
+        organizer
     }
 }

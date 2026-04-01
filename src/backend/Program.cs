@@ -19,13 +19,11 @@ builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings")
 );
 
-builder.Services.AddSingleton(sp =>
+builder.Services.AddSingleton<IMongoClient>(sp =>
 {
     var settings = builder.Configuration.GetSection("MongoSettings").Get<MongoSettings>();
     var mongoClientSettings = MongoClientSettings.FromConnectionString(settings?.ConnectionString);
 
-    // Desabilita o uso de TLS/SSL explicitamente
-    mongoClientSettings.UseTls = false;
     return new MongoClient(settings?.ConnectionString);
 });
 

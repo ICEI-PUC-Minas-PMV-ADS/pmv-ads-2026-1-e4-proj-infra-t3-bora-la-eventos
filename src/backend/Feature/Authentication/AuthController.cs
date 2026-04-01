@@ -1,7 +1,6 @@
 using BoraLaBackend.Infrastructure.Database;
 using BoraLaBackend.Feature.Authentication.DTO;
 using BoraLaBackend.Infrastructure.Security;
-using BoraLaBackend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -51,42 +50,6 @@ namespace BoraLaBackend.Feature.Authentication
             string token = _jwtService.GenerateToken(_clientId, null);
 
             return Ok(new { token = $"Bearer {token}" });
-        }
-
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterRequest registerRequest)
-        {
-            if (string.IsNullOrEmpty(registerRequest.Email) || string.IsNullOrEmpty(registerRequest.Password))
-            {
-                return BadRequest(new { message = "MISSING_PROPERTIES" });
-            }
-
-            if (!DocumentValidator.GetRoleFromDocument(registerRequest.Document, out var role))
-            {
-                return BadRequest(new { message = "INVALID_DOCUMENT" });
-            }
-
-            var existingUser = _users.Find(u => u.Email == registerRequest.Email).FirstOrDefault();
-            if (existingUser != null)
-            {
-                return Conflict(new { message = "EMAIL_ALREADY_EXISTS" });
-            }           
-
-            var user = new User
-            {
-                Name = registerRequest.Name,
-                Document = registerRequest.Document,
-                Email = registerRequest.Email,
-                Role = role,
-                TokenVersion = 0,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            user.Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password);
-
-            _users.InsertOne(user);
-            return Ok(new { message = "USER_REGISTERED_SUCCESSFULLY" });
         }
     }
 }
