@@ -12,9 +12,6 @@ builder.Services.AddControllers();
 // configuring OpenAPI (Swegger)
 builder.Services.AddOpenApi();
 
-// Inject dependencies
-builder.Services.AddScoped<IJwtService, JwtService>();
-
 // Configure MongoDB
 builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings")
@@ -26,6 +23,8 @@ builder.Services.AddSingleton(sp =>
     return new MongoClient(settings?.ConnectionString);
 });
 
+// Inject dependencies
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddAuthentication(options =>
 {

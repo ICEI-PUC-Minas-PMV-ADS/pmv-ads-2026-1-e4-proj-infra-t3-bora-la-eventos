@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using BoraLaBackend.Feature.Authentication.DTO;
 using BoraLaBackend.Infrastructure.Database;
 using BoraLaBackend.Infrastructure.Security;
@@ -13,23 +14,22 @@ namespace BoraLaBackend.Feature.Authentication
   [ApiController]
   public class AuthController : ControllerBase
   {
-    private readonly IMongoCollection<User> _users;
+    private readonly IMongoDatabase _db;
     private readonly IConfiguration _config;
     private readonly IJwtService _jwtService;
 
     public AuthController(
-      MongoClient client, 
+      MongoClient client,
       IOptions<MongoSettings> settings,
       IConfiguration config,
       IJwtService jwtService
     )
     {
-      var db = client.GetDatabase(settings.Value.DatabaseName);
-      _users = db.GetCollection<User>("users");
+      _db = client.GetDatabase(settings.Value.DatabaseName);
       _config = config;
       _jwtService = jwtService;
     }
-    
+
     // POST /auth/pre-login
     [HttpPost("pre-login")]
     [AllowAnonymous]
@@ -38,7 +38,7 @@ namespace BoraLaBackend.Feature.Authentication
 
       if (string.IsNullOrEmpty(request.ClientSecret) || string.IsNullOrEmpty(request.ClientID))
       {
-        return BadRequest(new { message = "MISSING_PROPERTIES" });
+        return BadRequest(new { code = "invalid_body" });
       }
 
       string? _clientSecret = _config["Auth:ClientSecret"];
@@ -60,13 +60,55 @@ namespace BoraLaBackend.Feature.Authentication
     public IActionResult Validate([FromBody] ValidateTokenRequestDto request)
     {
 
-        if (string.IsNullOrEmpty(request.token))
-            return BadRequest(new { error = "Token is required" });
-        string validToken = request.token.Split(' ')[1];
+      if (string.IsNullOrEmpty(request.token))
+        return BadRequest(new { error = "Token is required" });
+      string validToken = request.token.Split(' ')[1];
 
-        bool isValid = _jwtService.ValidateToken(validToken);
+      bool isValid = _jwtService.ValidateToken(validToken);
 
-        return Ok(new { isValid });
+      return Ok(new { isValid });
+    }
+
+    // POST: /auth/sign-in
+    [HttpPost("login")]
+    [Authorize]
+    public async Task<IActionResult> Login([FromBody] SignInRequestDto props)
+    {
+      if (string.IsNullOrEmpty(props.Email) || string.IsNullOrEmpty(props.Password))
+      {
+        return BadRequest("invalid_body");
+      }
+
+      var user = await _db
+        .GetCollection<User>("users")
+        .Find((item) => item.Email == props.Email)
+        .ToListAsync();
+
+      if (user == null)
+      {
+        return NotFound(new { code = "user_not_found" });
+      }
+      // Precisa implementar a decriptação da senha
+      // Validar a senha infromada com a senha decriptada
+      // retornar o Ok(user) caso positivo ou Unauthorize() caoso negativo
+      return Ok();
+    }
+
+    // POST: /auth/logout
+    [HttpPost("logout")]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+      var authHeader = Request.Headers.Authorization.ToString();
+
+      if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+          return NotFound("parameter_not_founded");
+
+      var token = authHeader.Replace("Bearer ", "");
+
+      bool wasInvalidated = await _jwtService
+        .InvalidateToken(token, _db.GetCollection<BlacklistedToken>("blacklisted_tokens"));
+      return wasInvalidated ? Ok() : BadRequest();
     }
   }
 }
