@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using BoraLaBackend.Models;
-using DevOne.Security.Cryptography.BCrypt;
 
 namespace BoraLaBackend.Feature.Authentication
 {
@@ -84,8 +83,8 @@ namespace BoraLaBackend.Feature.Authentication
                 UpdatedAt = DateTime.UtcNow
             };
 
-            var salt = BCryptHelper.GenerateSalt();
-            user.Password = BCryptHelper.HashPassword(registerRequest.Password, salt);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password);
+
             _users.InsertOne(user);
             return Ok(new { message = "USER_REGISTERED_SUCCESSFULLY" });
         }
