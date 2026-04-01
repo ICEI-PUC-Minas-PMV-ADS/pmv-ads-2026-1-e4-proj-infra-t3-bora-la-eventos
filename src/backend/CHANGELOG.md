@@ -10,7 +10,7 @@ e versionamento semântico (SemVer).
 ## [Unreleased]
 
 ### Added
-- Criação do endpoint de obtenção do token [RF001-15-52](https://github.com/orgs/ICEI-PUC-Minas-PMV-ADS/projects/2749/views/1?pane=issue&itemId=168361859&issue=ICEI-PUC-Minas-PMV-ADS%7Cpmv-ads-2026-1-e4-proj-infra-t3-bora-la-eventos%7C15)
+- Criação dos endpoints para obter e validar token e configuração do middleware de autorização [RF001-15-52](https://github.com/orgs/ICEI-PUC-Minas-PMV-ADS/projects/2749/views/1?pane=issue&itemId=168361859&issue=ICEI-PUC-Minas-PMV-ADS%7Cpmv-ads-2026-1-e4-proj-infra-t3-bora-la-eventos%7C15)
 
 ### Changed
 
