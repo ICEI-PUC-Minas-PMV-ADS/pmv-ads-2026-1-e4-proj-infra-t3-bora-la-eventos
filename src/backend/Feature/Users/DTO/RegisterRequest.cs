@@ -1,4 +1,4 @@
-﻿namespace BoraLaBackend.Feature.Authentication.DTO
+﻿namespace BoraLaBackend.Feature.Users.DTO
 {
     public class RegisterRequest
     {

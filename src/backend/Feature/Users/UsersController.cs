@@ -1,5 +1,4 @@
-﻿using BoraLaBackend.Feature.Authentication.DTO;
-using BoraLaBackend.Feature.Users.DTO;
+﻿using BoraLaBackend.Feature.Users.DTO;
 using BoraLaBackend.Infrastructure.Database;
 using BoraLaBackend.Models;
 using BoraLaBackend.Utils;
