@@ -10,13 +10,15 @@ namespace BoraLaBackend.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        [BsonRequired]
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
 
+        [BsonRequired]
         [BsonRepresentation(BsonType.ObjectId)]
         public string EventId { get; set; }
 
-        public int Rating { get; set; }
+        [BsonRequired]
         public string Text { get; set; }
 
         [BsonRepresentation(BsonType.DateTime)]
