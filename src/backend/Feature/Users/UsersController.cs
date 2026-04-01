@@ -1,8 +1,6 @@
 ﻿using BoraLaBackend.Feature.Users.DTO;
 using BoraLaBackend.Infrastructure.Database;
-using BoraLaBackend.Infrastructure.Security;
 using BoraLaBackend.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
