@@ -9,106 +9,93 @@ using MongoDB.Driver;
 
 namespace BoraLaBackend.Feature.Authentication
 {
-  [Route("auth")]
-  [ApiController]
-  public class AuthController : ControllerBase
-  {
-    private readonly IMongoDatabase _db;
-    private readonly IConfiguration _config;
-    private readonly IJwtService _jwtService;
-
-    public AuthController(
+    [Route("auth")]
+    [ApiController]
+    public class AuthController(
       MongoClient client,
       IOptions<MongoSettings> settings,
       IConfiguration config,
       IJwtService jwtService
-    )
+        ) : ControllerBase
     {
-      _db = client.GetDatabase(settings.Value.DatabaseName);
-      _config = config;
-      _jwtService = jwtService;
-    }
+        private readonly IMongoDatabase _db = client.GetDatabase(settings.Value.DatabaseName);
+        private readonly IConfiguration _config = config;
+        private readonly IJwtService _jwtService = jwtService;
 
-    // POST /auth/pre-login
-    [HttpPost("pre-login")]
-    [AllowAnonymous]
-    public IActionResult AppAuthorization([FromBody] AuthTokenReqDto request)
-    {
+        // POST /auth/pre-login
+        [HttpPost("pre-login")]
+        [AllowAnonymous]
+        public IActionResult AppAuthorization([FromBody] AuthTokenReqDto request)
+        {
+            bool isNullOrEmpty = string.IsNullOrEmpty(request.ClientSecret) || string.IsNullOrEmpty(request.ClientID);
 
-      if (string.IsNullOrEmpty(request.ClientSecret) || string.IsNullOrEmpty(request.ClientID))
-      {
-        return BadRequest(new { code = "invalid_body" });
-      }
-
-            string? _clientSecret = _config["Auth:ClientSecret"];
-            string? _clientId = _config["Auth:ClientID"];
-            string? _serverSecret = _config["Auth:ServerSecret"];
-            if (_clientSecret == null || _serverSecret == null || _clientId == null)
+            if (isNullOrEmpty)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                return BadRequest(new { code = "INVALID_BODY" });
+            }
+            string? serverSecret = _config["Auth:ServerSecret"];
+            string? clientId = _config["Auth:ClientID"];
+            string? clientSecret = _config["Auth:ClientSecret"];
+            if (clientSecret == null || serverSecret == null || clientId == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "INTERNAL_SERVER_ERROR");
             }
 
-            string token = _jwtService.GenerateToken(_clientId, null);
+            bool doesNotMatches = request.ClientID != clientId || request.ClientSecret != clientSecret;
+            if (doesNotMatches) return Unauthorized();
+
+            string token = _jwtService.GenerateToken(clientId, null);
 
             return Ok(new { token = $"Bearer {token}" });
         }
+
+        // POST: /auth/login
+        [HttpPost("login")]
+        [Authorize]
+        public async Task<IActionResult> Login(
+            [FromBody] SignInRequestDto props,
+            [FromHeader(Name = "x-request-id")] string appId
+        )
+        {
+            string? clientId = _config["Auth:ClientID"];
+            bool hasEmptyBody = string.IsNullOrEmpty(props.Email) || string.IsNullOrEmpty(props.Password);
+
+            if (string.IsNullOrEmpty(clientId)) return StatusCode(StatusCodes.Status500InternalServerError, "INTERNAL_SERVER_ERROR");
+
+            if (string.IsNullOrEmpty(appId)) return BadRequest(new { message = "INVALID_HEADER" });
+
+            if (hasEmptyBody) return BadRequest(new { message = "INVALID_BODY" });
+
+            if (appId != clientId) return UnprocessableEntity();
+
+            User? user = await _db
+              .GetCollection<User>("users")
+              .Find((item) => item.Email == props.Email)
+              .FirstAsync();
+
+            if (user == null) return NotFound();
+
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(props.Password, user.Password);
+            string token = _jwtService.GenerateToken(appId, props.Email);
+
+            return isValidPassword ? Ok(new { currentUser = user, accessToken = token }) : Unauthorized();
+        }
+
+        // POST: /auth/logout
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var authHeader = Request.Headers.Authorization.ToString();
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return NotFound("parameter_not_founded");
+
+            var token = authHeader.Replace("Bearer ", "");
+
+            bool wasInvalidated = await _jwtService
+              .InvalidateToken(token, _db.GetCollection<BlacklistedToken>("blacklisted_tokens"));
+            return wasInvalidated ? Ok() : BadRequest();
+        }
     }
-
-    // POST: /auth/validate
-    [HttpPost("validate")]
-    [AllowAnonymous]
-    public IActionResult Validate([FromBody] ValidateTokenRequestDto request)
-    {
-
-      if (string.IsNullOrEmpty(request.token))
-        return BadRequest(new { error = "Token is required" });
-      string validToken = request.token.Split(' ')[1];
-
-      bool isValid = _jwtService.ValidateToken(validToken);
-
-      return Ok(new { isValid });
-    }
-
-    // POST: /auth/sign-in
-    [HttpPost("login")]
-    [Authorize]
-    public async Task<IActionResult> Login([FromBody] SignInRequestDto props)
-    {
-      if (string.IsNullOrEmpty(props.Email) || string.IsNullOrEmpty(props.Password))
-      {
-        return BadRequest("invalid_body");
-      }
-
-      var user = await _db
-        .GetCollection<User>("users")
-        .Find((item) => item.Email == props.Email)
-        .ToListAsync();
-
-      if (user == null)
-      {
-        return NotFound(new { code = "user_not_found" });
-      }
-      // Precisa implementar a decriptação da senha
-      // Validar a senha infromada com a senha decriptada
-      // retornar o Ok(user) caso positivo ou Unauthorize() caoso negativo
-      return Ok();
-    }
-
-    // POST: /auth/logout
-    [HttpPost("logout")]
-    [Authorize]
-    public async Task<IActionResult> Logout()
-    {
-      var authHeader = Request.Headers.Authorization.ToString();
-
-      if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-          return NotFound("parameter_not_founded");
-
-      var token = authHeader.Replace("Bearer ", "");
-
-      bool wasInvalidated = await _jwtService
-        .InvalidateToken(token, _db.GetCollection<BlacklistedToken>("blacklisted_tokens"));
-      return wasInvalidated ? Ok() : BadRequest();
-    }
-  }
 }
