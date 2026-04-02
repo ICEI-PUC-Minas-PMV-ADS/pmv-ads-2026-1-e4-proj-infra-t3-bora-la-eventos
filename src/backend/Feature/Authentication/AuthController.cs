@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using BoraLaBackend.Feature.Authentication.DTO;
 using BoraLaBackend.Infrastructure.Database;
 using BoraLaBackend.Infrastructure.Security;
@@ -41,17 +40,18 @@ namespace BoraLaBackend.Feature.Authentication
         return BadRequest(new { code = "invalid_body" });
       }
 
-      string? _clientSecret = _config["Auth:ClientSecret"];
-      string? _clientId = _config["Auth:ClientID"];
-      string? _serverSecret = _config["Auth:ServerSecret"];
-      if (_clientSecret == null || _serverSecret == null || _clientId == null)
-      {
-        return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
-      }
+            string? _clientSecret = _config["Auth:ClientSecret"];
+            string? _clientId = _config["Auth:ClientID"];
+            string? _serverSecret = _config["Auth:ServerSecret"];
+            if (_clientSecret == null || _serverSecret == null || _clientId == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
 
-      string token = _jwtService.GenerateToken(_clientId, null);
+            string token = _jwtService.GenerateToken(_clientId, null);
 
-      return Ok(new { token = $"Bearer {token}" });
+            return Ok(new { token = $"Bearer {token}" });
+        }
     }
 
     // POST: /auth/validate
