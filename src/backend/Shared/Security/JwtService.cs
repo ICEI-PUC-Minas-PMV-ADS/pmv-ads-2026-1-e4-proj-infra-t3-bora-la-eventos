@@ -4,7 +4,7 @@ using JWT.Algorithms;
 using JWT.Serializers;
 using MongoDB.Driver;
 
-namespace BoraLaBackend.Infrastructure.Security
+namespace BoraLaBackend.Shared.Security
 {
     public class JwtService: IJwtService
     {
