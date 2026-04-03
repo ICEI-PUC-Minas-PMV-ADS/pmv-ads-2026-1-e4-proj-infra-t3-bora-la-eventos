@@ -1,18 +1,18 @@
 using BoraLaBackend.Feature.Authentication.DTO;
-using BoraLaBackend.Infrastructure.Database;
-using BoraLaBackend.Infrastructure.Security;
+using BoraLaBackend.Shared.Database;
 using BoraLaBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using BoraLaBackend.Shared.Security;
 
 namespace BoraLaBackend.Feature.Authentication
 {
     [Route("auth")]
     [ApiController]
     public class AuthController(
-      MongoClient client,
+      IMongoClient client,
       IOptions<MongoSettings> settings,
       IConfiguration config,
       IJwtService jwtService

@@ -1,75 +1,51 @@
 ﻿using BoraLaBackend.Feature.Users.DTO;
-using BoraLaBackend.Infrastructure.Database;
-using BoraLaBackend.Models;
-using BoraLaBackend.Utils;
+using BoraLaBackend.Feature.Users.Enums;
+using BoraLaBackend.Feature.Users.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 
 namespace BoraLaBackend.Feature.Users
 {
+    [Authorize]
     [Route("users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly IUsersService _userService;
 
-        public UsersController(
-          IMongoClient client,
-          IOptions<MongoSettings> settings
-        )
+        public UsersController(IUsersService userService)
         {
-            var db = client.GetDatabase(settings.Value.DatabaseName);
-            _users = db.GetCollection<User>("users");
+            _userService = userService;
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            if (string.IsNullOrEmpty(registerRequest.Email) || string.IsNullOrEmpty(registerRequest.Password))
-            {
-                return BadRequest(new { message = "MISSING_PROPERTIES" });
-            }
+            var result = await _userService.RegisterAsync(request);
 
-            if (!DocumentValidator.GetRoleFromDocument(registerRequest.Document, out var role))
+            return result switch
             {
-                return BadRequest(new { message = "INVALID_DOCUMENT" });
-            }
-
-            var existingUser = _users.Find(u => u.Email == registerRequest.Email).FirstOrDefault();
-            if (existingUser != null)
-            {
-                return Conflict(new { message = "EMAIL_ALREADY_EXISTS" });
-            }
-
-            User user = new()
-            {
-                Name = registerRequest.Name,
-                Document = registerRequest.Document,
-                Email = registerRequest.Email,
-                Role = role,
-                TokenVersion = 0,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password)
+                RegisterResult.Success => Ok(new { message = "USER_REGISTERED_SUCCESSFULLY" }),
+                RegisterResult.EmailExists => Conflict(new { message = "EMAIL_ALREADY_IN_USE" }),
+                RegisterResult.DocumentExists => Conflict(new { message = "DOCUMENT_ALREADY_IN_USE" }),
+                RegisterResult.InvalidDocument => BadRequest(new { message = "INVALID_DOCUMENT" }),
+                RegisterResult.InvalidInput => BadRequest(new { message = "MISSING_PROPERTIES" }),
+                _ => StatusCode(500)
             };
-
-            _users.InsertOne(user);
-            return Ok(new { message = "USER_REGISTERED_SUCCESSFULLY" });
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            List<User> users = _users.Find(user => true).ToList();
-
+            var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUserById(string id)
+        public async Task<IActionResult> GetUserById(string id)
         {
-            var user = _users.Find(u => u.Id == id).FirstOrDefault();
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound(new { message = "USER_NOT_FOUNDED" });
@@ -78,36 +54,25 @@ namespace BoraLaBackend.Feature.Users
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(string id, [FromBody] UpdateUserRequest request)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserRequest request)
         {
-            var user = _users.Find(u => u.Id == id).FirstOrDefault();
-
+            var user = await _userService.UpdateUserAsync(id, request);
             if (user == null)
             {
-                return NotFound(new { message = "USER_NOT_FOUNDED" });
+                return NotFound(new { message = "USER_NOT_FOUND" });
             }
-
-            user.Name = request.Name ?? user.Name;
-            user.Document = request.Document ?? user.Document;
-            user.Email = request.Email ?? user.Email;
-            user.UpdatedAt = System.DateTime.UtcNow;
-
-            _users.ReplaceOne(u => u.Id == id, user);
 
             return Ok(user);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = _users.Find(u => u.Id == id).FirstOrDefault();
-
-            if (user == null)
+            var deleted = await _userService.DeleteUserAsync(id);
+            if (!deleted)
             {
-                return NotFound(new { message = "USER_NOT_FOUNDED" });
+                return NotFound(new { message = "USER_NOT_FOUND" });
             }
-
-            _users.DeleteOne(u => u.Id == id);
 
             return Ok(new { message = "USER_DELETE_SUCCESSFULY" });
         }
