@@ -42,7 +42,7 @@ namespace BoraLaBackend.Feature.Users
                 return Conflict(new { message = "EMAIL_ALREADY_EXISTS" });
             }
 
-            var user = new User
+            User user = new()
             {
                 Name = registerRequest.Name,
                 Document = registerRequest.Document,
@@ -50,10 +50,9 @@ namespace BoraLaBackend.Feature.Users
                 Role = role,
                 TokenVersion = 0,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
+                Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password)
             };
-
-            user.Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password);
 
             _users.InsertOne(user);
             return Ok(new { message = "USER_REGISTERED_SUCCESSFULLY" });
@@ -73,7 +72,7 @@ namespace BoraLaBackend.Feature.Users
             var user = _users.Find(u => u.Id == id).FirstOrDefault();
             if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return NotFound(new { message = "USER_NOT_FOUNDED" });
             }
             return Ok(user);
         }
@@ -85,7 +84,7 @@ namespace BoraLaBackend.Feature.Users
 
             if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return NotFound(new { message = "USER_NOT_FOUNDED" });
             }
 
             user.Name = request.Name ?? user.Name;
@@ -105,12 +104,12 @@ namespace BoraLaBackend.Feature.Users
 
             if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return NotFound(new { message = "USER_NOT_FOUNDED" });
             }
 
             _users.DeleteOne(u => u.Id == id);
 
-            return Ok(new { message = "User deleted successfully" });
+            return Ok(new { message = "USER_DELETE_SUCCESSFULY" });
         }
     }
 }

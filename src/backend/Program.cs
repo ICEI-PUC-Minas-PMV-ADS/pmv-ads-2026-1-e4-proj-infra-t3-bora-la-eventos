@@ -14,9 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Inject dependencies
-builder.Services.AddScoped<IJwtService, JwtService>();
-
 // Configure MongoDB
 builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings")
@@ -30,6 +27,8 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
     return new MongoClient(settings?.ConnectionString);
 });
 
+// Inject dependencies
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddAuthentication(options =>
 {
