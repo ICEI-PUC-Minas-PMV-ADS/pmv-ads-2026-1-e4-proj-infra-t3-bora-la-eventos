@@ -18,6 +18,7 @@ namespace BoraLaBackend.Feature.Users
             _userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -29,12 +30,10 @@ namespace BoraLaBackend.Feature.Users
                 RegisterResult.EmailExists => Conflict(new { message = "EMAIL_ALREADY_IN_USE" }),
                 RegisterResult.DocumentExists => Conflict(new { message = "DOCUMENT_ALREADY_IN_USE" }),
                 RegisterResult.InvalidDocument => BadRequest(new { message = "INVALID_DOCUMENT" }),
-                RegisterResult.InvalidInput => BadRequest(new { message = "MISSING_PROPERTIES" }),
                 _ => StatusCode(500)
             };
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
