@@ -1,4 +1,6 @@
 using System.Text;
+using BoraLaBackend.Feature.Events.Repository;
+using BoraLaBackend.Feature.Events.Services;
 using BoraLaBackend.Feature.Users.Repository;
 using BoraLaBackend.Feature.Users.Services;
 using BoraLaBackend.Shared.Database;
@@ -33,6 +35,8 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventsService, EventsService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 builder.Services.AddAuthentication(options =>
@@ -45,6 +49,7 @@ builder.Services.AddAuthentication(options =>
     var serverSecret = builder.Configuration["Auth:ServerSecret"];
     var key = Encoding.ASCII.GetBytes(serverSecret ?? "");
 
+    options.MapInboundClaims = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
@@ -70,6 +75,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 // Direciona qualquer requisição que não seja um dos controllers para 404 
