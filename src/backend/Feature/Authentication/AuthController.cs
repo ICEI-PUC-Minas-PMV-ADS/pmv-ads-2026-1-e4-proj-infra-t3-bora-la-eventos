@@ -68,7 +68,6 @@ namespace BoraLaBackend.Feature.Authentication
 
             if (appId != clientId) return UnprocessableEntity();
 
-            // Repository
             User? user = await _db
               .GetCollection<User>("users")
               .Find((item) => item.Email == props.Email)
@@ -76,7 +75,6 @@ namespace BoraLaBackend.Feature.Authentication
 
             if (user == null) return NotFound();
 
-            // rt
             bool isValidPassword = BCrypt.Net.BCrypt.Verify(props.Password, user.Password);
             string token = _jwtService.GenerateToken(appId, props.Email);
 
