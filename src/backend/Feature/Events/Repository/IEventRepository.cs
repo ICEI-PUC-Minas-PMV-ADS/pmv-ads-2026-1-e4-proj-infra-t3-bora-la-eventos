@@ -6,5 +6,7 @@ namespace BoraLaBackend.Feature.Events.Repository
     {
         Task<Event> CreateAsync(Event evt);
         Task<Event?> GetByIdAsync(string id);
+        Task UpdateAsync(string id, Event evt);
+        Task DeleteAsync(string id);
     }
 }
