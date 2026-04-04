@@ -1,8 +1,14 @@
 using System.Text;
+using BoraLaBackend.Feature.Authentication.Repositories;
+using BoraLaBackend.Feature.Authentication.Services;
+using BoraLaBackend.Feature.Authentication.Services.Interfaces;
 using BoraLaBackend.Feature.Users.Repository;
 using BoraLaBackend.Feature.Users.Services;
+using BoraLaBackend.Models;
 using BoraLaBackend.Shared.Database;
 using BoraLaBackend.Shared.Security;
+using BoraLaBackend.Shared.Utils;
+using BoraLaBackend.Shared.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -30,10 +36,19 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 });
 
 // Inject dependencies
-builder.Services.AddScoped<IJwtService, JwtService>();
+
+// Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBlackListRepository, BlackListRepository>();
+
+// Services
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Helpers
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IEnumHelper, EnumHelper>();
 
 builder.Services.AddAuthentication(options =>
 {

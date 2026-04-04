@@ -15,6 +15,7 @@ e versionamento semântico (SemVer).
 ### Changed
 
 ### Fixed
+- Refactor the auth process to enable unit tests
 
 ---
 
