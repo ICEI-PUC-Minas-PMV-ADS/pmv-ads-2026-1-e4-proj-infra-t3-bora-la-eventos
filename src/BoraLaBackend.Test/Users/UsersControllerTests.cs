@@ -1,5 +1,5 @@
 ﻿using BoraLaBackend.Feature.Users;
-using BoraLaBackend.Infrastructure.Database;
+using BoraLaBackend.Shared.Database;
 using BoraLaBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
