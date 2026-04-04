@@ -61,34 +61,23 @@ namespace BoraLaBackend.Shared.Security
             }
         }
 
-        public async Task<bool> InvalidateToken(string token, IMongoCollection<BlacklistedToken> collection)
+        public ValidateTokenReturnProps? InvalidateToken(string token)
         {
-            try
-            {
-                var json = _decoder.DecodeToObject<Dictionary<string, object>>(token, _secretKey, verify: true);
+  
+            var json = _decoder.DecodeToObject<Dictionary<string, object>>(token, _secretKey, verify: true);
 
-                if (json == null || !json.TryGetValue("jti", out var jtiObj))
-                    return false;
+            if (json == null || !json.TryGetValue("jti", out var jtiObj))
+                return null;
 
-                var jti = jtiObj.ToString();
+            var jti = jtiObj.ToString();
+            if (string.IsNullOrEmpty(jti)) return null;
 
-                var expiresAt = DateTimeOffset.FromUnixTimeSeconds(
-                    Convert.ToInt64(json["exp"])
-                ).UtcDateTime;
+            var expiresAt = DateTimeOffset.FromUnixTimeSeconds(
+                Convert.ToInt64(json["exp"])
+            ).UtcDateTime;
 
-                BlacklistedToken doc = new()
-                {
-                    Id = jti,
-                    ExpiresAt = expiresAt
-                };
-
-                await collection.InsertOneAsync(doc);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            ValidateTokenReturnProps data = new(jti, expiresAt);
+            return data;
         }
 
         private static Dictionary<string, object> CreateAppPayload(string appId) => new()
