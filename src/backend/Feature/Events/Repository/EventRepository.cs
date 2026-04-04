@@ -32,6 +32,14 @@ namespace BoraLaBackend.Feature.Events.Repository
                 .Find(e => e.Date >= from)
                 .SortBy(e => e.Date)
                 .ToListAsync();
+        public async Task UpdateAsync(string id, Event evt)
+        {
+            await _events.ReplaceOneAsync(e => e.Id == id, evt);
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            await _events.DeleteOneAsync(e => e.Id == id);
         }
     }
 }

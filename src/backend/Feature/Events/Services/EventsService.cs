@@ -63,6 +63,55 @@ namespace BoraLaBackend.Feature.Events.Services
                     OrganizerId = e.OrganizerId,
                     CreatedAt = e.CreatedAt
                 });
+        public async Task<(EventOperationResult result, Event? evt)> UpdateEventAsync(string organizerEmail, string eventId, UpdateEventRequest request)
+        {
+            var user = await _userRepo.GetByEmailAsync(organizerEmail);
+            if (user == null)
+                return (EventOperationResult.UserNotFound, null);
+
+            var evt = await _eventRepo.GetByIdAsync(eventId);
+            if (evt == null)
+                return (EventOperationResult.EventNotFound, null);
+
+            if (evt.OrganizerId != user.Id)
+                return (EventOperationResult.NotTheOrganizer, null);
+
+            evt.Title = request.Title ?? evt.Title;
+            evt.Description = request.Description ?? evt.Description;
+            evt.Date = request.Date ?? evt.Date;
+            evt.Location = request.Location ?? evt.Location;
+            evt.Capacity = request.Capacity ?? evt.Capacity;
+
+            if (request.Address != null)
+            {
+                evt.Address.Street = request.Address.Street ?? evt.Address.Street;
+                evt.Address.Number = request.Address.Number ?? evt.Address.Number;
+                evt.Address.City = request.Address.City ?? evt.Address.City;
+                evt.Address.State = request.Address.State ?? evt.Address.State;
+                evt.Address.ZipCode = request.Address.ZipCode ?? evt.Address.ZipCode;
+            }
+
+            evt.UpdatedAt = DateTime.UtcNow;
+
+            await _eventRepo.UpdateAsync(eventId, evt);
+            return (EventOperationResult.Success, evt);
+        }
+
+        public async Task<EventOperationResult> DeleteEventAsync(string organizerEmail, string eventId)
+        {
+            var user = await _userRepo.GetByEmailAsync(organizerEmail);
+            if (user == null)
+                return EventOperationResult.UserNotFound;
+
+            var evt = await _eventRepo.GetByIdAsync(eventId);
+            if (evt == null)
+                return EventOperationResult.EventNotFound;
+
+            if (evt.OrganizerId != user.Id)
+                return EventOperationResult.NotTheOrganizer;
+
+            await _eventRepo.DeleteAsync(eventId);
+            return EventOperationResult.Success;
         }
     }
 }
