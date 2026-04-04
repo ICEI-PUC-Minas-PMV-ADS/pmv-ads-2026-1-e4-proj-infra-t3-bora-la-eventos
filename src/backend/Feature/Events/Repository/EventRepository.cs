@@ -26,6 +26,12 @@ namespace BoraLaBackend.Feature.Events.Repository
             return await _events.Find(e => e.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Event>> GetFeedAsync(DateTime from)
+        {
+            return await _events
+                .Find(e => e.Date >= from)
+                .SortBy(e => e.Date)
+                .ToListAsync();
         public async Task UpdateAsync(string id, Event evt)
         {
             await _events.ReplaceOneAsync(e => e.Id == id, evt);

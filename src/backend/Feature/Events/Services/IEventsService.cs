@@ -7,6 +7,7 @@ namespace BoraLaBackend.Feature.Events.Services
     public interface IEventsService
     {
         Task<(CreateEventResult result, Event? evt)> CreateEventAsync(string organizerEmail, CreateEventRequest request);
+        Task<IEnumerable<EventFeedResponse>> GetFeedAsync();
         Task<(EventOperationResult result, Event? evt)> UpdateEventAsync(string organizerEmail, string eventId, UpdateEventRequest request);
         Task<EventOperationResult> DeleteEventAsync(string organizerEmail, string eventId);
     }

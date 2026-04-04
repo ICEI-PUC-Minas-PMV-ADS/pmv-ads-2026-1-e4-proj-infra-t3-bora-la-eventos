@@ -20,6 +20,14 @@ namespace BoraLaBackend.Feature.Events
             _eventsService = eventsService;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeed()
+        {
+            var feed = await _eventsService.GetFeedAsync();
+            return Ok(feed);
+        }
+
         /// <summary>Cria um novo evento.</summary>
         /// <remarks>Apenas organizadores (cadastrados com CNPJ) podem criar eventos.</remarks>
         /// <response code="201">Evento criado com sucesso.</response>
