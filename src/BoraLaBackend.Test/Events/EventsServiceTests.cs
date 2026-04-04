@@ -23,7 +23,6 @@ namespace BoraLaBackend.Test.Events
         [Test]
         public async Task GetFeedAsync_DeveRetornarApenasEventosFuturos()
         {
-            // Arrange
             var eventos = new List<Event>
             {
                 new Event { Id = "1", Title = "Evento Futuro", Date = DateTime.UtcNow.AddDays(10), Participants = new List<string>() },
@@ -34,10 +33,8 @@ namespace BoraLaBackend.Test.Events
                 .Setup(r => r.GetFeedAsync(It.IsAny<DateTime>()))
                 .ReturnsAsync(eventos.Where(e => e.Date >= DateTime.UtcNow).ToList());
 
-            // Act
             var resultado = await _service.GetFeedAsync();
 
-            // Assert
             Assert.That(resultado.Count(), Is.EqualTo(1));
             Assert.That(resultado.First().Title, Is.EqualTo("Evento Futuro"));
         }
@@ -45,7 +42,6 @@ namespace BoraLaBackend.Test.Events
         [Test]
         public async Task GetFeedAsync_DeveOrdenarPorDataCrescente()
         {
-            // Arrange
             var eventos = new List<Event>
             {
                 new Event { Id = "1", Title = "Evento Junho", Date = new DateTime(2026, 6, 1, 0, 0, 0, DateTimeKind.Utc), Participants = new List<string>() },
@@ -57,11 +53,9 @@ namespace BoraLaBackend.Test.Events
                 .Setup(r => r.GetFeedAsync(It.IsAny<DateTime>()))
                 .ReturnsAsync(eventos);
 
-            // Act
             var resultado = await _service.GetFeedAsync();
             var lista = resultado.ToList();
 
-            // Assert
             Assert.That(lista[0].Title, Is.EqualTo("Evento Maio"));
             Assert.That(lista[1].Title, Is.EqualTo("Evento Junho"));
             Assert.That(lista[2].Title, Is.EqualTo("Evento Julho"));
@@ -70,7 +64,6 @@ namespace BoraLaBackend.Test.Events
         [Test]
         public async Task GetFeedAsync_ComMesmaData_DeveOrdenarPorParticipantesDecrescente()
         {
-            // Arrange
             var mesmaData = new DateTime(2026, 6, 1, 0, 0, 0, DateTimeKind.Utc);
             var eventos = new List<Event>
             {
@@ -83,11 +76,9 @@ namespace BoraLaBackend.Test.Events
                 .Setup(r => r.GetFeedAsync(It.IsAny<DateTime>()))
                 .ReturnsAsync(eventos);
 
-            // Act
             var resultado = await _service.GetFeedAsync();
             var lista = resultado.ToList();
 
-            // Assert
             Assert.That(lista[0].Title, Is.EqualTo("Evento Mais Popular"));
             Assert.That(lista[1].Title, Is.EqualTo("Evento Medio"));
             Assert.That(lista[2].Title, Is.EqualTo("Evento Pouco Popular"));
@@ -96,15 +87,12 @@ namespace BoraLaBackend.Test.Events
         [Test]
         public async Task GetFeedAsync_SemEventosFuturos_DeveRetornarListaVazia()
         {
-            // Arrange
             _eventRepoMock
                 .Setup(r => r.GetFeedAsync(It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<Event>());
 
-            // Act
             var resultado = await _service.GetFeedAsync();
 
-            // Assert
             Assert.That(resultado, Is.Empty);
         }
     }
