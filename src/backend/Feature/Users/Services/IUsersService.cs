@@ -7,9 +7,9 @@ namespace BoraLaBackend.Feature.Users.Services
     public interface IUsersService
     {
         Task<RegisterResult> RegisterAsync(RegisterRequest request);
-        Task<List<User>> GetAllUsersAsync();
-        Task<User?> GetUserByIdAsync(string id);
-        Task<User?> UpdateUserAsync(string id, UpdateUserRequest request);
+        Task<List<UserResponse>> GetAllUsersAsync();
+        Task<UserResponse?> GetUserByIdAsync(string id);
+        Task<UserResponse?> UpdateUserAsync(string id, UpdateUserRequest request);
         Task<bool> DeleteUserAsync(string id);
     }
 }
