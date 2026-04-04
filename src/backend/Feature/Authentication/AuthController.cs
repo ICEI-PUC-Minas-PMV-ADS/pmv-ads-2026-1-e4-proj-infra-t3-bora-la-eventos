@@ -1,52 +1,37 @@
 using BoraLaBackend.Feature.Authentication.DTO;
-using BoraLaBackend.Shared.Database;
-using BoraLaBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using BoraLaBackend.Shared.Security;
+using BoraLaBackend.Feature.Authentication.Services.Interfaces;
+using BoraLaBackend.Shared.Utils.Interfaces;
+using BoraLaBackend.Feature.Authentication.Enums;
 
 namespace BoraLaBackend.Feature.Authentication
 {
     [Route("auth")]
     [ApiController]
     public class AuthController(
-      IMongoClient client,
-      IOptions<MongoSettings> settings,
-      IConfiguration config,
-      IJwtService jwtService
-        ) : ControllerBase
+      IAuthService service,
+      IEnumHelper enumHelper
+    ) : ControllerBase
     {
-        private readonly IMongoDatabase _db = client.GetDatabase(settings.Value.DatabaseName);
-        private readonly IConfiguration _config = config;
-        private readonly IJwtService _jwtService = jwtService;
+        private readonly IAuthService _service = service;
+        private readonly IEnumHelper _helper = enumHelper;
 
         // POST /auth/pre-login
         [HttpPost("pre-login")]
         [AllowAnonymous]
         public IActionResult AppAuthorization([FromBody] AuthTokenReqDto request)
         {
-            bool isNullOrEmpty = string.IsNullOrEmpty(request.ClientSecret) || string.IsNullOrEmpty(request.ClientID);
-
-            if (isNullOrEmpty)
-            {
+            if (string.IsNullOrEmpty(request.ClientSecret) || string.IsNullOrEmpty(request.ClientID))
                 return BadRequest(new { code = "INVALID_BODY" });
-            }
-            string? serverSecret = _config["Auth:ServerSecret"];
-            string? clientId = _config["Auth:ClientID"];
-            string? clientSecret = _config["Auth:ClientSecret"];
-            if (clientSecret == null || serverSecret == null || clientId == null)
+
+            TokenResults result = _service.GenerateToken(request.ClientID, request.ClientSecret);
+
+            if (!result.Status)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "INTERNAL_SERVER_ERROR");
+                return result.ErrorMessage == "UNAUTHORIZED" ? Unauthorized() : StatusCode(500);
             }
-
-            bool doesNotMatches = request.ClientID != clientId || request.ClientSecret != clientSecret;
-            if (doesNotMatches) return Unauthorized();
-
-            string token = _jwtService.GenerateToken(clientId, null);
-
-            return Ok(new { token = $"Bearer {token}" });
+            return Ok(new { token = $"Bearer {result.Result}" });
         }
 
         // POST: /auth/login
@@ -57,28 +42,27 @@ namespace BoraLaBackend.Feature.Authentication
             [FromHeader(Name = "x-request-id")] string appId
         )
         {
-            string? clientId = _config["Auth:ClientID"];
-            bool hasEmptyBody = string.IsNullOrEmpty(props.Email) || string.IsNullOrEmpty(props.Password);
+            if (string.IsNullOrEmpty(props.Email) || string.IsNullOrEmpty(props.Password) || string.IsNullOrEmpty(appId))
+            {
+                return BadRequest();
+            }
 
-            if (string.IsNullOrEmpty(clientId)) return StatusCode(StatusCodes.Status500InternalServerError, "INTERNAL_SERVER_ERROR");
+            AuthResults result = await _service.Login(props.Email, props.Password, appId);
+            if (result.HasError)
+            {
+                var code = result.ErrorCode ?? ErrorMessageCode.INTERNAL_SERVER_ERROR;
+                string name = _helper.GetName<ErrorMessageCode>((int)code, "INTERNAL_SERVER_ERROR");
+                return result.ErrorCode switch
+                {
+                    ErrorMessageCode.INTERNAL_SERVER_ERROR => StatusCode(500, new { message = name }),
+                    ErrorMessageCode.INVALID_HEADER => BadRequest(new { message = name }),
+                    ErrorMessageCode.INVALID_BODY => UnprocessableEntity(),
+                    ErrorMessageCode.NOT_FOUNDED => NotFound(),
+                    _ => StatusCode(500)
+                };
 
-            if (string.IsNullOrEmpty(appId)) return BadRequest(new { message = "INVALID_HEADER" });
-
-            if (hasEmptyBody) return BadRequest(new { message = "INVALID_BODY" });
-
-            if (appId != clientId) return UnprocessableEntity();
-
-            User? user = await _db
-              .GetCollection<User>("users")
-              .Find((item) => item.Email == props.Email)
-              .FirstAsync();
-
-            if (user == null) return NotFound();
-
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(props.Password, user.Password);
-            string token = _jwtService.GenerateToken(appId, props.Email);
-
-            return isValidPassword ? Ok(new { currentUser = user, accessToken = token }) : Unauthorized();
+            }
+            return Ok(new { currentUser = result.Result.CurrentUser, token = result.Result.Token });
         }
 
         // POST: /auth/logout
@@ -91,11 +75,20 @@ namespace BoraLaBackend.Feature.Authentication
             if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
                 return NotFound("parameter_not_founded");
 
-            var token = authHeader.Replace("Bearer ", "");
+            AuthResults result = await _service.Logout(authHeader);
 
-            bool wasInvalidated = await _jwtService
-              .InvalidateToken(token, _db.GetCollection<BlacklistedToken>("blacklisted_tokens"));
-            return wasInvalidated ? Ok() : BadRequest();
+            if (result.HasError)
+            {
+                var code = result.ErrorCode ?? ErrorMessageCode.INTERNAL_SERVER_ERROR;
+                string name = _helper.GetName<ErrorMessageCode>((int)code, "INTERNAL_SERVER_ERROR");
+                return result.ErrorCode switch
+                {
+                    ErrorMessageCode.INTERNAL_SERVER_ERROR => StatusCode(500, new { message = name }),
+                    ErrorMessageCode.UNPROCESSABLE_ENTITY => UnprocessableEntity(),
+                    _ => StatusCode(500)
+                };
+            }
+            return Ok();
         }
     }
 }

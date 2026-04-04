@@ -1,10 +1,15 @@
 using System.Text;
 using BoraLaBackend.Feature.Events.Repository;
 using BoraLaBackend.Feature.Events.Services;
+using BoraLaBackend.Feature.Authentication.Repositories;
+using BoraLaBackend.Feature.Authentication.Services;
+using BoraLaBackend.Feature.Authentication.Services.Interfaces;
 using BoraLaBackend.Feature.Users.Repository;
 using BoraLaBackend.Feature.Users.Services;
 using BoraLaBackend.Shared.Database;
 using BoraLaBackend.Shared.Security;
+using BoraLaBackend.Shared.Utils;
+using BoraLaBackend.Shared.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -37,13 +42,20 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
     return new MongoClient(settings?.ConnectionString);
 });
 
-// Inject dependencies
-builder.Services.AddScoped<IJwtService, JwtService>();
+// Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBlackListRepository, BlackListRepository>();
+
+// Services
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventsService, EventsService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Helpers
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IEnumHelper, EnumHelper>();
 
 builder.Services.AddAuthentication(options =>
 {

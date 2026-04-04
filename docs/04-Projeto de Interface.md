@@ -22,4 +22,45 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagramas d
 
 ## Wireframes
 
-Link para o Figma do projeto: https://www.figma.com/design/mh8Z0cxwjbsv4ovA3CU2vm/Sem-t%C3%ADtulo?node-id=0-1&t=aOpi6H0gvEGgZeR6-1
+### Login - versão mobile
+
+<img alt="Login versão mobile" src="./img/wireframes/login-mobile.png">
+
+### Login - versão web
+
+<img alt="Login versão web" src="./img/wireframes/login-web.png">
+
+### Registro - versão mobile
+
+<img alt="Registro - versão mobile" src="./img/wireframes/registro-mobile.png">
+
+### Registro - versão web
+
+<img alt="Registro - versão web" src="./img/wireframes/registro-web.png">
+
+### Meu perfil - versão mobile
+<img alt="Meu perfil - versão mobile" src="./img/wireframes/meu-perfil.png">
+
+### Explorar (estilo lista) - versão mobile
+
+<img alt="Explorar - estilo lista - versão mobile" src="./img/wireframes/explorar-lista.png">
+
+### Explorar (estilo mapa) - versão mobile
+
+<img alt="Explorar - estilo mapa - versão mobile" src="./img/wireframes/explorar-mapa.png">
+
+### Detalhes do evento - versão mobile
+
+<img alt="Detalhes do evento - versão mobile" src="./img/wireframes/detalhes-do-evento.png">
+
+### Meus eventos - versão mobile
+
+<img alt="Meus eventos - versão mobile" src="./img/wireframes/meus-eventos.png">
+
+### Gerenciar eventos - versão web
+
+<img alt="Gerenciar eventos - versão web" src="./img/wireframes/gerenciar-eventos.png">
+
+### Criar evento - versão web
+
+<img alt="Criar evento - versão web" src="./img/wireframes/criar-evento.png">
