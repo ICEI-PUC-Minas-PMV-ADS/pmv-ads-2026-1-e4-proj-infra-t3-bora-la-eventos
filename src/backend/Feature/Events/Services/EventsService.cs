@@ -63,6 +63,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     OrganizerId = e.OrganizerId,
                     CreatedAt = e.CreatedAt
                 });
+        }
         public async Task<(EventOperationResult result, Event? evt)> UpdateEventAsync(string organizerEmail, string eventId, UpdateEventRequest request)
         {
             var user = await _userRepo.GetByEmailAsync(organizerEmail);
