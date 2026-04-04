@@ -20,6 +20,11 @@ namespace BoraLaBackend.Feature.Users.Repository
             return await _users.Find(u => u.Email == email).FirstOrDefaultAsync();
         }
 
+        public async Task<User?> GetByDocumentAsync(string document)
+        {
+            return await _users.Find(u => u.Document == document).FirstOrDefaultAsync();
+        }
+
         public async Task<User?> GetByIdAsync(string id)
         {
             return await _users.Find(u => u.Id == id).FirstOrDefaultAsync();

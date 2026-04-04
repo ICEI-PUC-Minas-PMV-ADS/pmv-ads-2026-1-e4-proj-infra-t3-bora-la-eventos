@@ -18,8 +18,18 @@ namespace BoraLaBackend.Feature.Users
             _userService = userService;
         }
 
+        /// <summary>Registra um novo usuário no sistema.</summary>
+        /// <remarks>Permite o cadastro de novos usuários como participantes (CPF) ou organizadores (CNPJ).</remarks>
+        /// <response code="200">Usuário registrado com sucesso.</response>
+        /// <response code="400">Documento inválido.</response>
+        /// <response code="409">Email ou documento já estão em uso.</response>
+        /// <response code="500">Erro interno do servidor.</response>
         [AllowAnonymous]
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var result = await _userService.RegisterAsync(request);
@@ -34,14 +44,27 @@ namespace BoraLaBackend.Feature.Users
             };
         }
 
+        /// <summary>Lista todos os usuários.</summary>
+        /// <response code="200">Lista de usuários retornada com sucesso.</response>
+        /// <response code="401">Token ausente ou inválido.</response>
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
 
+        /// <summary>Busca um usuário específico pelo ID.</summary>
+        /// <param name="id">ID do usuário a ser buscado.</param>
+        /// <response code="200">Usuário encontrado e retornado com sucesso.</response>
+        /// <response code="401">Token ausente ou inválido.</response>
+        /// <response code="404">Usuário não encontrado.</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -52,7 +75,15 @@ namespace BoraLaBackend.Feature.Users
             return Ok(user);
         }
 
+        /// <summary>Atualiza os dados de um usuário existente.</summary>
+        /// <param name="id">ID do usuário a ser atualizado.</param>
+        /// <response code="200">Usuário atualizado com sucesso.</response>
+        /// <response code="401">Token ausente ou inválido.</response>
+        /// <response code="404">Usuário não encontrado.</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserRequest request)
         {
             var user = await _userService.UpdateUserAsync(id, request);
@@ -64,7 +95,15 @@ namespace BoraLaBackend.Feature.Users
             return Ok(user);
         }
 
+        /// <summary>Exclui um usuário do sistema.</summary>
+        /// <param name="id">ID do usuário a ser excluído.</param>
+        /// <response code="200">Usuário excluído com sucesso.</response>
+        /// <response code="401">Token ausente ou inválido.</response>
+        /// <response code="404">Usuário não encontrado.</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var deleted = await _userService.DeleteUserAsync(id);

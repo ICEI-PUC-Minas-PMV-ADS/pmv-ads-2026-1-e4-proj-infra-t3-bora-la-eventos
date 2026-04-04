@@ -31,7 +31,8 @@ namespace BoraLaBackend.Feature.Users.Services
                 return RegisterResult.EmailExists;
             }
 
-            var existsDocument = await _repo.GetByEmailAsync(request.Document);
+            var existsDocument = await _repo.GetByDocumentAsync(request.Document);
+
             if (existsDocument != null)
             {
                 return RegisterResult.DocumentExists;
@@ -54,17 +55,19 @@ namespace BoraLaBackend.Feature.Users.Services
             return RegisterResult.Success;
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<UserResponse>> GetAllUsersAsync()
         {
-            return await _repo.GetAllAsync();
+            var users = await _repo.GetAllAsync();
+            return users.Select(MapToResponse).ToList();
         }
 
-        public async Task<User?> GetUserByIdAsync(string id)
+        public async Task<UserResponse?> GetUserByIdAsync(string id)
         {
-            return await _repo.GetByIdAsync(id);
+            var user = await _repo.GetByIdAsync(id);
+            return user == null ? null : MapToResponse(user);
         }
 
-        public async Task<User?> UpdateUserAsync(string id, UpdateUserRequest request)
+        public async Task<UserResponse?> UpdateUserAsync(string id, UpdateUserRequest request)
         {
             var user = await _repo.GetByIdAsync(id);
             if (user == null)
@@ -79,7 +82,7 @@ namespace BoraLaBackend.Feature.Users.Services
 
             await _repo.UpdateAsync(id, user);
 
-            return user;
+            return MapToResponse(user);
         }
 
         public async Task<bool> DeleteUserAsync(string id)
@@ -92,6 +95,20 @@ namespace BoraLaBackend.Feature.Users.Services
 
             await _repo.DeleteAsync(id);
             return true;
+        }
+
+        private static UserResponse MapToResponse(User user)
+        {
+            return new UserResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Document = user.Document,
+                Role = user.Role.ToString(),
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt
+            };
         }
     }
 }
