@@ -42,5 +42,27 @@ namespace BoraLaBackend.Feature.Events.Services
             var created = await _eventRepo.CreateAsync(evt);
             return (CreateEventResult.Success, created);
         }
+
+        public async Task<IEnumerable<EventFeedResponse>> GetFeedAsync()
+        {
+            var events = await _eventRepo.GetFeedAsync(DateTime.UtcNow);
+
+            return events
+                .OrderBy(e => e.Date)
+                .ThenByDescending(e => e.Participants.Count)
+                .Select(e => new EventFeedResponse
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Address = e.Address,
+                    Location = e.Location,
+                    Capacity = e.Capacity,
+                    ParticipantsCount = e.Participants.Count,
+                    OrganizerId = e.OrganizerId,
+                    CreatedAt = e.CreatedAt
+                });
+        }
     }
 }
