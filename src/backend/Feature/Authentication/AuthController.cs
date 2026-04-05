@@ -58,6 +58,7 @@ namespace BoraLaBackend.Feature.Authentication
                     ErrorMessageCode.INVALID_HEADER => BadRequest(new { message = name }),
                     ErrorMessageCode.INVALID_BODY => UnprocessableEntity(),
                     ErrorMessageCode.NOT_FOUNDED => NotFound(),
+                    ErrorMessageCode.UNAUTHORIZED => Unauthorized(),
                     _ => StatusCode(500)
                 };
 
@@ -68,14 +69,13 @@ namespace BoraLaBackend.Feature.Authentication
         // POST: /auth/logout
         [HttpPost("logout")]
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout([FromHeader(Name = "Authorization")] string authToken)
         {
-            var authHeader = Request.Headers.Authorization.ToString();
 
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            if (string.IsNullOrEmpty(authToken) || !authToken.StartsWith("Bearer "))
                 return NotFound("parameter_not_founded");
 
-            AuthResults result = await _service.Logout(authHeader);
+            AuthResults result = await _service.Logout(authToken);
 
             if (result.HasError)
             {
