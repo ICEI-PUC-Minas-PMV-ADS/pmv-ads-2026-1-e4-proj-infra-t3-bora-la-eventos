@@ -33,6 +33,36 @@ namespace BoraLaBackend.Feature.Events.Repository
                 .SortBy(e => e.Date)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Event>> SearchAsync(string? name, string? category)
+        {
+            var filters = new List<FilterDefinition<Event>>();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                filters.Add(Builders<Event>.Filter.Regex("Title", new MongoDB.Bson.BsonRegularExpression(name, "i")));
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                filters.Add(Builders<Event>.Filter.Eq("Category", category));
+            }
+
+            if (filters.Count == 0)
+            {
+                return new List<Event>();
+            }
+
+            var filter = filters.Count == 1
+                ? filters[0]
+                : Builders<Event>.Filter.And(filters);
+
+            return await _events
+                .Find(filter)
+                .SortByDescending(e => e.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task UpdateAsync(string id, Event evt)
         {
             await _events.ReplaceOneAsync(e => e.Id == id, evt);

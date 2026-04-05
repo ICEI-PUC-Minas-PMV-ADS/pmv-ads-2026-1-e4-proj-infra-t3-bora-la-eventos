@@ -33,6 +33,7 @@ namespace BoraLaBackend.Feature.Events.Services
                 Date = request.Date,
                 Address = request.Address,
                 Location = request.Location,
+                Category = request.Category,
                 Capacity = request.Capacity,
                 OrganizerId = user.Id,
                 CreatedAt = DateTime.UtcNow,
@@ -58,6 +59,28 @@ namespace BoraLaBackend.Feature.Events.Services
                     Date = e.Date,
                     Address = e.Address,
                     Location = e.Location,
+                    Category = e.Category,
+                    Capacity = e.Capacity,
+                    ParticipantsCount = e.Participants.Count,
+                    OrganizerId = e.OrganizerId,
+                    CreatedAt = e.CreatedAt
+                });
+        }
+
+        public async Task<IEnumerable<EventFeedResponse>> SearchEventsAsync(string? name, string? category)
+        {
+            var events = await _eventRepo.SearchAsync(name, category);
+
+            return events
+                .Select(e => new EventFeedResponse
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Address = e.Address,
+                    Location = e.Location,
+                    Category = e.Category,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
@@ -81,6 +104,7 @@ namespace BoraLaBackend.Feature.Events.Services
             evt.Description = request.Description ?? evt.Description;
             evt.Date = request.Date ?? evt.Date;
             evt.Location = request.Location ?? evt.Location;
+            evt.Category = request.Category ?? evt.Category;
             evt.Capacity = request.Capacity ?? evt.Capacity;
 
             if (request.Address != null)

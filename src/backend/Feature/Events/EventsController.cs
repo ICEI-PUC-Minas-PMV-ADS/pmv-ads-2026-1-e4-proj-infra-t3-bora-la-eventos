@@ -28,6 +28,23 @@ namespace BoraLaBackend.Feature.Events
             return Ok(feed);
         }
 
+        /// <summary>Busca eventos por nome ou categoria.</summary>
+        /// <remarks>Permite buscar eventos por título (busca parcial, case-insensitive) e/ou categoria (busca exata).</remarks>
+        /// <param name="name">Parte do título do evento para buscar (opcional).</param>
+        /// <param name="category">Categoria exata do evento (opcional).</param>
+        /// <response code="200">Lista de eventos encontrados.</response>
+        [HttpGet("search")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(IEnumerable<EventFeedResponse>), 200)]
+        public async Task<IActionResult> SearchEvents([FromQuery] string? name, [FromQuery] string? category)
+        {
+            if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(category))
+                return BadRequest(new { message = "At least one search parameter (name or category) is required" });
+
+            var results = await _eventsService.SearchEventsAsync(name, category);
+            return Ok(results);
+        }
+
         /// <summary>Cria um novo evento.</summary>
         /// <remarks>Apenas organizadores (cadastrados com CNPJ) podem criar eventos.</remarks>
         /// <response code="201">Evento criado com sucesso.</response>
