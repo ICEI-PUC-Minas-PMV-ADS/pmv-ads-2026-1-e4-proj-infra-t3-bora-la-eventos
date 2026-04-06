@@ -95,5 +95,91 @@ namespace BoraLaBackend.Test.Events
 
             Assert.That(resultado, Is.Empty);
         }
+
+        [Test]
+        public async Task SearchEventsAsync_ComNome_DeveRetornarEventosComNomeCorrespondente()
+        {
+            var eventos = new List<Event>
+            {
+                new Event { Id = "1", Title = "Festival de Música", Category = "Música", Participants = new List<string>() },
+                new Event { Id = "2", Title = "Peça de Teatro", Category = "Teatro", Participants = new List<string>() }
+            };
+
+            _eventRepoMock
+                .Setup(r => r.SearchAsync("Festival", null))
+                .ReturnsAsync(new List<Event> { eventos[0] });
+
+            var resultado = await _service.SearchEventsAsync("Festival", null);
+
+            Assert.That(resultado.Count(), Is.EqualTo(1));
+            Assert.That(resultado.First().Title, Is.EqualTo("Festival de Música"));
+        }
+
+        [Test]
+        public async Task SearchEventsAsync_ComCategoria_DeveRetornarEventosDaCategoriaCorrespondente()
+        {
+            var eventos = new List<Event>
+            {
+                new Event { Id = "1", Title = "Festival de Música", Category = "Música", Participants = new List<string>() },
+                new Event { Id = "2", Title = "Show de Rock", Category = "Música", Participants = new List<string>() },
+                new Event { Id = "3", Title = "Peça de Teatro", Category = "Teatro", Participants = new List<string>() }
+            };
+
+            _eventRepoMock
+                .Setup(r => r.SearchAsync(null, "Música"))
+                .ReturnsAsync(eventos.Where(e => e.Category == "Música").ToList());
+
+            var resultado = await _service.SearchEventsAsync(null, "Música");
+
+            Assert.That(resultado.Count(), Is.EqualTo(2));
+            Assert.That(resultado.All(e => e.Category == "Música"), Is.True);
+        }
+
+        [Test]
+        public async Task SearchEventsAsync_ComNomeECategoria_DeveRetornarApenasEventosQueCorrespondemAmbos()
+        {
+            var eventos = new List<Event>
+            {
+                new Event { Id = "1", Title = "Festival de Música Eletrônica", Category = "Música", Participants = new List<string>() }
+            };
+
+            _eventRepoMock
+                .Setup(r => r.SearchAsync("Festival", "Música"))
+                .ReturnsAsync(eventos);
+
+            var resultado = await _service.SearchEventsAsync("Festival", "Música");
+
+            Assert.That(resultado.Count(), Is.EqualTo(1));
+            Assert.That(resultado.First().Title, Is.EqualTo("Festival de Música Eletrônica"));
+            Assert.That(resultado.First().Category, Is.EqualTo("Música"));
+        }
+
+        [Test]
+        public async Task SearchEventsAsync_SemResultados_DeveRetornarListaVazia()
+        {
+            _eventRepoMock
+                .Setup(r => r.SearchAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new List<Event>());
+
+            var resultado = await _service.SearchEventsAsync("EventoInexistente", null);
+
+            Assert.That(resultado, Is.Empty);
+        }
+
+        [Test]
+        public async Task SearchEventsAsync_ComCategoria_NaoDeveRetornarEventosDeCategoriasDiferentes()
+        {
+            _eventRepoMock
+                .Setup(r => r.SearchAsync(null, "Teatro"))
+                .ReturnsAsync(new List<Event>
+                {
+                    new Event { Id = "1", Title = "Peça de Teatro Clássico", Category = "Teatro", Participants = new List<string>() }
+                });
+
+            var resultado = await _service.SearchEventsAsync(null, "Teatro");
+
+            Assert.That(resultado.All(e => e.Category == "Teatro"), Is.True);
+            Assert.That(resultado.Any(e => e.Category == "Música"), Is.False);
+        }
     }
 }
