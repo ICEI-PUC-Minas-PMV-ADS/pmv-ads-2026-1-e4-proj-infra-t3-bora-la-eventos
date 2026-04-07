@@ -39,11 +39,11 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |RF-001| Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis |ALTA | Willy & Gustavo |
 |RF-002| Permitir que organizadores cadastrem eventos com data, hora e local | ALTA |  Mireia |
 |RF-003| Exibir feed de eventos disponíveis com base na data e relevância | ALTA | Michelle |
-|RF-004| Implementar busca de eventos por nome ou categoria| ALTA| Mireia |
+|RF-004| Implementar busca de eventos por nome ou categoria| ALTA| Michelle |
 |RF-005| Permitir a edição e exclusão de eventos pelo organizador| ALTA| Mireia |
 |RF-006| Painel de gestão para o estabelecimento gerenciar seu perfil| ALTA| *A definir* |
-|RF-007| Permitir que o usuário curta um evento |BAIXA |*A definir* |
-|RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA|*A definir* |
+|RF-007| Permitir que o usuário curta um evento |BAIXA | Samuel |
+|RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA| Samuel |
 |RF-009| Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
 |RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA|*A definir* |
 |RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
