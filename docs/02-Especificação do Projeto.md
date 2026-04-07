@@ -1,9 +1,5 @@
 # Especificações do Projeto
 
-<span style="color:red">Pré-requisitos: <a href="1-Documentação de Contexto.md"> Documentação de Contexto</a></span>
-
-Esta seção detalha a definição do problema e a proposta de solução sob a ótica dos usuários. O documento abrange o mapeamento de personas, a redação de histórias de usuários, a elicitação de requisitos funcionais e não funcionais, além das restrições tecnológicas. Para a elaboração desta especificação, foram utilizadas técnicas de design thinking para criação de perfis, o método MoSCoW para priorização de requisitos e a modelagem UML para o diagrama de casos de uso
-
 ## Personas
 
 **Pedro Paulo:** 26 anos, arquiteto recém-formado e autônomo. Adora viajar e é solteiro. Sente dificuldade em encontrar eventos culturais e opções de lazer em sua cidade de forma centralizada. Busca uma ferramenta que o ajude a descobrir o que fazer no tempo livre sem precisar filtrar dezenas de redes sociais.
@@ -28,10 +24,6 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 
 ## Requisitos
 
-As tabelas que se seguem apresentam os requisitos funcionais e não funcionais que detalham o escopo do projeto. Para determinar a prioridade de requisitos, aplicar uma técnica de priorização de requisitos e detalhar como a técnica foi aplicada.
-
-<strong>Crie no mínimo 12 Requisitos funcionais, 6 não funcionais e 3 restrições</strong>
-<strong>Cada aluno será responsável pela execução completa (back, web e mobile) de pelo menos 2 requisitos que será acompanhado pelo professor</strong>
 ### Requisitos Funcionais
 
 |ID    | Descrição do Requisito  | Prioridade | Responsável |
