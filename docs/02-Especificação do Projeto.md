@@ -66,9 +66,10 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 
 |ID| Restrição                                             |
 |--|-------------------------------------------------------|
-| 01 | O projeto deve utilizar Node.js ou .NET no ecossistema do backend| 
+| 01 | O projeto deve utilizar ASP.NET no ecossistema do backend| 
 | 02 | O frontend administrativo deve ser restrito ao uso de Next.js e TypeScript |
-| 03 | Não poderá ser desenvolvido um módulo de backend que não siga os princípios de sistemas distribuídos |
+| 03 | O frontend mobile deve ser restrito ao uso de React Native e TypeScript |
+| 04 | Não poderá ser desenvolvido um módulo de backend que não siga os princípios de sistemas distribuídos |
 
 
 ## Diagrama de Casos de Uso (WiP)
