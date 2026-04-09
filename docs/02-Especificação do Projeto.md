@@ -1,9 +1,5 @@
 # Especificações do Projeto
 
-<span style="color:red">Pré-requisitos: <a href="1-Documentação de Contexto.md"> Documentação de Contexto</a></span>
-
-Esta seção detalha a definição do problema e a proposta de solução sob a ótica dos usuários. O documento abrange o mapeamento de personas, a redação de histórias de usuários, a elicitação de requisitos funcionais e não funcionais, além das restrições tecnológicas. Para a elaboração desta especificação, foram utilizadas técnicas de design thinking para criação de perfis, o método MoSCoW para priorização de requisitos e a modelagem UML para o diagrama de casos de uso
-
 ## Personas
 
 **Pedro Paulo:** 26 anos, arquiteto recém-formado e autônomo. Adora viajar e é solteiro. Sente dificuldade em encontrar eventos culturais e opções de lazer em sua cidade de forma centralizada. Busca uma ferramenta que o ajude a descobrir o que fazer no tempo livre sem precisar filtrar dezenas de redes sociais.
@@ -28,10 +24,6 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 
 ## Requisitos
 
-As tabelas que se seguem apresentam os requisitos funcionais e não funcionais que detalham o escopo do projeto. Para determinar a prioridade de requisitos, aplicar uma técnica de priorização de requisitos e detalhar como a técnica foi aplicada.
-
-<strong>Crie no mínimo 12 Requisitos funcionais, 6 não funcionais e 3 restrições</strong>
-<strong>Cada aluno será responsável pela execução completa (back, web e mobile) de pelo menos 2 requisitos que será acompanhado pelo professor</strong>
 ### Requisitos Funcionais
 
 |ID    | Descrição do Requisito  | Prioridade | Responsável |
@@ -39,11 +31,11 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |RF-001| Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis |ALTA | Willy & Gustavo |
 |RF-002| Permitir que organizadores cadastrem eventos com data, hora e local | ALTA |  Mireia |
 |RF-003| Exibir feed de eventos disponíveis com base na data e relevância | ALTA | Michelle |
-|RF-004| Implementar busca de eventos por nome ou categoria| ALTA| Mireia |
+|RF-004| Implementar busca de eventos por nome ou categoria| ALTA| Michelle |
 |RF-005| Permitir a edição e exclusão de eventos pelo organizador| ALTA| Mireia |
 |RF-006| Painel de gestão para o estabelecimento gerenciar seu perfil| ALTA| *A definir* |
-|RF-007| Permitir que o usuário curta um evento |BAIXA |*A definir* |
-|RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA|*A definir* |
+|RF-007| Permitir que o usuário curta um evento |BAIXA | Samuel |
+|RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA| Samuel |
 |RF-009| Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
 |RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA|*A definir* |
 |RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
@@ -66,9 +58,10 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 
 |ID| Restrição                                             |
 |--|-------------------------------------------------------|
-| 01 | O projeto deve utilizar Node.js ou .NET no ecossistema do backend| 
+| 01 | O projeto deve utilizar ASP.NET no ecossistema do backend| 
 | 02 | O frontend administrativo deve ser restrito ao uso de Next.js e TypeScript |
-| 03 | Não poderá ser desenvolvido um módulo de backend que não siga os princípios de sistemas distribuídos |
+| 03 | O frontend mobile deve ser restrito ao uso de React Native e TypeScript |
+| 04 | Não poderá ser desenvolvido um módulo de backend que não siga os princípios de sistemas distribuídos |
 
 
 ## Diagrama de Casos de Uso (WiP)
