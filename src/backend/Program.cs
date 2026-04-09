@@ -51,6 +51,7 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventsService, EventsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEventLikeRepository, EventLikeRepository>();
 
 // Helpers
 builder.Services.AddScoped<IPasswordService, PasswordService>();

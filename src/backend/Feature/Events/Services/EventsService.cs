@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using BoraLaBackend.Feature.Events.DTO;
 using BoraLaBackend.Feature.Events.Enums;
 using BoraLaBackend.Feature.Events.Repository;
@@ -137,6 +138,27 @@ namespace BoraLaBackend.Feature.Events.Services
 
             await _eventRepo.DeleteAsync(eventId);
             return EventOperationResult.Success;
+
+            
+        
+        }
+        //configuração dos likes
+        public async Task ToggleLikeAsync(Guid userId, Guid eventId)
+        {
+            var existing = await _likeRepository.GetAsync(userId, eventId);
+
+            if (existing == null)
+            {
+                await _likeRepository.RemoveAsync(existing);
+                return;
+            }
+
+            var like = EventLike
+            (
+                UserId = userId,
+                EventId = eventId
+            );
+            await likeRepository.AddAsync(like);
         }
     }
 }

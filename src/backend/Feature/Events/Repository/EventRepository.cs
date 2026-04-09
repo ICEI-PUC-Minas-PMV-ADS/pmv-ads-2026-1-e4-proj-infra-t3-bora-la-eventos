@@ -1,7 +1,9 @@
+using System;
 using BoraLaBackend.Models;
 using BoraLaBackend.Shared.Database;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using static BoraLaBackend.Feature.Events.Repository.EventRepository;
 
 namespace BoraLaBackend.Feature.Events.Repository
 {
@@ -72,5 +74,7 @@ namespace BoraLaBackend.Feature.Events.Repository
         {
             await _events.DeleteOneAsync(e => e.Id == id);
         }
+
+
     }
 }
