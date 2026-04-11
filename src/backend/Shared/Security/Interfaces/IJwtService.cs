@@ -9,6 +9,9 @@ namespace BoraLaBackend.Shared.Security
         public bool ValidateToken(string token);
 
         public ValidateTokenReturnProps? InvalidateToken(string token);
+
+        public string? GetClaimFromToken(string token, string claimKey);
+
     }
 
 

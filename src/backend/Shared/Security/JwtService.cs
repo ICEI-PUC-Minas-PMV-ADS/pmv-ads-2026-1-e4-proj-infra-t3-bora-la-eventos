@@ -32,7 +32,7 @@ namespace BoraLaBackend.Shared.Security
         {
             var payload = email == null
                 ? CreateAppPayload(appId)
-                : CreateUserPayload(email, appId, tokenVersion ?? 1);
+                : CreateUserPayload(email, appId, tokenVersion ?? 0);
 
             return _encoder.Encode(payload, _secretKey);
         }
@@ -78,6 +78,25 @@ namespace BoraLaBackend.Shared.Security
 
             ValidateTokenReturnProps data = new(jti, expiresAt);
             return data;
+        }
+
+        public string? GetClaimFromToken(string token, string claimKey)
+        {
+            try
+            {
+                var payload = _decoder.DecodeToObject<Dictionary<string, object>>(token, _secretKey, verify: true);
+
+                if (payload != null && payload.TryGetValue(claimKey, out var valueObj))
+                {
+                    return valueObj.ToString();
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private static Dictionary<string, object> CreateAppPayload(string appId) => new()
