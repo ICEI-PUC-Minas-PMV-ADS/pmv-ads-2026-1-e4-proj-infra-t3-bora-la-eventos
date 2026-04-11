@@ -143,22 +143,22 @@ namespace BoraLaBackend.Feature.Events.Services
         
         }
         //configuração dos likes
-        public async Task ToggleLikeAsync(Guid userId, Guid eventId)
-        {
-            var existing = await _likeRepository.GetAsync(userId, eventId);
+        //public async Task ToggleLikeAsync(Guid userId, Guid eventId)
+        //{
+        //    var existing = await _likeRepository.GetAsync(userId, eventId);
 
-            if (existing == null)
-            {
-                await _likeRepository.RemoveAsync(existing);
-                return;
-            }
+        //    if (existing == null)
+        //    {
+        //        await _likeRepository.RemoveAsync(existing);
+        //        return;
+        //    }
 
-            var like = EventLike
-            (
-                UserId = userId,
-                EventId = eventId
-            );
-            await likeRepository.AddAsync(like);
-        }
+        //    var like = EventLike
+        //    (
+        //        UserId = userId,
+        //        EventId = eventId
+        //    );
+        //    await likeRepository.AddAsync(like);
+        //}
     }
 }

@@ -1,10 +1,13 @@
 
 using BoraLaBackend.Feature.Authentication.DTO;
-using BoraLaBackend.Shared.Security;
+using BoraLaBackend.Feature.Authentication.Repositories;
 using BoraLaBackend.Feature.Authentication.Services.Interfaces;
 using BoraLaBackend.Feature.Users.Repository;
-using BoraLaBackend.Feature.Authentication.Repositories;
 using BoraLaBackend.Models;
+using BoraLaBackend.Shared.Security;
+using JWT;
+using JWT.Algorithms;
+using JWT.Serializers;
 
 namespace BoraLaBackend.Feature.Authentication.Services
 {
@@ -54,32 +57,37 @@ namespace BoraLaBackend.Feature.Authentication.Services
       bool isValidPassword = _pass.Check(password, usr.Password);
       if (!isValidPassword) return AuthResults.Unauthorized;
 
-      string token = _jwtService.GenerateToken(id, email);
+      string token = _jwtService.GenerateToken(id, email, usr.TokenVersion);
       LoginReturn data = new(usr, token);
       return AuthResults.LoginSuccess(data);
     }
+
     public async Task<AuthResults> Logout(string token)
     {
-      string purgedToken = token.Replace("Bearer ", "");
-      ValidateTokenReturnProps? data = _jwtService.InvalidateToken(purgedToken);
+    string purgedToken = token.Replace("Bearer ", "");
+    var decoder = new JwtDecoder(new JsonNetSerializer(), new JwtValidator(new JsonNetSerializer(), new UtcDateTimeProvider()), new JwtBase64UrlEncoder(), new HMACSHA256Algorithm());
+    try
+    {
+        var payload = decoder.DecodeToObject<Dictionary<string, object>>(purgedToken, _config["Auth:ServerSecret"], verify: true);
 
-      if (data == null) return AuthResults.ServerError;
+        if (payload != null && payload.TryGetValue("email", out var emailObj))
+        {
+            var email = emailObj.ToString();
+            var user = await _usrRepository.GetByEmailAsync(email);
 
-      BlacklistedToken field = new()
-      {
-        Id = data.Jti,
-        ExpiresAt = data.Date
-      };
-      try
-      {
-        await _blRepository.Insert(field);
+            if (user != null)
+            {
+                user.TokenVersion += 1;
+                await _usrRepository.UpdateAsync(user.Id, user);
+            }
+        }
+        }
+        catch
+        {
+            return AuthResults.Unprocessable;
+        }
+
         return AuthResults.LogoutSuccess();
-        
-      } catch
-      {
-        return AuthResults.Unprocessable;
-      }
-
     }
   }
 }
