@@ -36,7 +36,7 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 |RF-007| Permitir que o usuário curta um evento |BAIXA | Samuel |
 |RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA| Samuel |
 |RF-009| Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
-|RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA|*A definir* |
+|RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA| Michelle |
 |RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
 
 ### Requisitos não Funcionais
