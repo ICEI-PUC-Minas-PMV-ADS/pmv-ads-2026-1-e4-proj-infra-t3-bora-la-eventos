@@ -19,7 +19,6 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 | Frequentador  | Curtir e comentar em eventos | Interagir com a comunidade e salvar interesses para consulta |
 | Organizador | Cadastrar e editar informações de eventos | Divulgar a agenda do meu estabelecimento de forma estruturada | 
 | Organizador | Visualizar o engajamento (curtidas/comentários) | Entender o interesse do público nas atividades propostas |
-| Administrador | Moderar comentários e excluir eventos impróprios | Manter a integridade e segurança da plataforma |
 
 
 ## Requisitos
