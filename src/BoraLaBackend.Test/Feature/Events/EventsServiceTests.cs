@@ -181,5 +181,87 @@ namespace BoraLaBackend.Test.Events
             Assert.That(resultado.All(e => e.Category == "Teatro"), Is.True);
             Assert.That(resultado.Any(e => e.Category == "Música"), Is.False);
         }
+
+        [Test]
+        public async Task GetNearbyEventsAsync_DeveRetornarEventosDentroDoRaio()
+        {
+            var eventos = new List<Event>
+            {
+                new Event
+                {
+                    Id = "1",
+                    Title = "Festival na Paulista",
+                    Category = "Música",
+                    Location = "Club Síntese",
+                    GeoLocation = new GeoLocation { Type = "Point", Coordinates = [-46.655881, -23.561414] },
+                    Participants = new List<string>()
+                }
+            };
+
+            _eventRepoMock
+                .Setup(r => r.GetNearbyAsync(-46.655881, -23.561414, 10))
+                .ReturnsAsync(eventos);
+
+            var resultado = await _service.GetNearbyEventsAsync(-46.655881, -23.561414, 10);
+
+            Assert.That(resultado.Count(), Is.EqualTo(1));
+            Assert.That(resultado.First().Title, Is.EqualTo("Festival na Paulista"));
+        }
+
+        [Test]
+        public async Task GetNearbyEventsAsync_SemEventosNoRaio_DeveRetornarListaVazia()
+        {
+            _eventRepoMock
+                .Setup(r => r.GetNearbyAsync(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>()))
+                .ReturnsAsync(new List<Event>());
+
+            var resultado = await _service.GetNearbyEventsAsync(-43.9387, -19.9167, 10);
+
+            Assert.That(resultado, Is.Empty);
+        }
+
+        [Test]
+        public async Task GetNearbyEventsAsync_DeveRetornarGeoLocationNaResposta()
+        {
+            var geoLocation = new GeoLocation { Type = "Point", Coordinates = [-46.655881, -23.561414] };
+
+            _eventRepoMock
+                .Setup(r => r.GetNearbyAsync(-46.655881, -23.561414, 10))
+                .ReturnsAsync(new List<Event>
+                {
+                    new Event
+                    {
+                        Id = "1",
+                        Title = "Evento com Coordenadas",
+                        GeoLocation = geoLocation,
+                        Participants = new List<string>()
+                    }
+                });
+
+            var resultado = await _service.GetNearbyEventsAsync(-46.655881, -23.561414, 10);
+
+            Assert.That(resultado.First().GeoLocation, Is.Not.Null);
+            Assert.That(resultado.First().GeoLocation!.Type, Is.EqualTo("Point"));
+            Assert.That(resultado.First().GeoLocation!.Coordinates, Is.EqualTo(new double[] { -46.655881, -23.561414 }));
+        }
+
+        [Test]
+        public async Task GetNearbyEventsAsync_DeveRetornarMultiplosEventosDentroDoRaio()
+        {
+            var eventos = new List<Event>
+            {
+                new Event { Id = "1", Title = "Evento A", GeoLocation = new GeoLocation { Type = "Point", Coordinates = [-46.65, -23.56] }, Participants = new List<string>() },
+                new Event { Id = "2", Title = "Evento B", GeoLocation = new GeoLocation { Type = "Point", Coordinates = [-46.66, -23.57] }, Participants = new List<string>() },
+                new Event { Id = "3", Title = "Evento C", GeoLocation = new GeoLocation { Type = "Point", Coordinates = [-46.67, -23.58] }, Participants = new List<string>() }
+            };
+
+            _eventRepoMock
+                .Setup(r => r.GetNearbyAsync(-46.655881, -23.561414, 50))
+                .ReturnsAsync(eventos);
+
+            var resultado = await _service.GetNearbyEventsAsync(-46.655881, -23.561414, 50);
+
+            Assert.That(resultado.Count(), Is.EqualTo(3));
+        }
     }
 }
