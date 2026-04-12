@@ -1,3 +1,5 @@
+using BoraLaBackend.Feature.Events.DTO;
+using BoraLaBackend.Feature.Events.Enums;
 using BoraLaBackend.Feature.Events.Repository;
 using BoraLaBackend.Feature.Events.Services;
 using BoraLaBackend.Feature.Users.Repository;
@@ -262,6 +264,290 @@ namespace BoraLaBackend.Test.Events
             var resultado = await _service.GetNearbyEventsAsync(-46.655881, -23.561414, 50);
 
             Assert.That(resultado.Count(), Is.EqualTo(3));
+        }
+
+        // ── CreateEventAsync ──────────────────────────────────────────────────
+
+        [Test]
+        public async Task CreateEventAsync_DeveRetornarSuccess_QuandoOrganizadorValido()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.CreateAsync(It.IsAny<Event>())).ReturnsAsync((Event e) => e);
+
+            var request = new CreateEventRequest
+            {
+                Title = "Show", Description = "Desc", Date = DateTime.UtcNow.AddDays(5),
+                Address = new Address { Street = "Rua A", Number = "1", City = "BH", State = "MG", ZipCode = "30000-000" },
+                Location = "BH", Capacity = 100
+            };
+
+            var (result, evt) = await _service.CreateEventAsync("org@teste.com", request);
+
+            Assert.That(result, Is.EqualTo(CreateEventResult.Success));
+            Assert.That(evt, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task CreateEventAsync_DeveDefinirOrganizerId_ComIdDoUsuario()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.CreateAsync(It.IsAny<Event>())).ReturnsAsync((Event e) => e);
+
+            var request = new CreateEventRequest
+            {
+                Title = "Show", Description = "Desc", Date = DateTime.UtcNow.AddDays(5),
+                Address = new Address { Street = "Rua A", Number = "1", City = "BH", State = "MG", ZipCode = "30000-000" },
+                Location = "BH", Capacity = 100
+            };
+
+            var (_, evt) = await _service.CreateEventAsync("org@teste.com", request);
+
+            Assert.That(evt!.OrganizerId, Is.EqualTo("org1"));
+        }
+
+        [Test]
+        public async Task CreateEventAsync_DeveRetornarUserNotFound_QuandoUsuarioNaoExiste()
+        {
+            _userRepoMock.Setup(r => r.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync((User?)null);
+
+            var (result, evt) = await _service.CreateEventAsync("naoexiste@teste.com", new CreateEventRequest());
+
+            Assert.That(result, Is.EqualTo(CreateEventResult.UserNotFound));
+            Assert.That(evt, Is.Null);
+        }
+
+        [Test]
+        public async Task CreateEventAsync_DeveRetornarNotAnOrganizer_QuandoUsuarioComum()
+        {
+            var user = new User { Id = "u1", Email = "user@teste.com", Role = Role.user };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("user@teste.com")).ReturnsAsync(user);
+
+            var (result, evt) = await _service.CreateEventAsync("user@teste.com", new CreateEventRequest());
+
+            Assert.That(result, Is.EqualTo(CreateEventResult.NotAnOrganizer));
+            Assert.That(evt, Is.Null);
+        }
+
+        [Test]
+        public async Task CreateEventAsync_DeveDefinirGeoLocation_QuandoCoordenadasFornecidas()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.CreateAsync(It.IsAny<Event>())).ReturnsAsync((Event e) => e);
+
+            var request = new CreateEventRequest
+            {
+                Title = "Show", Description = "Desc", Date = DateTime.UtcNow.AddDays(5),
+                Address = new Address { Street = "Rua A", Number = "1", City = "BH", State = "MG", ZipCode = "30000-000" },
+                Location = "BH", Capacity = 100, Latitude = -23.56, Longitude = -46.65
+            };
+
+            var (_, evt) = await _service.CreateEventAsync("org@teste.com", request);
+
+            Assert.That(evt!.GeoLocation, Is.Not.Null);
+            Assert.That(evt.GeoLocation!.Coordinates, Is.EqualTo(new double[] { -46.65, -23.56 }));
+        }
+
+        [Test]
+        public async Task CreateEventAsync_GeoLocationDeveSerNulo_QuandoSemCoordenadas()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.CreateAsync(It.IsAny<Event>())).ReturnsAsync((Event e) => e);
+
+            var request = new CreateEventRequest
+            {
+                Title = "Show", Description = "Desc", Date = DateTime.UtcNow.AddDays(5),
+                Address = new Address { Street = "Rua A", Number = "1", City = "BH", State = "MG", ZipCode = "30000-000" },
+                Location = "BH", Capacity = 100
+            };
+
+            var (_, evt) = await _service.CreateEventAsync("org@teste.com", request);
+
+            Assert.That(evt!.GeoLocation, Is.Null);
+        }
+
+        // ── UpdateEventAsync ──────────────────────────────────────────────────
+
+        [Test]
+        public async Task UpdateEventAsync_DeveRetornarSuccess_QuandoOrganizadorEDono()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Title = "Antigo", Description = "Desc", Location = "BH", Capacity = 50, Date = DateTime.UtcNow.AddDays(5), Address = new Address(), Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+            _eventRepoMock.Setup(r => r.UpdateAsync("evt1", It.IsAny<Event>())).Returns(Task.CompletedTask);
+
+            var (result, evt) = await _service.UpdateEventAsync("org@teste.com", "evt1", new UpdateEventRequest { Title = "Novo" });
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.Success));
+            Assert.That(evt!.Title, Is.EqualTo("Novo"));
+        }
+
+        [Test]
+        public async Task UpdateEventAsync_DeveAtualizarApenasCamposEnviados()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Title = "Título Original", Description = "Descrição Original", Location = "Local Original", Capacity = 50, Date = DateTime.UtcNow.AddDays(5), Address = new Address(), Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+            _eventRepoMock.Setup(r => r.UpdateAsync("evt1", It.IsAny<Event>())).Returns(Task.CompletedTask);
+
+            var (_, evt) = await _service.UpdateEventAsync("org@teste.com", "evt1", new UpdateEventRequest { Title = "Título Novo" });
+
+            Assert.That(evt!.Title, Is.EqualTo("Título Novo"));
+            Assert.That(evt.Description, Is.EqualTo("Descrição Original"));
+            Assert.That(evt.Location, Is.EqualTo("Local Original"));
+        }
+
+        [Test]
+        public async Task UpdateEventAsync_DeveAtualizarEnderecoParcialmente()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            var evento = new Event
+            {
+                Id = "evt1", OrganizerId = "org1", Title = "Show", Description = "Desc", Location = "BH", Capacity = 50,
+                Date = DateTime.UtcNow.AddDays(5), Participants = new List<string>(),
+                Address = new Address { Street = "Rua A", Number = "1", City = "BH", State = "MG", ZipCode = "30000-000" }
+            };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+            _eventRepoMock.Setup(r => r.UpdateAsync("evt1", It.IsAny<Event>())).Returns(Task.CompletedTask);
+
+            var (_, evt) = await _service.UpdateEventAsync("org@teste.com", "evt1", new UpdateEventRequest
+            {
+                Address = new UpdateAddressRequest { City = "São Paulo" }
+            });
+
+            Assert.That(evt!.Address.City, Is.EqualTo("São Paulo"));
+            Assert.That(evt.Address.Street, Is.EqualTo("Rua A"));
+            Assert.That(evt.Address.State, Is.EqualTo("MG"));
+        }
+
+        [Test]
+        public async Task UpdateEventAsync_DeveRetornarUserNotFound_QuandoUsuarioNaoExiste()
+        {
+            _userRepoMock.Setup(r => r.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync((User?)null);
+
+            var (result, evt) = await _service.UpdateEventAsync("naoexiste@teste.com", "evt1", new UpdateEventRequest());
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.UserNotFound));
+            Assert.That(evt, Is.Null);
+        }
+
+        [Test]
+        public async Task UpdateEventAsync_DeveRetornarEventNotFound_QuandoEventoNaoExiste()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com", Role = Role.organizer };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((Event?)null);
+
+            var (result, evt) = await _service.UpdateEventAsync("org@teste.com", "inexistente", new UpdateEventRequest());
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.EventNotFound));
+            Assert.That(evt, Is.Null);
+        }
+
+        [Test]
+        public async Task UpdateEventAsync_DeveRetornarNotTheOrganizer_QuandoNaoEDono()
+        {
+            var user = new User { Id = "org2", Email = "outro@teste.com", Role = Role.organizer };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("outro@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+
+            var (result, evt) = await _service.UpdateEventAsync("outro@teste.com", "evt1", new UpdateEventRequest());
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.NotTheOrganizer));
+            Assert.That(evt, Is.Null);
+        }
+
+        // ── DeleteEventAsync ──────────────────────────────────────────────────
+
+        [Test]
+        public async Task DeleteEventAsync_DeveRetornarSuccess_QuandoOrganizadorEDono()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com" };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+            _eventRepoMock.Setup(r => r.DeleteAsync("evt1")).Returns(Task.CompletedTask);
+
+            var result = await _service.DeleteEventAsync("org@teste.com", "evt1");
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.Success));
+        }
+
+        [Test]
+        public async Task DeleteEventAsync_DeveChamarDeleteNoRepository()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com" };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+            _eventRepoMock.Setup(r => r.DeleteAsync("evt1")).Returns(Task.CompletedTask);
+
+            await _service.DeleteEventAsync("org@teste.com", "evt1");
+
+            _eventRepoMock.Verify(r => r.DeleteAsync("evt1"), Times.Once);
+        }
+
+        [Test]
+        public async Task DeleteEventAsync_DeveRetornarUserNotFound_QuandoUsuarioNaoExiste()
+        {
+            _userRepoMock.Setup(r => r.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync((User?)null);
+
+            var result = await _service.DeleteEventAsync("naoexiste@teste.com", "evt1");
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.UserNotFound));
+        }
+
+        [Test]
+        public async Task DeleteEventAsync_DeveRetornarEventNotFound_QuandoEventoNaoExiste()
+        {
+            var user = new User { Id = "org1", Email = "org@teste.com" };
+            _userRepoMock.Setup(r => r.GetByEmailAsync("org@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((Event?)null);
+
+            var result = await _service.DeleteEventAsync("org@teste.com", "inexistente");
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.EventNotFound));
+        }
+
+        [Test]
+        public async Task DeleteEventAsync_DeveRetornarNotTheOrganizer_QuandoNaoEDono()
+        {
+            var user = new User { Id = "org2", Email = "outro@teste.com" };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("outro@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+
+            var result = await _service.DeleteEventAsync("outro@teste.com", "evt1");
+
+            Assert.That(result, Is.EqualTo(EventOperationResult.NotTheOrganizer));
+        }
+
+        [Test]
+        public async Task DeleteEventAsync_NaoDeveChamarDelete_QuandoNaoEDono()
+        {
+            var user = new User { Id = "org2", Email = "outro@teste.com" };
+            var evento = new Event { Id = "evt1", OrganizerId = "org1", Participants = new List<string>() };
+
+            _userRepoMock.Setup(r => r.GetByEmailAsync("outro@teste.com")).ReturnsAsync(user);
+            _eventRepoMock.Setup(r => r.GetByIdAsync("evt1")).ReturnsAsync(evento);
+
+            await _service.DeleteEventAsync("outro@teste.com", "evt1");
+
+            _eventRepoMock.Verify(r => r.DeleteAsync(It.IsAny<string>()), Times.Never);
         }
     }
 }
