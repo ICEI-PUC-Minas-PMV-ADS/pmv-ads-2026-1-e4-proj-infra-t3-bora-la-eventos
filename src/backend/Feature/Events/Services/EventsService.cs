@@ -4,6 +4,7 @@ using BoraLaBackend.Feature.Events.Enums;
 using BoraLaBackend.Feature.Events.Repository;
 using BoraLaBackend.Feature.Users.Repository;
 using BoraLaBackend.Models;
+using GeoLocationModel = BoraLaBackend.Models.GeoLocation;
 
 namespace BoraLaBackend.Feature.Events.Services
 {
@@ -34,6 +35,9 @@ namespace BoraLaBackend.Feature.Events.Services
                 Date = request.Date,
                 Address = request.Address,
                 Location = request.Location,
+                GeoLocation = request.Latitude.HasValue && request.Longitude.HasValue
+                    ? new GeoLocationModel { Coordinates = [request.Longitude.Value, request.Latitude.Value] }
+                    : null,
                 Category = request.Category,
                 Capacity = request.Capacity,
                 OrganizerId = user.Id,
@@ -60,6 +64,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     Date = e.Date,
                     Address = e.Address,
                     Location = e.Location,
+                    GeoLocation = e.GeoLocation,
                     Category = e.Category,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
@@ -81,6 +86,29 @@ namespace BoraLaBackend.Feature.Events.Services
                     Date = e.Date,
                     Address = e.Address,
                     Location = e.Location,
+                    GeoLocation = e.GeoLocation,
+                    Category = e.Category,
+                    Capacity = e.Capacity,
+                    ParticipantsCount = e.Participants.Count,
+                    OrganizerId = e.OrganizerId,
+                    CreatedAt = e.CreatedAt
+                });
+        }
+
+        public async Task<IEnumerable<EventFeedResponse>> GetNearbyEventsAsync(double longitude, double latitude, double radiusInKm)
+        {
+            var events = await _eventRepo.GetNearbyAsync(longitude, latitude, radiusInKm);
+
+            return events
+                .Select(e => new EventFeedResponse
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Address = e.Address,
+                    Location = e.Location,
+                    GeoLocation = e.GeoLocation,
                     Category = e.Category,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
@@ -107,6 +135,9 @@ namespace BoraLaBackend.Feature.Events.Services
             evt.Location = request.Location ?? evt.Location;
             evt.Category = request.Category ?? evt.Category;
             evt.Capacity = request.Capacity ?? evt.Capacity;
+
+            if (request.Latitude.HasValue && request.Longitude.HasValue)
+                evt.GeoLocation = new GeoLocationModel { Coordinates = [request.Longitude.Value, request.Latitude.Value] };
 
             if (request.Address != null)
             {

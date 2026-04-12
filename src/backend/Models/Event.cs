@@ -23,6 +23,8 @@ namespace BoraLaBackend.Models
         [BsonRequired]
         public string Location { get; set; }
 
+        public GeoLocation? GeoLocation { get; set; }
+
         // TODO: Make Category required after migrating existing events without category
         public string Category { get; set; }
 
