@@ -65,6 +65,23 @@ namespace BoraLaBackend.Feature.Events.Repository
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Event>> GetNearbyAsync(double longitude, double latitude, double radiusInKm)
+        {
+            var radiusInRadians = radiusInKm / 6371.0;
+
+            var filter = Builders<Event>.Filter.GeoWithinCenterSphere(
+                "GeoLocation.coordinates",
+                longitude,
+                latitude,
+                radiusInRadians
+            );
+
+            return await _events
+                .Find(filter)
+                .SortBy(e => e.Date)
+                .ToListAsync();
+        }
+
         public async Task UpdateAsync(string id, Event evt)
         {
             await _events.ReplaceOneAsync(e => e.Id == id, evt);
