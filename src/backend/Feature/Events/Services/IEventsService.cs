@@ -12,5 +12,7 @@ namespace BoraLaBackend.Feature.Events.Services
         Task<IEnumerable<EventFeedResponse>> GetNearbyEventsAsync(double longitude, double latitude, double radiusInKm);
         Task<(EventOperationResult result, Event? evt)> UpdateEventAsync(string organizerEmail, string eventId, UpdateEventRequest request);
         Task<EventOperationResult> DeleteEventAsync(string organizerEmail, string eventId);
+        Task ToggleLikeAsync(string userId, string eventId);
+        Task<int> CountLikesAsync(string eventId);
     }
 }

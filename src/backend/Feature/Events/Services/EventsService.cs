@@ -4,7 +4,6 @@ using BoraLaBackend.Feature.Events.Enums;
 using BoraLaBackend.Feature.Events.Repository;
 using BoraLaBackend.Feature.Users.Repository;
 using BoraLaBackend.Models;
-using GeoLocationModel = BoraLaBackend.Models.GeoLocation;
 
 namespace BoraLaBackend.Feature.Events.Services
 {
@@ -12,11 +11,13 @@ namespace BoraLaBackend.Feature.Events.Services
     {
         private readonly IEventRepository _eventRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IEventLikeRepository _likeRepository;
 
-        public EventsService(IEventRepository eventRepo, IUserRepository userRepo)
+        public EventsService(IEventRepository eventRepo, IUserRepository userRepo, IEventLikeRepository likeRepository)
         {
             _eventRepo = eventRepo;
             _userRepo = userRepo;
+            _likeRepository = likeRepository;
         }
 
         public async Task<(CreateEventResult result, Event? evt)> CreateEventAsync(string organizerEmail, CreateEventRequest request)
@@ -35,9 +36,6 @@ namespace BoraLaBackend.Feature.Events.Services
                 Date = request.Date,
                 Address = request.Address,
                 Location = request.Location,
-                GeoLocation = request.Latitude.HasValue && request.Longitude.HasValue
-                    ? new GeoLocationModel { Coordinates = [request.Longitude.Value, request.Latitude.Value] }
-                    : null,
                 Category = request.Category,
                 Capacity = request.Capacity,
                 OrganizerId = user.Id,
@@ -64,7 +62,6 @@ namespace BoraLaBackend.Feature.Events.Services
                     Date = e.Date,
                     Address = e.Address,
                     Location = e.Location,
-                    GeoLocation = e.GeoLocation,
                     Category = e.Category,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
@@ -86,29 +83,6 @@ namespace BoraLaBackend.Feature.Events.Services
                     Date = e.Date,
                     Address = e.Address,
                     Location = e.Location,
-                    GeoLocation = e.GeoLocation,
-                    Category = e.Category,
-                    Capacity = e.Capacity,
-                    ParticipantsCount = e.Participants.Count,
-                    OrganizerId = e.OrganizerId,
-                    CreatedAt = e.CreatedAt
-                });
-        }
-
-        public async Task<IEnumerable<EventFeedResponse>> GetNearbyEventsAsync(double longitude, double latitude, double radiusInKm)
-        {
-            var events = await _eventRepo.GetNearbyAsync(longitude, latitude, radiusInKm);
-
-            return events
-                .Select(e => new EventFeedResponse
-                {
-                    Id = e.Id,
-                    Title = e.Title,
-                    Description = e.Description,
-                    Date = e.Date,
-                    Address = e.Address,
-                    Location = e.Location,
-                    GeoLocation = e.GeoLocation,
                     Category = e.Category,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
@@ -135,9 +109,6 @@ namespace BoraLaBackend.Feature.Events.Services
             evt.Location = request.Location ?? evt.Location;
             evt.Category = request.Category ?? evt.Category;
             evt.Capacity = request.Capacity ?? evt.Capacity;
-
-            if (request.Latitude.HasValue && request.Longitude.HasValue)
-                evt.GeoLocation = new GeoLocationModel { Coordinates = [request.Longitude.Value, request.Latitude.Value] };
 
             if (request.Address != null)
             {
@@ -170,26 +141,31 @@ namespace BoraLaBackend.Feature.Events.Services
             await _eventRepo.DeleteAsync(eventId);
             return EventOperationResult.Success;
 
-            
-        
+
+
         }
         //configuração dos likes
-        //public async Task ToggleLikeAsync(Guid userId, Guid eventId)
-        //{
-        //    var existing = await _likeRepository.GetAsync(userId, eventId);
+        public async Task ToggleLikeAsync(string userId, string eventId)
+        {
+            var existing = await _likeRepository.GetAsync(userId, eventId);
 
-        //    if (existing == null)
-        //    {
-        //        await _likeRepository.RemoveAsync(existing);
-        //        return;
-        //    }
+            if (existing != null)
+            {
+                await _likeRepository.RemoveAsync(existing.Id);
+                return;
+            }
 
-        //    var like = EventLike
-        //    (
-        //        UserId = userId,
-        //        EventId = eventId
-        //    );
-        //    await likeRepository.AddAsync(like);
-        //}
+            var like = new EventLike
+            {
+                UserId = userId,
+                EventId = eventId
+            };
+
+            await _likeRepository.AddAsync(like);
+        }
+        public async Task<int> CountLikesAsync(string eventId)
+        {
+            return await _likeRepository.CountLikesAsync(eventId);
+        }
     }
 }

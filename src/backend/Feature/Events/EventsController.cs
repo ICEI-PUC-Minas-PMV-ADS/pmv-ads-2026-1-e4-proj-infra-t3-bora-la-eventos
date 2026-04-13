@@ -152,5 +152,29 @@ namespace BoraLaBackend.Feature.Events
                 _ => StatusCode(500)
             };
         }
+
+        /// <summary>cCurte um evento</summary>
+        /// <remarks>Apenas o organizador que criou o evento pode excluí-lo.</remarks>
+        [HttpPost("{eventId}/like")]
+        public async Task<IActionResult> ToggleLike(string eventId)
+        {
+            var userId = User.FindFirst("sub")?.Value;
+
+            if (string.IsNullOrEmpty(userId)) 
+                return Unauthorized();
+
+            await _eventsService.ToggleLikeAsync(userId, eventId);
+
+            return Ok(new {message = "LIKE_TOGGLED"});
+        }
+
+        [HttpGet("{eventId}/likes")]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> GetLikes(string eventId)
+        {
+            var count = await _eventsService.CountLikesAsync(eventId);
+            return Ok(new {likes = count});
+        }
     }
 }
