@@ -167,5 +167,25 @@ namespace BoraLaBackend.Feature.Events.Services
         {
             return await _likeRepository.CountLikesAsync(eventId);
         }
+        public async Task<IEnumerable<EventFeedResponse>> GetNearbyEventsAsync(double longitude, double latitude, double radiusInKm)
+        {
+            var events = await _eventRepo.GetNearbyAsync(longitude, latitude, radiusInKm);
+
+            return events
+                .Select(e => new EventFeedResponse
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Address = e.Address,
+                    Location = e.Location,
+                    Category = e.Category,
+                    Capacity = e.Capacity,
+                    ParticipantsCount = e.Participants.Count,
+                    OrganizerId = e.OrganizerId,
+                    CreatedAt = e.CreatedAt
+                });
+        }
     }
 }
