@@ -165,8 +165,7 @@ namespace BoraLaBackend.Feature.Events.Services
         }
         public async Task<int> CountLikesAsync(string eventId)
         {
-            var likes = await _likeRepository.GetByEventIdAsync(eventId);
-            return likes.Count();
+            return await _likeRepository.CountLikesAsync(eventId);
         }
     }
 }

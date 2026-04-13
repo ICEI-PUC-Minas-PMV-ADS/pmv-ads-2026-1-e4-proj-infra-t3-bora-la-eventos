@@ -45,6 +45,26 @@ namespace BoraLaBackend.Feature.Events
             return Ok(results);
         }
 
+        /// <summary>Busca eventos por proximidade geográfica.</summary>
+        /// <remarks>Retorna eventos dentro do raio informado. Requer que os eventos tenham coordenadas cadastradas (latitude/longitude).</remarks>
+        /// <param name="latitude">Latitude do ponto central da busca.</param>
+        /// <param name="longitude">Longitude do ponto central da busca.</param>
+        /// <param name="radiusKm">Raio de busca em quilômetros (padrão: 10km).</param>
+        /// <response code="200">Lista de eventos encontrados no raio.</response>
+        /// <response code="400">Parâmetros de latitude ou longitude inválidos.</response>
+        [HttpGet("nearby")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(IEnumerable<EventFeedResponse>), 200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetNearbyEvents([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radiusKm = 10)
+        {
+            if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
+                return BadRequest(new { message = "Invalid latitude or longitude values" });
+
+            var results = await _eventsService.GetNearbyEventsAsync(longitude, latitude, radiusKm);
+            return Ok(results);
+        }
+
         /// <summary>Cria um novo evento.</summary>
         /// <remarks>Apenas organizadores (cadastrados com CNPJ) podem criar eventos.</remarks>
         /// <response code="201">Evento criado com sucesso.</response>

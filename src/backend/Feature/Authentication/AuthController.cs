@@ -63,7 +63,7 @@ namespace BoraLaBackend.Feature.Authentication
                 };
 
             }
-            return Ok(new { currentUser = result.Result.CurrentUser, token = result.Result.Token });
+            return Ok(new { currentUser = result.Result.CurrentUser, token = $"Bearer {result.Result.Token}" });
         }
 
         // POST: /auth/logout

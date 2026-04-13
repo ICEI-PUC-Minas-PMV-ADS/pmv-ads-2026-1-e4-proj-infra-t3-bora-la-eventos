@@ -19,7 +19,6 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 | Frequentador  | Curtir e comentar em eventos | Interagir com a comunidade e salvar interesses para consulta |
 | Organizador | Cadastrar e editar informações de eventos | Divulgar a agenda do meu estabelecimento de forma estruturada | 
 | Organizador | Visualizar o engajamento (curtidas/comentários) | Entender o interesse do público nas atividades propostas |
-| Administrador | Moderar comentários e excluir eventos impróprios | Manter a integridade e segurança da plataforma |
 
 
 ## Requisitos
@@ -37,7 +36,7 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 |RF-007| Permitir que o usuário curta um evento |BAIXA | Samuel |
 |RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA| Samuel |
 |RF-009| Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
-|RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA|*A definir* |
+|RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA| Michelle |
 |RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
 
 ### Requisitos não Funcionais
