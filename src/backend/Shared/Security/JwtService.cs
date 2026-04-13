@@ -28,11 +28,11 @@ namespace BoraLaBackend.Shared.Security
             _decoder = decoder;
         }
 
-        public string GenerateToken(string appId, string? email)
+        public string GenerateToken(string appId, string? email, int? tokenVersion = null)
         {
             var payload = email == null
                 ? CreateAppPayload(appId)
-                : CreateUserPayload(email, appId);
+                : CreateUserPayload(email, appId, tokenVersion ?? 0);
 
             return _encoder.Encode(payload, _secretKey);
         }
@@ -80,6 +80,25 @@ namespace BoraLaBackend.Shared.Security
             return data;
         }
 
+        public string? GetClaimFromToken(string token, string claimKey)
+        {
+            try
+            {
+                var payload = _decoder.DecodeToObject<Dictionary<string, object>>(token, _secretKey, verify: true);
+
+                if (payload != null && payload.TryGetValue(claimKey, out var valueObj))
+                {
+                    return valueObj.ToString();
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         private static Dictionary<string, object> CreateAppPayload(string appId) => new()
      {
         { "jti", Guid.NewGuid().ToString() },
@@ -88,7 +107,7 @@ namespace BoraLaBackend.Shared.Security
         { "iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds() }
      };
 
-        private static Dictionary<string, object> CreateUserPayload(string email, string appId)
+        private static Dictionary<string, object> CreateUserPayload(string email, string appId, int tokenVersion)
         {
             return new()
             {
@@ -96,6 +115,7 @@ namespace BoraLaBackend.Shared.Security
                 { "email", email },
                 { "sub", email },
                 { "app_id", appId },
+                { "token_version", tokenVersion },
                 { "exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds() },
                 { "iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds() }
             };

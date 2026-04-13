@@ -1,7 +1,9 @@
+using System;
 using BoraLaBackend.Models;
 using BoraLaBackend.Shared.Database;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using static BoraLaBackend.Feature.Events.Repository.EventRepository;
 
 namespace BoraLaBackend.Feature.Events.Repository
 {
@@ -63,6 +65,23 @@ namespace BoraLaBackend.Feature.Events.Repository
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Event>> GetNearbyAsync(double longitude, double latitude, double radiusInKm)
+        {
+            var radiusInRadians = radiusInKm / 6371.0;
+
+            var filter = Builders<Event>.Filter.GeoWithinCenterSphere(
+                "GeoLocation.coordinates",
+                longitude,
+                latitude,
+                radiusInRadians
+            );
+
+            return await _events
+                .Find(filter)
+                .SortBy(e => e.Date)
+                .ToListAsync();
+        }
+
         public async Task UpdateAsync(string id, Event evt)
         {
             await _events.ReplaceOneAsync(e => e.Id == id, evt);
@@ -72,5 +91,7 @@ namespace BoraLaBackend.Feature.Events.Repository
         {
             await _events.DeleteOneAsync(e => e.Id == id);
         }
+
+
     }
 }

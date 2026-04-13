@@ -26,7 +26,8 @@ namespace BoraLaBackend.Feature.Authentication
       var fakeUser = new Models.User
       {
         Email = "test@email.com",
-        Password = "hashed"
+        Password = "hashed",
+        TokenVersion = 1
       };
 
       userRepoMock
@@ -38,8 +39,8 @@ namespace BoraLaBackend.Feature.Authentication
           .Returns(true);
 
       jwtMock
-          .Setup(j => j.GenerateToken("app-id", "test@email.com"))
-          .Returns("token123");
+        .Setup(j => j.GenerateToken("app-id", "test@email.com", It.IsAny<int?>()))
+        .Returns("token123");
 
       var service = new AuthService(
           configMock.Object,
