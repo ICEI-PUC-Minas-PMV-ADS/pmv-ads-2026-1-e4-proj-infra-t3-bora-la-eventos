@@ -2,7 +2,6 @@
 using BoraLaBackend.Shared.Database;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using static BoraLaBackend.Feature.Events.Repository.EventLikeRepository;
 using System;
 
 
@@ -16,6 +15,8 @@ namespace BoraLaBackend.Feature.Events.Repository
         {
             var db = client.GetDatabase(settings.Value.DatabaseName);
             _likes = db.GetCollection<EventLike>("event_likes");
+
+            CreateIndexs();
         }
 
         private void CreateIndexs()

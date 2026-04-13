@@ -11,11 +11,13 @@ namespace BoraLaBackend.Feature.Events.Services
     {
         private readonly IEventRepository _eventRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IEventLikeRepository _likeRepository;
 
-        public EventsService(IEventRepository eventRepo, IUserRepository userRepo)
+        public EventsService(IEventRepository eventRepo, IUserRepository userRepo, IEventLikeRepository likeRepository)
         {
             _eventRepo = eventRepo;
             _userRepo = userRepo;
+            _likeRepository = likeRepository;
         }
 
         public async Task<(CreateEventResult result, Event? evt)> CreateEventAsync(string organizerEmail, CreateEventRequest request)
@@ -139,26 +141,32 @@ namespace BoraLaBackend.Feature.Events.Services
             await _eventRepo.DeleteAsync(eventId);
             return EventOperationResult.Success;
 
-            
-        
+
+
         }
         //configuração dos likes
-        public async Task ToggleLikeAsync(Guid userId, Guid eventId)
+        public async Task ToggleLikeAsync(string userId, string eventId)
         {
             var existing = await _likeRepository.GetAsync(userId, eventId);
 
-            if (existing == null)
+            if (existing != null)
             {
-                await _likeRepository.RemoveAsync(existing);
+                await _likeRepository.RemoveAsync(existing.Id);
                 return;
             }
 
-            var like = EventLike
-            (
+            var like = new EventLike
+            {
                 UserId = userId,
                 EventId = eventId
-            );
-            await likeRepository.AddAsync(like);
+            };
+
+            await _likeRepository.AddAsync(like);
+        }
+        public async Task<int> CountLikesAsync(string eventId)
+        {
+            var likes = await _likeRepository.GetByEventIdAsync(eventId);
+            return likes.Count();
         }
     }
 }
