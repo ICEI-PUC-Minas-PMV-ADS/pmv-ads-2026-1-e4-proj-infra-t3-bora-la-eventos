@@ -4,3 +4,4 @@ obj/
 .vscode/
 .vs/
 **/*/appsettings.Development.json
+/src/backend/Models/Comment.cs
