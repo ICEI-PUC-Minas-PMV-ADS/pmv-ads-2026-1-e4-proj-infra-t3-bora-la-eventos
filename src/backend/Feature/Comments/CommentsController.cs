@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BoraLaBackend.Feature.Comments;
 
-// api/events/{eventId}/
 // ROOT PATH
 [ApiController]
 [Route("comments")]
@@ -23,7 +22,7 @@ public class CommentsController(ICommentService service): ControllerBase
         return Ok(comments);
     }
 
-    /// Cria um comentário em um evento (RF-008)
+    // POST comments/
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -38,7 +37,7 @@ public class CommentsController(ICommentService service): ControllerBase
         return CreatedAtAction(nameof(GetByEvent), new { eventId }, created);
     }
 
-    /// Edita um comentário (apenas pelo autor) (RF-008)
+    // POST comments/id
     [HttpPut("{commentId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -60,7 +59,7 @@ public class CommentsController(ICommentService service): ControllerBase
         }
     }
 
-    /// Remove um comentário (organizador do evento OU autor)
+    // POST comments/id
     [HttpDelete("{commentId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
