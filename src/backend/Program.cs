@@ -13,6 +13,7 @@ using BoraLaBackend.Shared.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using BoraLaBackend.Feature.Comments.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBlackListRepository, BlackListRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 
 // Services
 builder.Services.AddScoped<IUsersService, UsersService>();
