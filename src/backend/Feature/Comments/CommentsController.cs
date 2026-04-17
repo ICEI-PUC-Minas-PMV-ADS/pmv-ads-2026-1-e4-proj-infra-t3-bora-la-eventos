@@ -1,26 +1,24 @@
-﻿using BoraLaBackend.Feature.Events.Services;
+﻿using BoraLaBackend.Feature.Comments.Services;
 using BoraLaBackend.Feature.Events.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoraLaBackend.Feature.Events;
+namespace BoraLaBackend.Feature.Comments;
 
+// api/events/{eventId}/
+// ROOT PATH
 [ApiController]
-[Route("api/events/{eventId}/comments")]
+[Route("comments")]
 [Produces("application/json")]
-public class CommentsController : ControllerBase
+public class CommentsController(ICommentService service): ControllerBase
 {
-    private readonly ICommentService _service;
+    private readonly ICommentService _service = service;
 
-    public CommentsController(ICommentService service)
-    {
-        _service = service;
-    }
-
-    /// Lista todos os comentários de um evento
-    [HttpGet]
+    // GET /comments/eventId
+    [HttpGet("{eventId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByEvent([FromRoute] string eventId)
     {
+        if (eventId == null) return BadRequest();
         var comments = await _service.GetByEventIdAsync(eventId);
         return Ok(comments);
     }
