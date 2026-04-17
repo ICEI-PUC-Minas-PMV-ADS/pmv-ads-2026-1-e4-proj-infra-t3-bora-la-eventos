@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using BoraLaBackend.Feature.Events.DTO;
 using BoraLaBackend.Feature.Events.Enums;
 using BoraLaBackend.Feature.Events.Repository;
@@ -10,11 +11,13 @@ namespace BoraLaBackend.Feature.Events.Services
     {
         private readonly IEventRepository _eventRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IEventLikeRepository _likeRepository;
 
-        public EventsService(IEventRepository eventRepo, IUserRepository userRepo)
+        public EventsService(IEventRepository eventRepo, IUserRepository userRepo, IEventLikeRepository likeRepository)
         {
             _eventRepo = eventRepo;
             _userRepo = userRepo;
+            _likeRepository = likeRepository;
         }
 
         public async Task<(CreateEventResult result, Event? evt)> CreateEventAsync(string organizerEmail, CreateEventRequest request)
@@ -137,6 +140,52 @@ namespace BoraLaBackend.Feature.Events.Services
 
             await _eventRepo.DeleteAsync(eventId);
             return EventOperationResult.Success;
+
+
+
+        }
+        //configuração dos likes
+        public async Task ToggleLikeAsync(string userId, string eventId)
+        {
+            var existing = await _likeRepository.GetAsync(userId, eventId);
+
+            if (existing != null)
+            {
+                await _likeRepository.RemoveAsync(existing.Id);
+                return;
+            }
+
+            var like = new EventLike
+            {
+                UserId = userId,
+                EventId = eventId
+            };
+
+            await _likeRepository.AddAsync(like);
+        }
+        public async Task<int> CountLikesAsync(string eventId)
+        {
+            return await _likeRepository.CountLikesAsync(eventId);
+        }
+        public async Task<IEnumerable<EventFeedResponse>> GetNearbyEventsAsync(double longitude, double latitude, double radiusInKm)
+        {
+            var events = await _eventRepo.GetNearbyAsync(longitude, latitude, radiusInKm);
+
+            return events
+                .Select(e => new EventFeedResponse
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Address = e.Address,
+                    Location = e.Location,
+                    Category = e.Category,
+                    Capacity = e.Capacity,
+                    ParticipantsCount = e.Participants.Count,
+                    OrganizerId = e.OrganizerId,
+                    CreatedAt = e.CreatedAt
+                });
         }
     }
 }

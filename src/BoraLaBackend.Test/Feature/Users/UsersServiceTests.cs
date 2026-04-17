@@ -6,7 +6,7 @@ using BoraLaBackend.Models;
 using BoraLaBackend.Shared.Security;
 using Moq;
 
-namespace BoraLaBackend.Test.Users
+namespace BoraLaBackend.Test.Feature.Users
 {
     [TestFixture]
     public class UsersServiceTests

@@ -51,6 +51,7 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventsService, EventsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEventLikeRepository, EventLikeRepository>();
 
 // Helpers
 builder.Services.AddScoped<IPasswordService, PasswordService>();
@@ -78,16 +79,34 @@ builder.Services.AddAuthentication(options =>
 
         ClockSkew = TimeSpan.Zero
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+
+            var emailClaim = context.Principal?.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+
+            var tokenVersionClaim = context.Principal?.Claims.FirstOrDefault(c => c.Type == "token_version")?.Value;
+
+            if (!string.IsNullOrEmpty(emailClaim) && int.TryParse(tokenVersionClaim, out int tokenVersion))
+            {
+                var user = await userRepository.GetByEmailAsync(emailClaim);
+
+                if (user == null || user.TokenVersion != tokenVersion)
+                {
+                    context.Fail("Token version is invalid or expired.");
+                }
+            }
+        }
+    };
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 if (!app.Environment.IsDevelopment())
 {

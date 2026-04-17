@@ -19,7 +19,6 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 | Frequentador  | Curtir e comentar em eventos | Interagir com a comunidade e salvar interesses para consulta |
 | Organizador | Cadastrar e editar informações de eventos | Divulgar a agenda do meu estabelecimento de forma estruturada | 
 | Organizador | Visualizar o engajamento (curtidas/comentários) | Entender o interesse do público nas atividades propostas |
-| Administrador | Moderar comentários e excluir eventos impróprios | Manter a integridade e segurança da plataforma |
 
 
 ## Requisitos
@@ -37,7 +36,7 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 |RF-007| Permitir que o usuário curta um evento |BAIXA | Samuel |
 |RF-008| Permitir a inserção e edição de comentários nas páginas de eventos|ALTA| Samuel |
 |RF-009| Implementar visualização de eventos em mapa integrado|BAIXA|*A definir* |
-|RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA|*A definir* |
+|RF-010| Disponibilizar filtros por geolocalização (raio de distância)|ALTA| Michelle |
 |RF-011| Sistema de recuperação de conta via e-mail| BAIXA| *A definir* |
 
 ### Requisitos não Funcionais
@@ -68,14 +67,9 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 
 O diagrama de casos de uso é o próximo passo após a elicitação de requisitos, que utiliza um modelo gráfico e uma tabela com as descrições sucintas dos casos de uso e dos atores. Ele contempla a fronteira do sistema e o detalhamento dos requisitos funcionais com a indicação dos atores, casos de uso e seus relacionamentos. 
 
-As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de Casos de Uso”.
+<img width="1827" height="843" alt="image" src="https://github.com/user-attachments/assets/ce293b9b-bb67-4d4a-b7e5-4d8b8146e765" />
 
-> **Links Úteis**:
-> - [Criando Casos de Uso](https://www.ibm.com/docs/pt-br/elm/6.0?topic=requirements-creating-use-cases)
-> - [Como Criar Diagrama de Caso de Uso: Tutorial Passo a Passo](https://gitmind.com/pt/fazer-diagrama-de-caso-uso.html/)
-> - [Lucidchart](https://www.lucidchart.com/)
-> - [Astah](https://astah.net/)
-> - [Diagrams](https://app.diagrams.net/)
+
 
 
 # Gerenciamento de Projeto (WiP)
