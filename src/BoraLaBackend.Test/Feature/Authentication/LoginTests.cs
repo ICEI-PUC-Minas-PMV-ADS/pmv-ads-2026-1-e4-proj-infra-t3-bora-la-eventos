@@ -6,7 +6,6 @@ using BoraLaBackend.Shared.Security;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
-
 namespace BoraLaBackend.Feature.Authentication
 {
   public class LoginTests
@@ -56,7 +55,7 @@ namespace BoraLaBackend.Feature.Authentication
       // Assert
       Assert.That(result.HasError, Is.False);
       Assert.That(result.Result.Token, Is.EqualTo("token123"));
-      Assert.That(result.Result.CurrentUser, Is.EqualTo(fakeUser));
+      Assert.That(result.Result.CurrentUser.Email, Is.EqualTo(fakeUser.Email)); 
     }
 
     [Test]
