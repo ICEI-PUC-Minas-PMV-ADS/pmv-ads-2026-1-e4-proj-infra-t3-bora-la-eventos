@@ -1,9 +1,10 @@
 using BoraLaBackend.Feature.Authentication.Enums;
 using BoraLaBackend.Models;
+using BoraLaBackend.Feature.Users.DTO;
 
 namespace BoraLaBackend.Feature.Authentication.DTO
 {
-  public record LoginReturn(User CurrentUser, string Token);
+  public record LoginReturn(UserResponse CurrentUser, string Token);
 
   public record LogoutRetun(BlacklistedToken? Data, bool Status);
 
