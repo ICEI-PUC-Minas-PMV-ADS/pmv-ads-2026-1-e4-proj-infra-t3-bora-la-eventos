@@ -12,6 +12,7 @@ namespace BoraLaBackend.Test.Events
     {
         private Mock<IEventRepository> _eventRepoMock;
         private Mock<IUserRepository> _userRepoMock;
+        private Mock<IEventLikeRepository> _likeRepoMock;
         private EventsService _service;
 
         [SetUp]
@@ -19,7 +20,8 @@ namespace BoraLaBackend.Test.Events
         {
             _eventRepoMock = new Mock<IEventRepository>();
             _userRepoMock = new Mock<IUserRepository>();
-            _service = new EventsService(_eventRepoMock.Object, _userRepoMock.Object);
+            _likeRepoMock = new Mock<IEventLikeRepository>();
+            _service = new EventsService(_eventRepoMock.Object, _userRepoMock.Object, _likeRepoMock.Object);
         }
 
         [Test]

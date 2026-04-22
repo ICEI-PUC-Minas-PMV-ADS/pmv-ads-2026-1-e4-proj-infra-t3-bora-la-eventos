@@ -44,7 +44,11 @@ namespace BoraLaBackend.Feature.Authentication
         {
             if (string.IsNullOrEmpty(props.Email) || string.IsNullOrEmpty(props.Password) || string.IsNullOrEmpty(appId))
             {
-                return BadRequest();
+                return BadRequest(new
+                {
+                    code = "MISSING_CREDENTIALS",
+                    message = "E-mail, senha e a identificação do app são obrigatórios."
+                });
             }
 
             AuthResults result = await _service.Login(props.Email, props.Password, appId);
@@ -58,7 +62,7 @@ namespace BoraLaBackend.Feature.Authentication
                     ErrorMessageCode.INVALID_HEADER => BadRequest(new { message = name }),
                     ErrorMessageCode.INVALID_BODY => UnprocessableEntity(),
                     ErrorMessageCode.NOT_FOUNDED => NotFound(),
-                    ErrorMessageCode.UNAUTHORIZED => Unauthorized(),
+                    ErrorMessageCode.UNAUTHORIZED => Unauthorized(new { code = "INVALID_CREDENTIALS", message = "Credenciais inválidas, verifique e tente novamente." }),
                     _ => StatusCode(500)
                 };
 

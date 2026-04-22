@@ -43,6 +43,15 @@ namespace BoraLaBackend.Feature.Events.Services
                 UpdatedAt = DateTime.UtcNow
             };
 
+            if (request.Latitude.HasValue && request.Longitude.HasValue)
+            {
+                evt.GeoLocation = new GeoLocation
+                {
+                    Type = "Point",
+                    Coordinates = [request.Longitude.Value, request.Latitude.Value]
+                };
+            }
+
             var created = await _eventRepo.CreateAsync(evt);
             return (CreateEventResult.Success, created);
         }
@@ -184,7 +193,8 @@ namespace BoraLaBackend.Feature.Events.Services
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
-                    CreatedAt = e.CreatedAt
+                    CreatedAt = e.CreatedAt,
+                    GeoLocation = e.GeoLocation
                 });
         }
     }

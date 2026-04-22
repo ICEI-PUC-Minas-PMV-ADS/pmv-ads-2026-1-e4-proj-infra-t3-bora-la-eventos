@@ -8,6 +8,8 @@ using BoraLaBackend.Shared.Security;
 using JWT;
 using JWT.Algorithms;
 using JWT.Serializers;
+using BoraLaBackend.Feature.Users.DTO;
+
 
 namespace BoraLaBackend.Feature.Authentication.Services
 {
@@ -52,14 +54,26 @@ namespace BoraLaBackend.Feature.Authentication.Services
       if (id != clientId) return AuthResults.Unprocessable;
 
       var usr = await _usrRepository.GetByEmailAsync(email);
-      if (usr == null) return AuthResults.NotFounded;
+      if (usr == null) return AuthResults.Unauthorized;
 
       bool isValidPassword = _pass.Check(password, usr.Password);
       if (!isValidPassword) return AuthResults.Unauthorized;
 
       string token = _jwtService.GenerateToken(id, email, usr.TokenVersion);
-      LoginReturn data = new(usr, token);
-      return AuthResults.LoginSuccess(data);
+
+      var userResponse = new UserResponse
+      {
+        Id = usr.Id, 
+        Name = usr.Name,
+        Email = usr.Email,
+        Document = usr.Document,
+        Role = usr.Role.ToString(),
+        CreatedAt = usr.CreatedAt,
+        UpdatedAt = usr.UpdatedAt
+      };
+
+     LoginReturn data = new(userResponse, token);
+     return AuthResults.LoginSuccess(data);
     }
 
     public async Task<AuthResults> Logout(string token)
