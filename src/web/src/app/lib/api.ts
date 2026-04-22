@@ -1,9 +1,10 @@
-import type { HttpMethod } from "@/types/auth,types";
+import type { HttpMethod } from "@/types/http.types";
 import { unstable_cache } from "next/cache";
+import { getRequiredEnv } from "./utils";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-const CLIENT_ID = process.env.API_CLIENT_ID!;
-const CLIENT_SECRET = process.env.API_CLIENT_SECRET;
+const BASE_URL = getRequiredEnv("NEXT_PUBLIC_API_URL");
+const CLIENT_ID = getRequiredEnv("API_CLIENT_ID");
+const CLIENT_SECRET = getRequiredEnv("API_CLIENT_SECRET");
 
 export const getAppToken = unstable_cache(
 	async (): Promise<string> => {

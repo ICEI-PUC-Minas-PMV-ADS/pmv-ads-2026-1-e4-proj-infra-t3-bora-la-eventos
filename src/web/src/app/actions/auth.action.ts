@@ -22,8 +22,6 @@ export async function loginAction(data: LoginSchema) {
 			appToken,
 		);
 
-		console.log(token);
-
 		await setToken(token);
 	} catch (error) {
 		return {
