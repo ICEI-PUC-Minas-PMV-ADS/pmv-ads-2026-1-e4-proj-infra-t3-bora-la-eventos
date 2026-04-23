@@ -49,19 +49,11 @@ export async function apiFetch<T>(
 		body,
 	});
 
-	const response = (await res.json()) || {};
-
-	console.log(response);
+	const data = await res.json();
 
 	if (!res.ok) {
-		console.log(res);
-
-		throw new Error(
-			typeof response === "string"
-				? response || "Request failed"
-				: "Request failed",
-		);
+		throw new Error(data.code);
 	}
 
-	return response as T;
+	return data as T;
 }

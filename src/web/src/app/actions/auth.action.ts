@@ -23,10 +23,17 @@ export async function loginAction(data: LoginSchema) {
 		);
 
 		await setToken(token);
-	} catch (error) {
+	} catch (error: any) {
+		if (error.message === "INVALID_CREDENTIALS") {
+			return {
+				success: false,
+				error: "Credenciais inválidas, verifique e tente novamente.",
+			};
+		}
+
 		return {
 			success: false,
-			error: "Credenciais inválidas, verifique e tente novamente.",
+			error: "Houve um erro ao fazer login, tente novamente mais tarde.",
 		};
 	}
 
