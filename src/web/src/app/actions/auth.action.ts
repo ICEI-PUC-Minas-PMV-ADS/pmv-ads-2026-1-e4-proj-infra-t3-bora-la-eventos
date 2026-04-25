@@ -2,40 +2,40 @@
 
 import { redirect } from "next/navigation";
 import { setToken } from "@/lib/auth";
-import { apiFetch } from "@/lib/api";
-import type { LoginSchema } from "@/lib/schemas/auth.schema";
-import { loginSchema } from "@/lib/schemas/auth.schema";
+import { apiFetch, getAppToken } from "@/lib/api";
+import { loginSchema, type LoginSchema } from "@/lib/schemas/auth.schema";
 
 export async function loginAction(data: LoginSchema) {
 	const parsed = loginSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return {
-			success: false,
-			error: parsed.error.issues[0].message,
-		};
+		return { success: false, error: parsed.error.issues[0].message };
 	}
 
 	try {
+		const appToken = await getAppToken();
+
 		const { token } = await apiFetch<{ token: string }>(
 			"/auth/login",
-			undefined,
-			{
-				method: "POST",
-				body: JSON.stringify(parsed.data),
-			},
+			"POST",
+			JSON.stringify(parsed.data),
+			appToken,
 		);
 
 		await setToken(token);
-	} catch (error) {
+	} catch (error: any) {
+		if (error.message === "INVALID_CREDENTIALS") {
+			return {
+				success: false,
+				error: "Credenciais inválidas, verifique e tente novamente.",
+			};
+		}
+
 		return {
 			success: false,
-			error:
-				error instanceof Error
-					? error.message
-					: "Erro ao fazer login",
+			error: "Houve um erro ao fazer login, tente novamente mais tarde.",
 		};
 	}
 
-	redirect("/dashboard");
+	redirect("/events");
 }
