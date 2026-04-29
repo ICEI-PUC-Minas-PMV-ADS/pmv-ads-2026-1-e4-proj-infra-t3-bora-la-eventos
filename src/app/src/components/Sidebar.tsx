@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles, ORANGE } from "./Sidebar.styles";
 
-export type Screen = "Painel" | "Eventos";
+export type Screen = "Criar Evento" | "Eventos";
 
 type Props = {
   activeScreen: Screen;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 const menuItems: { name: Screen; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { name: "Painel", icon: "grid-outline" },
+  { name: "Criar Evento", icon: "add-circle-outline" },
   { name: "Eventos", icon: "calendar-outline" },
 ];
 
