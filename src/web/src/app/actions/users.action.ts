@@ -19,7 +19,6 @@ type CreateUserActionProps = {
 
 type CreateUserAction = (props: CreateUserActionProps) => Promise<void>;
 
-const AUTH_COOKIE_NAME = "auth-token";
 
 export const createUserAction: CreateUserAction = async ({
   data,
@@ -27,6 +26,7 @@ export const createUserAction: CreateUserAction = async ({
   onSuccess,
 }) => {
   try {
+    const AUTH_COOKIE_NAME = "auth-token";
     const token = await getToken(AUTH_COOKIE_NAME);
 
     const response = await apiFetch<DefaultHttpResponse<CreateUserResponse>>(
