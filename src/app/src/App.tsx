@@ -1,43 +1,19 @@
-import { StyleSheet, Text, View } from "react-native";
-import MapView, { UrlTile } from "react-native-maps";
+import { useState } from "react";
+import { View } from "react-native";
+import Sidebar, { Screen } from "./components/Sidebar";
+import CriarEventoScreen from "./screens/Painel/PainelScreen";
+import EventosScreen from "./screens/Eventos/EventosScreen";
+import { styles } from "./App.styles";
 
 export default function App() {
+  const [activeScreen, setActiveScreen] = useState<Screen>("Eventos");
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+      <Sidebar activeScreen={activeScreen} onNavigate={setActiveScreen} />
+      <View style={styles.content}>
+        {activeScreen === "Criar Evento" ? <CriarEventoScreen /> : <EventosScreen />}
       </View>
-      <MapView
-        style={{ flex: 1 }}
-        initialRegion={{
-          latitude: -23.160959,
-          longitude: -45.918067,
-          latitudeDelta: 0.5,
-          longitudeDelta: 0.5,
-        }}
-      >
-        <UrlTile
-          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maximumZ={5}
-        />
-      </MapView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 20,
-  },
-  header: {
-    height: 20,
-    marginBottom: 10,
-  },
-  mapContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
