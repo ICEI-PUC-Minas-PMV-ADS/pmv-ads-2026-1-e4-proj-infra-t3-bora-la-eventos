@@ -17,7 +17,7 @@ export const CustomParagraph: FC<CustomParagraph> = ({
   const createElement = (content: string, index: number) => {
     if (!color) {
       return (
-        <span key={index} className="text-bold text-[#333333]">
+        <span key={index} className="text-bold text-[#475569]">
           {content}
         </span>
       );
