@@ -1,6 +1,8 @@
+"use server";
+
 import { apiFetch } from "@/lib/api";
-import { getToken } from "@/lib/auth";
 import { CreateUserResponse, DefaultHttpResponse } from "@/types/http.types";
+import { getToken } from "@/lib/auth";
 
 interface ICreateUserData {
   checkbox: boolean;
@@ -11,20 +13,11 @@ interface ICreateUserData {
   password: string;
 }
 
-type CreateUserActionProps = {
-  data: ICreateUserData;
-  onSuccess: (response: DefaultHttpResponse<CreateUserResponse>) => void;
-  onError: (error: DefaultHttpResponse<CreateUserResponse>) => void;
-};
+type CreateUserAction = (
+  data: ICreateUserData,
+) => Promise<DefaultHttpResponse<CreateUserResponse>>;
 
-type CreateUserAction = (props: CreateUserActionProps) => Promise<void>;
-
-
-export const createUserAction: CreateUserAction = async ({
-  data,
-  onError,
-  onSuccess,
-}) => {
+export const createUserAction: CreateUserAction = async (data) => {
   try {
     const AUTH_COOKIE_NAME = "auth-token";
     const token = await getToken(AUTH_COOKIE_NAME);
@@ -35,9 +28,9 @@ export const createUserAction: CreateUserAction = async ({
       JSON.stringify(data),
       token,
     );
-    return onSuccess(response);
+    return response;
   } catch (error) {
     const defaultError = error as DefaultHttpResponse<CreateUserResponse>;
-    return onError(defaultError);
+    return defaultError;
   }
 };

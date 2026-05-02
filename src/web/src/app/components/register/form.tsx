@@ -1,18 +1,18 @@
 "use client";
 
+import { ArrowRight, Lock, Mail, Store, User} from "lucide-react";
+import { Button, Input } from "@/components/ui";
+import { createUserAction } from "@/actions/users.action";
+import { CreateUserResponse, DefaultHttpResponse } from "@/types/http.types";
+import { CustomParagraph } from "../ui/CustomParagraph";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import registerSchema, {
   RegisterUserSchema,
 } from "@/lib/schemas/register-form-schema";
-import { Mail, Lock, ArrowRight, Store, User } from "lucide-react";
-
-import { Button, Input } from "@/components/ui";
 import s from "./form.module.css";
-import { CustomParagraph } from "../ui/CustomParagraph";
-import { createUserAction } from "@/actions/users.action";
-import { useRouter } from "next/router";
-import { CreateUserResponse, DefaultHttpResponse } from "@/types/http.types";
 
 type RegisterFormProps = {
   alertHandler: (value: string) => void;
@@ -37,12 +37,13 @@ export const RegisterForm = ({ alertHandler }: RegisterFormProps) => {
     alertHandler(error.message)
   };
 
-  const onSubmit = async (data: RegisterUserSchema) =>
-    await createUserAction({
-      data,
-      onSuccess,
-      onError,
-    });
+  const onSubmit = async (data: RegisterUserSchema) => {
+    const response = await createUserAction(data);
+    if (response.message === CreateUserResponse.USER_REGISTERED_SUCCESSFULLY) {
+      return onSuccess(response);
+    }
+    return onError(response)
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">

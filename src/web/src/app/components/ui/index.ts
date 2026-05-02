@@ -1,3 +1,3 @@
-export { Input } from "./Input";
+export { Alert } from "./Alert/Alert";
 export { Button } from "./Button";
-export { Alert } from "./Alert";
+export { Input } from "./Input";

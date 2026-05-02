@@ -1,4 +1,5 @@
-import { useEffect, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect} from "react";
+import styles from "./Alert.module.css";
 
 type AlertDataProps = {
   isVisible: boolean;
@@ -29,7 +30,7 @@ export const Alert = ({
   return (
     <div
       role="alert"
-      className="border-2 bg-blue-100 p-4 text-blue-900 shadow-[4px_4px_0_0]"
+      className={`border-2 bg-blue-100 p-4 text-blue-900 shadow-[4px_4px_0_0] ${styles.alert} ${isVisible ? styles.show : styles.hide}`}
     >
       <div className="flex items-start gap-3">
         <svg
@@ -39,9 +40,9 @@ export const Alert = ({
           className="mt-0.5 size-4"
         >
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z"
-            clip-rule="evenodd"
+            clipRule="evenodd"
           ></path>
         </svg>
         <div className="flex justify-flex-start gap-y-2">

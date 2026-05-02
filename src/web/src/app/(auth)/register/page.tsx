@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
-import { RegisterForm } from "@/components/register/form";
+"use client"
+
+import { Alert } from "@/components/ui";
 import { Calendar } from "lucide-react";
 import { CustomParagraph } from "@/components/ui/CustomParagraph";
-import { Alert } from "@/components/ui";
+import { RegisterForm } from "@/components/register/form";
+import { useState } from "react";
 
-export function RegisterPage() {
+export default function RegisterPage() {
   const [showAlert, setShowAlert] = useState(false);
 	const [message, setMessage] = useState('')
   
