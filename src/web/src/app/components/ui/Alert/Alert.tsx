@@ -1,8 +1,16 @@
-import { Dispatch, SetStateAction, useEffect} from "react";
+import { CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
 import styles from "./Alert.module.css";
+import { CircleCheck, CircleX, Info, TriangleAlert } from "lucide-react";
+
+export enum AlertTypes {
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+}
 
 type AlertDataProps = {
   isVisible: boolean;
+  type: AlertTypes;
   body: string;
   title?: string;
   handleVisibility: Dispatch<SetStateAction<boolean>>;
@@ -13,9 +21,36 @@ export const Alert = ({
   isVisible,
   body,
   title,
+  type,
   handleVisibility,
   handleOnClose,
 }: AlertDataProps) => {
+  const getAlertStyle = (): CSSProperties => {
+    switch (type) {
+      case AlertTypes.ERROR:
+        return { backgroundColor: "oklch(39.6% 0.141 25.723)", color: "#fff" };
+      case AlertTypes.SUCCESS:
+        return { backgroundColor: "oklch(39.3% 0.095 152.535)", color: "#fff" };
+      case AlertTypes.WARNING:
+        return { backgroundColor: "oklch(79.5% 0.184 86.047)", color: "#fff" };
+      default:
+        return { backgroundColor: "oklch(39.8% 0.195 277.366)", color: "#fff" };
+    }
+  };
+
+  const getAlertIcon = () => {
+    switch (type) {
+      case AlertTypes.ERROR:
+        return <CircleX size={18} />;
+      case AlertTypes.SUCCESS:
+        return <CircleCheck size={18} />;
+      case AlertTypes.WARNING:
+        return <TriangleAlert size={18} />;
+      default:
+        return <Info size={18} />;
+    }
+  };
+
   useEffect(() => {
     if (isVisible) {
       setTimeout(() => {
@@ -30,21 +65,11 @@ export const Alert = ({
   return (
     <div
       role="alert"
-      className={`border-2 bg-blue-100 p-4 text-blue-900 shadow-[4px_4px_0_0] ${styles.alert} ${isVisible ? styles.show : styles.hide}`}
+      className={`${styles.alert} ${isVisible ? styles.show : styles.hide}`}
+      style={getAlertStyle()}
     >
-      <div className="flex items-start gap-3">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="mt-0.5 size-4"
-        >
-          <path
-            fillRule="evenodd"
-            d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z"
-            clipRule="evenodd"
-          ></path>
-        </svg>
+      <div className="flex flex-row items-start gap-3">
+        {getAlertIcon()}
         <div className="flex justify-flex-start gap-y-2">
           {title && <p className="text-lg">{title}</p>}
           <strong className="block flex-1 leading-tight font-semibold">
