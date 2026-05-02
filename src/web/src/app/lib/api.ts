@@ -49,11 +49,28 @@ export async function apiFetch<T>(
 		body,
 	});
 
-	const data = await res.json();
+	const text = await res.text();
 
 	if (!res.ok) {
-		throw new Error(data.code);
+		let message = `HTTP ${res.status}`;
+		try {
+			const data = JSON.parse(text);
+			// ASP.NET Core model validation returns { errors: { Field: ["msg"] } }
+			if (data.errors) {
+				const fields = Object.entries(data.errors)
+					.map(([k, v]) => `${k}: ${(v as string[]).join(", ")}`)
+					.join(" | ");
+				message = `${message} — ${fields}`;
+			} else {
+				message = data.message ?? data.code ?? message;
+			}
+		} catch {
+			if (text) message = `${message} — ${text.slice(0, 200)}`;
+		}
+		throw new Error(message);
 	}
 
-	return data as T;
+	if (!text) return undefined as T;
+
+	return JSON.parse(text) as T;
 }

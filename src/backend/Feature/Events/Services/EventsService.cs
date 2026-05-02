@@ -36,7 +36,8 @@ namespace BoraLaBackend.Feature.Events.Services
                 Date = request.Date,
                 Address = request.Address,
                 Location = request.Location,
-                Category = request.Category,
+                Category = request.Category?.ToString(),
+                BannerBase64 = request.BannerBase64,
                 Capacity = request.Capacity,
                 OrganizerId = user.Id,
                 CreatedAt = DateTime.UtcNow,
@@ -72,6 +73,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     Address = e.Address,
                     Location = e.Location,
                     Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
@@ -93,6 +95,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     Address = e.Address,
                     Location = e.Location,
                     Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
@@ -116,7 +119,8 @@ namespace BoraLaBackend.Feature.Events.Services
             evt.Description = request.Description ?? evt.Description;
             evt.Date = request.Date ?? evt.Date;
             evt.Location = request.Location ?? evt.Location;
-            evt.Category = request.Category ?? evt.Category;
+            evt.Category = request.Category?.ToString() ?? evt.Category;
+            evt.BannerBase64 = request.BannerBase64 ?? evt.BannerBase64;
             evt.Capacity = request.Capacity ?? evt.Capacity;
 
             if (request.Address != null)
@@ -153,7 +157,7 @@ namespace BoraLaBackend.Feature.Events.Services
 
 
         }
-        //configuração dos likes
+        //configuraï¿½ï¿½o dos likes
         public async Task ToggleLikeAsync(string userId, string eventId)
         {
             var existing = await _likeRepository.GetAsync(userId, eventId);
@@ -190,6 +194,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     Address = e.Address,
                     Location = e.Location,
                     Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,

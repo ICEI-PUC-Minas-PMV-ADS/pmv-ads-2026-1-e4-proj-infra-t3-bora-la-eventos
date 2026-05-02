@@ -26,7 +26,9 @@ namespace BoraLaBackend.Models
         public GeoLocation? GeoLocation { get; set; }
 
         // TODO: Make Category required after migrating existing events without category
-        public string Category { get; set; }
+        public string? Category { get; set; }
+
+        public string? BannerBase64 { get; set; }
 
         [BsonRequired]
         [BsonRepresentation(BsonType.DateTime)]
