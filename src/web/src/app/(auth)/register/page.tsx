@@ -1,6 +1,6 @@
 "use client"
 
-import { Alert } from "@/components/ui";
+import { Alert, AlertTypes } from "@/components/ui";
 import { Calendar } from "lucide-react";
 import { CustomParagraph } from "@/components/ui/CustomParagraph";
 import { RegisterForm } from "@/components/register/form";
@@ -9,15 +9,17 @@ import { useState } from "react";
 export default function RegisterPage() {
   const [showAlert, setShowAlert] = useState(false);
 	const [message, setMessage] = useState('')
+  const [alertType, setAlertType] = useState(AlertTypes.WARNING)
   
-	const alertHandler = (message: string) => {
+	const alertHandler = (message: string, type: AlertTypes) => {
     setMessage(message);
 		setShowAlert(true);
+    setAlertType(type)
   };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col relative overflow-hidden font-sans">
-      <Alert handleVisibility={setShowAlert} body={message} isVisible={showAlert} />
+      <Alert handleVisibility={setShowAlert} body={message} isVisible={showAlert} type={alertType}/>
       <header className="p-6 absolute top-0 left-0 w-full">
         <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center text-[#f97316]">
           <Calendar size={24} />

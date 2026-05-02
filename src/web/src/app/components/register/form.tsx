@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowRight, Lock, Mail, Store, User} from "lucide-react";
-import { Button, Input } from "@/components/ui";
+import { ArrowRight, Lock, Mail, Store, User } from "lucide-react";
+import { AlertTypes, Button, Input } from "@/components/ui";
 import { createUserAction } from "@/actions/users.action";
 import { CreateUserResponse, DefaultHttpResponse } from "@/types/http.types";
 import { CustomParagraph } from "../ui/CustomParagraph";
@@ -15,7 +15,7 @@ import registerSchema, {
 import s from "./form.module.css";
 
 type RegisterFormProps = {
-  alertHandler: (value: string) => void;
+  alertHandler: (value: string, type: AlertTypes) => void;
 };
 
 export const RegisterForm = ({ alertHandler }: RegisterFormProps) => {
@@ -29,21 +29,39 @@ export const RegisterForm = ({ alertHandler }: RegisterFormProps) => {
     mode: "onChange",
   });
 
-  const onSuccess = (response: DefaultHttpResponse<CreateUserResponse>) => {
-    alertHandler(response.message);
-    return router.push("/login");
+  const onSuccess = () => {
+    alertHandler("Usuário cadastrado com sucesso", AlertTypes.SUCCESS);
+    return setTimeout(() => router.push("/login"), 3000);
   };
   const onError = (error: DefaultHttpResponse<CreateUserResponse>) => {
-    alertHandler(error.message)
+    switch (error.message) {
+      case CreateUserResponse.DOCUMENT_ALREADY_IN_USE:
+        return alertHandler("Usuário ja cadastrado", AlertTypes.ERROR);
+      case CreateUserResponse.INVALID_DOCUMENT:
+        return alertHandler(
+          "Tivemos um probvlema para validar o documento. Verifique e tente novamente",
+          AlertTypes.WARNING,
+        );
+      case CreateUserResponse.EMAIL_ALREADY_IN_USE:
+        return alertHandler(
+          "Tivemos um probvlema para validar o email. Verifique e tente novamente",
+          AlertTypes.WARNING,
+        );
+      default:
+        return alertHandler(
+          "Não foi possível completar o cadastro. Tente novamente mais tarde",
+          AlertTypes.ERROR,
+        );
+    }
   };
 
   const onSubmit = async (data: RegisterUserSchema) => {
     const response = await createUserAction(data);
     if (response.message === CreateUserResponse.USER_REGISTERED_SUCCESSFULLY) {
-      return onSuccess(response);
+      return onSuccess();
     }
-    return onError(response)
-  }
+    return onError(response);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">

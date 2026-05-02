@@ -1,6 +1,6 @@
 .customCheckbox {
   appearance: none;
-  width: 40px;
+  width: 30px;
   height: 20px;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
@@ -9,8 +9,9 @@
 
 .customCheckbox:checked {
   background-color: #EC5B13;
+  border: 1px solid #EC5B13;
   border-radius: 4px;
-  width: 40px;
+  width: 30px;
   height: 20px;
 }
 
