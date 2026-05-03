@@ -1,19 +1,17 @@
 import { cookies } from "next/headers";
 
-const COOKIE_NAME = "auth-token";
-
-export async function getToken() {
+export async function getToken(cookieName: string) {
 	const cookieStore = await cookies();
 
-	const token = cookieStore.get(COOKIE_NAME)?.value;
+	const token = cookieStore.get(cookieName)?.value;
 
 	return token;
 }
 
-export async function setToken(token: string) {
+export async function setToken(cookieName: string,token: string) {
 	const cookieStore = await cookies();
 
-	const newToken = cookieStore.set(COOKIE_NAME, token, {
+	const newToken = cookieStore.set(cookieName, token, {
 		httpOnly: true,
 
 		maxAge: 60 * 60 * 24 * 30,
@@ -30,8 +28,8 @@ export async function setToken(token: string) {
 	return newToken;
 }
 
-export async function removeToken() {
+export async function removeToken(cookieName: string) {
 	const cookieStore = await cookies();
 
-	cookieStore.delete(COOKIE_NAME);
+	cookieStore.delete(cookieName);
 }

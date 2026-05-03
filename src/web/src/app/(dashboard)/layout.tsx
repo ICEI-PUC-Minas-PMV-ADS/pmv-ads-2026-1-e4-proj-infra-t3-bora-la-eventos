@@ -3,14 +3,17 @@ import { getToken } from "@/lib/auth";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 
-export default async function DashboardLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
-	const token = await getToken();
+type DashboardProps = {
+  children: React.ReactNode;
+};
 
-	if (!token) redirect("/login");
+export default async function DashboardLayout({
+  children,
+}: Readonly<DashboardProps>) {
+  const APP_TOKEN = "auth-token";
+  const token = await getToken(APP_TOKEN);
+
+  if (!token) redirect("/login");
 
 	return (
 		<div className="flex h-screen bg-gray-50">
