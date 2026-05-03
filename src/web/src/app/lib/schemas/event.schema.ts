@@ -22,9 +22,12 @@ export const EVENT_CATEGORY_LABELS: Record<typeof EVENT_CATEGORIES[number], stri
 	Outro: "Outro",
 };
 
+const MIN_TITLE_LENGTH = 3;
+const MIN_DESCRIPTION_LENGTH = 10;
+
 export const createEventSchema = z.object({
-	title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
-	description: z.string().min(10, "Descrição deve ter pelo menos 10 caracteres"),
+	title: z.string().min(MIN_TITLE_LENGTH, "Título deve ter pelo menos 3 caracteres"),
+	description: z.string().min(MIN_DESCRIPTION_LENGTH, "Descrição deve ter pelo menos 10 caracteres"),
 	category: z.preprocess(
 		(val) => (val === "" ? undefined : val),
 		z.enum(EVENT_CATEGORIES).optional(),

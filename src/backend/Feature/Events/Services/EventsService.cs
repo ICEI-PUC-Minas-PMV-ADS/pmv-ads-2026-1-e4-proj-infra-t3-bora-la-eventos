@@ -157,7 +157,7 @@ namespace BoraLaBackend.Feature.Events.Services
 
 
         }
-        //configura��o dos likes
+        //configuração dos likes
         public async Task ToggleLikeAsync(string userId, string eventId)
         {
             var existing = await _likeRepository.GetAsync(userId, eventId);

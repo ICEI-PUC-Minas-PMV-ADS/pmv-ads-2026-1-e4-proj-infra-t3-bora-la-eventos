@@ -39,7 +39,6 @@ export async function createEventAction(data: CreateEventSchema) {
 	try {
 		await apiFetch("/events", "POST", JSON.stringify(body), token);
 	} catch (error: any) {
-		console.error("[createEventAction]", error?.message ?? error);
 		if (error?.message === "FORBIDDEN_ORGANIZER_ONLY") {
 			return { success: false, error: "Apenas organizadores podem criar eventos." };
 		}
