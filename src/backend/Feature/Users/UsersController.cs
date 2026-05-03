@@ -24,8 +24,8 @@ namespace BoraLaBackend.Feature.Users
         /// <response code="400">Documento inválido.</response>
         /// <response code="409">Email ou documento já estão em uso.</response>
         /// <response code="500">Erro interno do servidor.</response>
-        [AllowAnonymous]
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
@@ -48,6 +48,7 @@ namespace BoraLaBackend.Feature.Users
         /// <response code="200">Lista de usuários retornada com sucesso.</response>
         /// <response code="401">Token ausente ou inválido.</response>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public async Task<IActionResult> GetUsers()
@@ -62,6 +63,7 @@ namespace BoraLaBackend.Feature.Users
         /// <response code="401">Token ausente ou inválido.</response>
         /// <response code="404">Usuário não encontrado.</response>
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -81,6 +83,7 @@ namespace BoraLaBackend.Feature.Users
         /// <response code="401">Token ausente ou inválido.</response>
         /// <response code="404">Usuário não encontrado.</response>
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -101,6 +104,7 @@ namespace BoraLaBackend.Feature.Users
         /// <response code="401">Token ausente ou inválido.</response>
         /// <response code="404">Usuário não encontrado.</response>
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]

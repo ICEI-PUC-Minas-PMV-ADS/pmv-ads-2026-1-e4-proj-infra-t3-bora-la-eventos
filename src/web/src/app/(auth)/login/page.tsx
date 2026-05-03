@@ -5,7 +5,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function LoginPage() {
-	const token = await getToken();
+	const APP_TOKEN = "auth-token";
+	const token = await getToken(APP_TOKEN);
 
 	if (token) redirect("/events");
 

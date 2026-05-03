@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { setToken } from "@/lib/auth";
 import { apiFetch, getAppToken } from "@/lib/api";
 import { loginSchema, type LoginSchema } from "@/lib/schemas/auth.schema";
+import { DefaultHttpResponse, LoginResponse } from "@/types/http.types";
+
+const COOKIE_NAME = "auth-token";
 
 export async function loginAction(data: LoginSchema) {
 	const parsed = loginSchema.safeParse(data);
@@ -22,9 +25,9 @@ export async function loginAction(data: LoginSchema) {
 			appToken,
 		);
 
-		await setToken(token);
-	} catch (error: any) {
-		if (error.message === "INVALID_CREDENTIALS") {
+		await setToken(COOKIE_NAME, token);
+	} catch (error) {
+		if ((error as DefaultHttpResponse<LoginResponse>).message === "INVALID_CREDENTIALS") {
 			return {
 				success: false,
 				error: "Credenciais inválidas, verifique e tente novamente.",
