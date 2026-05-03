@@ -30,6 +30,31 @@ export const getAppToken = unstable_cache(
 	},
 );
 
+interface ApiErrorBody {
+	message?: string;
+	code?: string;
+	errors?: Record<string, string[]>;
+}
+
+const MAX_ERROR_PREVIEW_LENGTH = 200;
+
+function extractErrorMessage(status: number, responseText: string): string {
+	const fallback = `HTTP ${status}`;
+	if (!responseText) return fallback;
+	try {
+		const body: ApiErrorBody = JSON.parse(responseText);
+		if (body.errors) {
+			const details = Object.entries(body.errors)
+				.map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+				.join(" | ");
+			return `${fallback} — ${details}`;
+		}
+		return body.message ?? body.code ?? fallback;
+	} catch {
+		return `${fallback} — ${responseText.slice(0, MAX_ERROR_PREVIEW_LENGTH)}`;
+	}
+}
+
 export async function apiFetch<T>(
 	path: string,
 	method: HttpMethod,
@@ -49,28 +74,11 @@ export async function apiFetch<T>(
 		body,
 	});
 
-	const text = await res.text();
+	const responseText = await res.text();
 
 	if (!res.ok) {
-		let message = `HTTP ${res.status}`;
-		try {
-			const data = JSON.parse(text);
-			// ASP.NET Core model validation returns { errors: { Field: ["msg"] } }
-			if (data.errors) {
-				const fields = Object.entries(data.errors)
-					.map(([k, v]) => `${k}: ${(v as string[]).join(", ")}`)
-					.join(" | ");
-				message = `${message} — ${fields}`;
-			} else {
-				message = data.message ?? data.code ?? message;
-			}
-		} catch {
-			if (text) message = `${message} — ${text.slice(0, 200)}`;
-		}
-		throw new Error(message);
+		throw new Error(extractErrorMessage(res.status, responseText));
 	}
 
-	if (!text) return undefined as T;
-
-	return JSON.parse(text) as T;
+	return (responseText ? JSON.parse(responseText) : undefined) as T;
 }
