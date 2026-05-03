@@ -26,15 +26,10 @@ public class CommentsController(ICommentService service): ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(
-        [FromRoute] string eventId,
-        [FromBody] CreateCommentDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateCommentDto dto)
     {
-        if (dto.EventId != eventId)
-            return BadRequest("EventId inconsistente.");
-
         var created = await _service.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetByEvent), new { eventId }, created);
+        return CreatedAtAction(nameof(GetByEvent), new { eventId = dto.EventId }, created);
     }
 
     // POST comments/id

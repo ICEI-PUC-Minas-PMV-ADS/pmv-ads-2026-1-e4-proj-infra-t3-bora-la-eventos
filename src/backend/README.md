@@ -44,21 +44,71 @@ A documentação esta disponível [neste endereço](https://bora-la-eventos-api-
 
 ### Testando a aplicação
 
-O ponto de entrada da aplicação é o endpoint de `/auth/pré-login`. Utilize os parâmetros a seguir para gerar um token de aplicação:
-```Json
+O fluxo completo de autenticação exige **4 etapas** na ordem abaixo. Pular qualquer etapa resultará em erro.
+
+---
+
+#### Etapa 1 — Registrar um usuário
+
+Antes de qualquer login, é necessário cadastrar um usuário via `POST /users`:
+
+```json
 {
-  "clienId": "bora_la_api",
-  "clientSecret": "9eb71ab7420eb452a22787ca4fab501b" 
+  "name": "Seu Nome",
+  "document": "12345678909",
+  "email": "usuario@email.com",
+  "password": "Senha@123"
 }
 ```
-Uma vez gerado o token, adicione ao header da request para acessar os demais endpoints
 
-**Importante**
-1. O token de aplicação fornece acesso ao fluxo de __criação__ e __login do usuário__. Os endpoints pós login precisam do token de usuário, gerado no `/auth/login`
+> Use um CPF válido (11 dígitos) para usuário comum ou CNPJ válido (14 dígitos) para organizador.
 
-2. No endpoint de login é necessário adicionar um campo a mais no header: `x-request-id` que é usado na criação do token. Inicialmente, estamos usando o mesmo valor do `clientId` mas deverá ser substituído em breve por um valor inerente à aplicação.
+---
+
+#### Etapa 2 — Gerar o token de aplicação (pre-login)
+
+Chame `POST /auth/pre-login` com as credenciais da aplicação:
+
+```json
+{
+  "clientID": "bora_la_api",
+  "clientSecret": "9eb71ab7420eb452a22787ca4fab501b"
+}
+```
+
+Copie o `token` retornado. No Swagger, clique em **Authorize** e cole o token **sem** o prefixo `Bearer `.
+
+> Este token de aplicação expira em **20 minutos** e dá acesso apenas ao endpoint de login.
+
+---
+
+#### Etapa 3 — Fazer login
+
+Com o token de aplicação no Authorize, chame `POST /auth/login`:
+
+- Header `x-request-id`: `bora_la_api`
+- Body:
+
+```json
+{
+  "email": "usuario@email.com",
+  "password": "Senha@123"
+}
+```
+
+Copie o `token` retornado no campo `token` da resposta.
+
+---
+
+#### Etapa 4 — Autorizar com o token de usuário
+
+No Swagger, clique em **Authorize** novamente e substitua pelo novo token (sem o prefixo `Bearer `).
+
+> Este token de usuário expira em **1 hora**. Todos os endpoints protegidos exigem este token.
+
+---
 
 ### Tipos de Usuários
-A Aplicação da suporte a dois tipos de usuários: 
+A aplicação suporta dois tipos de usuários:
 - `user`: Usuário simples, capaz de visualizar o conteúdo da aplicação, interagir com eventos (likes e comentários), etc.
-- `organizer`: Usuário criador de eventos. Possui os mesmos acesso de um `user` acrescido da criação de gerenciamento de eventos
+- `organizer`: Usuário criador de eventos. Possui os mesmos acessos de um `user` acrescido da criação e gerenciamento de eventos. Deve ser cadastrado com CNPJ.

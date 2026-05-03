@@ -153,7 +153,7 @@ namespace BoraLaBackend.Feature.Events
             };
         }
 
-        /// <summary>cCurte um evento</summary>
+        /// <summary>Curte um evento</summary>
         /// <remarks>Apenas o organizador que criou o evento pode excluí-lo.</remarks>
         [HttpPost("{eventId}/like")]
         public async Task<IActionResult> ToggleLike(string eventId)
