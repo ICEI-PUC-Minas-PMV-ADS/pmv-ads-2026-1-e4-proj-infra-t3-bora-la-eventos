@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { getToken } from "@/lib/auth";
 import { apiFetch } from "@/lib/api";
 import { createEventSchema, type CreateEventSchema } from "@/lib/schemas/event.schema";
@@ -12,7 +11,8 @@ export async function createEventAction(data: CreateEventSchema) {
 		return { success: false, error: parsed.error.issues[0].message };
 	}
 
-	const token = await getToken();
+	const AUTH_COOKIE = "auth-token";
+	const token = await getToken(AUTH_COOKIE);
 	if (!token) {
 		return { success: false, error: "Sessão expirada, faça login novamente." };
 	}
@@ -38,12 +38,12 @@ export async function createEventAction(data: CreateEventSchema) {
 
 	try {
 		await apiFetch("/events", "POST", JSON.stringify(body), token);
-	} catch (error: any) {
-		if (error?.message === "FORBIDDEN_ORGANIZER_ONLY") {
+		return { success: true };
+	} catch (error: unknown) {
+		const message = error instanceof Error ? error.message : "erro desconhecido";
+		if (message === "FORBIDDEN_ORGANIZER_ONLY") {
 			return { success: false, error: "Apenas organizadores podem criar eventos." };
 		}
-		return { success: false, error: `Erro ao criar evento: ${error?.message ?? "erro desconhecido"}` };
+		return { success: false, error: `Erro ao criar evento: ${message}` };
 	}
-
-	redirect("/events");
 }

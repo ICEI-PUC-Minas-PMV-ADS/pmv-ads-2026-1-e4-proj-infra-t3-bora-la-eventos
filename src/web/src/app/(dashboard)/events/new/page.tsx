@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { flushSync } from "react-dom";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -13,13 +15,16 @@ import {
 	EVENT_CATEGORY_LABELS,
 } from "@/lib/schemas/event.schema";
 import { createEventAction } from "@/actions/events.action";
+import { AlertTypes, useAlert } from "@/components/ui";
+
 
 const EventLocationMap = dynamic(() => import("@/components/EventLocationMap"), { ssr: false });
 
 export default function NewEventPage() {
+	const router = useRouter();
+	const { showAlert } = useAlert();
 	const [bannerPreview, setBannerPreview] = useState<string | null>(null);
 	const [submitting, setSubmitting] = useState(false);
-	const [serverError, setServerError] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const {
@@ -64,12 +69,14 @@ export default function NewEventPage() {
 	}
 
 	async function onSubmit(data: CreateEventSchema) {
-		setSubmitting(true);
-		setServerError(null);
+		flushSync(() => setSubmitting(true));
 		const result = await createEventAction(data);
-		if (result?.success === false) {
-			setServerError(result.error);
+		if (result.success) {
+			showAlert("Evento criado com sucesso!", AlertTypes.SUCCESS);
+			router.push("/events");
+		} else {
 			setSubmitting(false);
+			showAlert(result.error, AlertTypes.ERROR);
 		}
 	}
 
@@ -303,13 +310,6 @@ export default function NewEventPage() {
 						{errors.capacity && <p className={errorClass}>{errors.capacity.message}</p>}
 					</div>
 				</section>
-
-				{/* Erro do servidor */}
-				{serverError && (
-					<p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-						{serverError}
-					</p>
-				)}
 
 				{/* Botões */}
 				<div className="flex items-center justify-end gap-3 pb-8">
