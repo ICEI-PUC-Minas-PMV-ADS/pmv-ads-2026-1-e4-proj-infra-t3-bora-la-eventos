@@ -47,7 +47,7 @@ namespace BoraLaBackend.Feature.Authentication
                 return BadRequest(new
                 {
                     code = "MISSING_CREDENTIALS",
-                    message = "E-mail, senha e a identifica��o do app s�o obrigat�rios."
+                    message = "E-mail, senha e a identificação do app são obrigatórios."
                 });
             }
 
