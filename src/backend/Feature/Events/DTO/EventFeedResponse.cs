@@ -11,7 +11,8 @@ namespace BoraLaBackend.Feature.Events.DTO
         public Address Address { get; set; }
         public string Location { get; set; }
         public GeoLocation? GeoLocation { get; set; }
-        public string Category { get; set; }
+        public string? Category { get; set; }
+        public string? BannerBase64 { get; set; }
         public int Capacity { get; set; }
         public int ParticipantsCount { get; set; }
         public string OrganizerId { get; set; }

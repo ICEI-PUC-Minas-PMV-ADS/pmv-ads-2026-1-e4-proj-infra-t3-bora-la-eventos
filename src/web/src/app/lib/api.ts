@@ -30,6 +30,31 @@ export const getAppToken = unstable_cache(
 	},
 );
 
+interface ApiErrorBody {
+	message?: string;
+	code?: string;
+	errors?: Record<string, string[]>;
+}
+
+const MAX_ERROR_PREVIEW_LENGTH = 200;
+
+function extractErrorMessage(status: number, responseText: string): string {
+	const fallback = `HTTP ${status}`;
+	if (!responseText) return fallback;
+	try {
+		const body: ApiErrorBody = JSON.parse(responseText);
+		if (body.errors) {
+			const details = Object.entries(body.errors)
+				.map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+				.join(" | ");
+			return `${fallback} — ${details}`;
+		}
+		return body.message ?? body.code ?? fallback;
+	} catch {
+		return `${fallback} — ${responseText.slice(0, MAX_ERROR_PREVIEW_LENGTH)}`;
+	}
+}
+
 export async function apiFetch<T>(
 	path: string,
 	method: HttpMethod,
@@ -49,11 +74,11 @@ export async function apiFetch<T>(
 		body,
 	});
 
-	const data = await res.json();
+	const responseText = await res.text();
 
 	if (!res.ok) {
-		throw new Error(data.code);
+		throw new Error(extractErrorMessage(res.status, responseText));
 	}
 
-	return data as T;
+	return (responseText ? JSON.parse(responseText) : undefined) as T;
 }
