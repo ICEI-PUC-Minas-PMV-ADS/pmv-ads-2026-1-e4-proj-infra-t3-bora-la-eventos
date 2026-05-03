@@ -17,5 +17,6 @@ namespace BoraLaBackend.Feature.Events.DTO
         public int ParticipantsCount { get; set; }
         public string OrganizerId { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { flushSync } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -14,27 +14,61 @@ import {
 	EVENT_CATEGORIES,
 	EVENT_CATEGORY_LABELS,
 } from "@/lib/schemas/event.schema";
-import { createEventAction } from "@/actions/events.action";
+import { createEventAction, updateEventAction, getEventByIdAction } from "@/actions/events.action";
 import { AlertTypes, useAlert } from "@/components/ui";
-
 
 const EventLocationMap = dynamic(() => import("@/components/EventLocationMap"), { ssr: false });
 
 export default function NewEventPage() {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const editId = searchParams.get("id");
+	const isEditing = !!editId;
+
 	const { showAlert } = useAlert();
 	const [bannerPreview, setBannerPreview] = useState<string | null>(null);
 	const [submitting, setSubmitting] = useState(false);
+	const [loadingEvent, setLoadingEvent] = useState(isEditing);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const {
 		register,
 		handleSubmit,
 		setValue,
+		reset,
 		formState: { errors },
 	} = useForm<CreateEventSchema>({
-		resolver: zodResolver(createEventSchema),
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		resolver: zodResolver(createEventSchema) as any,
 	});
+
+	useEffect(() => {
+		if (!editId) return;
+
+		getEventByIdAction(editId).then((event) => {
+			if (!event) {
+				showAlert("Evento não encontrado.", AlertTypes.ERROR);
+				setLoadingEvent(false);
+				return;
+			}
+
+			const e = event as Record<string, unknown>;
+
+			reset({
+				title: e.title as string,
+				description: e.description as string,
+				category: e.category as CreateEventSchema["category"],
+				date: e.date ? (e.date as string).slice(0, 16) : "",
+				location: e.location as string,
+				capacity: e.capacity as number,
+				bannerBase64: e.bannerBase64 as string | undefined,
+				address: e.address as CreateEventSchema["address"],
+			});
+
+			if (e.bannerBase64) setBannerPreview(e.bannerBase64 as string);
+			setLoadingEvent(false);
+		});
+	}, [editId]);
 
 	function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
@@ -70,13 +104,26 @@ export default function NewEventPage() {
 
 	async function onSubmit(data: CreateEventSchema) {
 		flushSync(() => setSubmitting(true));
+
+		if (isEditing && editId) {
+			const result = await updateEventAction(editId, data);
+			if (result.success) {
+				showAlert("Evento atualizado com sucesso!", AlertTypes.SUCCESS);
+				router.push("/events");
+			} else {
+				setSubmitting(false);
+				showAlert(result.error ?? "Erro ao atualizar.", AlertTypes.ERROR);
+			}
+			return;
+		}
+
 		const result = await createEventAction(data);
 		if (result.success) {
 			showAlert("Evento criado com sucesso!", AlertTypes.SUCCESS);
 			router.push("/events");
 		} else {
 			setSubmitting(false);
-			showAlert(result.error, AlertTypes.ERROR);
+			showAlert(result.error ?? "Erro ao criar.", AlertTypes.ERROR);
 		}
 	}
 
@@ -85,13 +132,25 @@ export default function NewEventPage() {
 	const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 	const errorClass = "text-xs text-red-500 mt-1";
 
+	if (loadingEvent) {
+		return (
+			<div className="max-w-3xl mx-auto px-8 py-8 flex items-center justify-center">
+				<Loader2 size={24} className="animate-spin text-orange-500" />
+			</div>
+		);
+	}
+
 	return (
 		<div className="max-w-3xl mx-auto px-8 py-8">
 			{/* Page title */}
 			<div className="mb-8">
-				<h1 className="text-3xl font-bold text-gray-900">Criar Novo Evento</h1>
+				<h1 className="text-3xl font-bold text-gray-900">
+					{isEditing ? "Editar Evento" : "Criar Novo Evento"}
+				</h1>
 				<p className="text-sm text-gray-500 mt-1">
-					Rascunhe sua próxima grande reunião e alcance seu público instantaneamente.
+					{isEditing
+						? "Atualize as informações do seu evento."
+						: "Rascunhe sua próxima grande reunião e alcance seu público instantaneamente."}
 				</p>
 			</div>
 
@@ -325,7 +384,7 @@ export default function NewEventPage() {
 						className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-[#ea580c] hover:bg-[#c2460a] rounded-lg transition-colors disabled:opacity-60"
 					>
 						{submitting && <Loader2 size={15} className="animate-spin" />}
-						{submitting ? "Criando..." : "Criar Evento"}
+						{submitting ? (isEditing ? "Salvando..." : "Criando...") : (isEditing ? "Salvar Alterações" : "Criar Evento")}
 					</button>
 				</div>
 			</form>

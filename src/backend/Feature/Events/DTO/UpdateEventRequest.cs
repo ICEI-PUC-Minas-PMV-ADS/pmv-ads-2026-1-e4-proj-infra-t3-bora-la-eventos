@@ -14,5 +14,6 @@ namespace BoraLaBackend.Feature.Events.DTO
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public string? BannerBase64 { get; set; }
+        public string? Status { get; set; }
     }
 }
