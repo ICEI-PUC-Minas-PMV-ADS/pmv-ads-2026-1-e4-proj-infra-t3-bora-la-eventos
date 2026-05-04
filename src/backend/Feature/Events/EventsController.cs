@@ -28,6 +28,25 @@ namespace BoraLaBackend.Feature.Events
             return Ok(feed);
         }
 
+        [HttpGet("mine")]
+        public async Task<IActionResult> GetMyEvents()
+        {
+            var email = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(email)) return Unauthorized();
+
+            var events = await _eventsService.GetMyEventsAsync(email);
+            return Ok(events);
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetEventById(string id)
+        {
+            var evt = await _eventsService.GetEventByIdAsync(id);
+            if (evt == null) return NotFound(new { message = "EVENT_NOT_FOUND" });
+            return Ok(evt);
+        }
+
         /// <summary>Busca eventos por nome ou categoria.</summary>
         /// <remarks>Permite buscar eventos por título (busca parcial, case-insensitive) e/ou categoria (busca exata).</remarks>
         /// <param name="name">Parte do título do evento para buscar (opcional).</param>
@@ -153,7 +172,7 @@ namespace BoraLaBackend.Feature.Events
             };
         }
 
-        /// <summary>cCurte um evento</summary>
+        /// <summary>Curte um evento</summary>
         /// <remarks>Apenas o organizador que criou o evento pode excluí-lo.</remarks>
         [HttpPost("{eventId}/like")]
         public async Task<IActionResult> ToggleLike(string eventId)

@@ -36,7 +36,8 @@ namespace BoraLaBackend.Feature.Events.Services
                 Date = request.Date,
                 Address = request.Address,
                 Location = request.Location,
-                Category = request.Category,
+                Category = request.Category?.ToString(),
+                BannerBase64 = request.BannerBase64,
                 Capacity = request.Capacity,
                 OrganizerId = user.Id,
                 CreatedAt = DateTime.UtcNow,
@@ -56,6 +57,56 @@ namespace BoraLaBackend.Feature.Events.Services
             return (CreateEventResult.Success, created);
         }
 
+        public async Task<IEnumerable<EventFeedResponse>> GetMyEventsAsync(string organizerEmail)
+        {
+            var user = await _userRepo.GetByEmailAsync(organizerEmail);
+            if (user == null) return [];
+
+            var events = await _eventRepo.GetByOrganizerIdAsync(user.Id);
+
+            return events.Select(e => new EventFeedResponse
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                Date = e.Date,
+                Address = e.Address,
+                Location = e.Location,
+                GeoLocation = e.GeoLocation,
+                Category = e.Category,
+                BannerBase64 = e.BannerBase64,
+                Capacity = e.Capacity,
+                ParticipantsCount = e.Participants.Count,
+                OrganizerId = e.OrganizerId,
+                CreatedAt = e.CreatedAt,
+                Status = e.Status ?? "published"
+            });
+        }
+
+        public async Task<EventFeedResponse?> GetEventByIdAsync(string id)
+        {
+            var e = await _eventRepo.GetByIdAsync(id);
+            if (e == null) return null;
+
+            return new EventFeedResponse
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                Date = e.Date,
+                Address = e.Address,
+                Location = e.Location,
+                GeoLocation = e.GeoLocation,
+                Category = e.Category,
+                BannerBase64 = e.BannerBase64,
+                Capacity = e.Capacity,
+                ParticipantsCount = e.Participants.Count,
+                OrganizerId = e.OrganizerId,
+                CreatedAt = e.CreatedAt,
+                Status = e.Status
+            };
+        }
+
         public async Task<IEnumerable<EventFeedResponse>> GetFeedAsync()
         {
             var events = await _eventRepo.GetFeedAsync(DateTime.UtcNow);
@@ -72,10 +123,12 @@ namespace BoraLaBackend.Feature.Events.Services
                     Address = e.Address,
                     Location = e.Location,
                     Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
-                    CreatedAt = e.CreatedAt
+                    CreatedAt = e.CreatedAt,
+                    Status = e.Status
                 });
         }
 
@@ -93,6 +146,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     Address = e.Address,
                     Location = e.Location,
                     Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
@@ -116,8 +170,10 @@ namespace BoraLaBackend.Feature.Events.Services
             evt.Description = request.Description ?? evt.Description;
             evt.Date = request.Date ?? evt.Date;
             evt.Location = request.Location ?? evt.Location;
-            evt.Category = request.Category ?? evt.Category;
+            evt.Category = request.Category?.ToString() ?? evt.Category;
+            evt.BannerBase64 = request.BannerBase64 ?? evt.BannerBase64;
             evt.Capacity = request.Capacity ?? evt.Capacity;
+            evt.Status = request.Status ?? evt.Status;
 
             if (request.Address != null)
             {
@@ -153,7 +209,7 @@ namespace BoraLaBackend.Feature.Events.Services
 
 
         }
-        //configuração dos likes
+        //configuraÃ§Ã£o dos likes
         public async Task ToggleLikeAsync(string userId, string eventId)
         {
             var existing = await _likeRepository.GetAsync(userId, eventId);
@@ -190,6 +246,7 @@ namespace BoraLaBackend.Feature.Events.Services
                     Address = e.Address,
                     Location = e.Location,
                     Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
                     Capacity = e.Capacity,
                     ParticipantsCount = e.Participants.Count,
                     OrganizerId = e.OrganizerId,
