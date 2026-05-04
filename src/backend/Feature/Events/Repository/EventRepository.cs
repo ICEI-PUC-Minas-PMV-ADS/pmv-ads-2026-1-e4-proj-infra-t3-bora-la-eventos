@@ -31,7 +31,7 @@ namespace BoraLaBackend.Feature.Events.Repository
         public async Task<IEnumerable<Event>> GetFeedAsync(DateTime from)
         {
             return await _events
-                .Find(e => e.Date >= from)
+                .Find(e => e.Date >= from && (e.Status == "published" || e.Status == null))
                 .SortBy(e => e.Date)
                 .ToListAsync();
         }
@@ -79,6 +79,14 @@ namespace BoraLaBackend.Feature.Events.Repository
             return await _events
                 .Find(filter)
                 .SortBy(e => e.Date)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Event>> GetByOrganizerIdAsync(string organizerId)
+        {
+            return await _events
+                .Find(e => e.OrganizerId == organizerId)
+                .SortByDescending(e => e.Date)
                 .ToListAsync();
         }
 

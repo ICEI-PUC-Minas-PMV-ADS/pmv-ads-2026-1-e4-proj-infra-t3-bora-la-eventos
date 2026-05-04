@@ -51,5 +51,7 @@ namespace BoraLaBackend.Models
 
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime UpdatedAt { get; set; }
+
+        public string Status { get; set; } = "published";
     }
 }
