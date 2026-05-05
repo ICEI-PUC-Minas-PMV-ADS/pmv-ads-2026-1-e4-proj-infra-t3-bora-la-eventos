@@ -96,7 +96,11 @@ namespace BoraLaBackend.Feature.Users.Services
             await _repo.DeleteAsync(id);
             return true;
         }
-
+        public async Task<UserResponse?> GetUserByEmailAsync(string email)
+        {
+            var user = await _repo.GetByEmailAsync(email);
+            return user == null ? null : MapToResponse(user);
+        }
         private static UserResponse MapToResponse(User user)
         {
             return new UserResponse

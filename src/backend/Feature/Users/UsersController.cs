@@ -118,5 +118,32 @@ namespace BoraLaBackend.Feature.Users
 
             return Ok(new { message = "USER_DELETE_SUCCESSFULY" });
         }
+
+        /// <summary>Busca os dados do próprio usuário logado (Perfil).</summary>
+        /// <response code="200">Perfil encontrado e retornado com sucesso.</response>
+        /// <response code="401">Token ausente ou inválido.</response>
+        /// <response code="404">Usuário não encontrado.</response>
+        [HttpGet("me")]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetMe()
+        {
+            var email = User.FindFirst("sub")?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userService.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound(new { message = "USER_NOT_FOUND" });
+            }
+
+            return Ok(user);
+        }
     }
 }
