@@ -76,7 +76,6 @@ namespace BoraLaBackend.Feature.Users.Services
             }
 
             user.Name = request.Name ?? user.Name;
-            user.Document = request.Document ?? user.Document;
             user.Email = request.Email ?? user.Email;
             user.UpdatedAt = DateTime.UtcNow;
 

@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Store, PlusCircle, Calendar, LogOut } from "lucide-react";
+import { Store, PlusCircle, Calendar, LogOut, UserRound } from "lucide-react";
 import { logoutAction } from "@/actions/auth.action";
+import { UserInfo } from "@/types/user.types";
 
 interface SidebarProps {
-	user?: {
-		name: string;
-		role?: string;
-	};
+	user?: UserInfo;
 }
 
 const ROLE_LABELS: Record<string, string> = {
@@ -21,6 +19,7 @@ const ROLE_LABELS: Record<string, string> = {
 const menuItems = [
 	{ name: "Criar Evento", href: "/events/new", icon: PlusCircle },
 	{ name: "Eventos", href: "/events", icon: Calendar },
+	{ name: "Meu perfil", href: "/profile", icon: UserRound },
 ];
 
 export default function Sidebar({ user }: SidebarProps) {
@@ -38,7 +37,7 @@ export default function Sidebar({ user }: SidebarProps) {
 						{user?.name || "Usuário"}
 					</p>
 					<p className="text-[11px] text-gray-400 mt-0.5">
-						{user?.role || "Usuário"}
+						{user?.role ? ROLE_LABELS[user.role] ?? user.role : "Usuário"}
 					</p>
 				</div>
 			</div>
