@@ -130,14 +130,15 @@ namespace BoraLaBackend.Feature.Users
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetMe()
         {
-            var email = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst("userId")?.Value;
 
-            if (string.IsNullOrEmpty(email))
+
+            if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized();
             }
 
-            var user = await _userService.GetUserByEmailAsync(email);
+            var user = await _userService.GetUserByIdAsync(userId);
             if (user == null)
             {
                 return NotFound(new { message = "USER_NOT_FOUND" });
@@ -158,14 +159,14 @@ namespace BoraLaBackend.Feature.Users
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateMe([FromBody] UpdateUserRequest request)
         {
-            var email = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst("userId")?.Value;
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized();
             }
 
-            var currentUser = await _userService.GetUserByEmailAsync(email);
+            var currentUser = await _userService.GetUserByIdAsync(userId);
             if (currentUser == null)
             {
                 return NotFound(new { message = "USER_NOT_FOUND" });
