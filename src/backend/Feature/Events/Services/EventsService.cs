@@ -20,9 +20,9 @@ namespace BoraLaBackend.Feature.Events.Services
             _likeRepository = likeRepository;
         }
 
-        public async Task<(CreateEventResult result, Event? evt)> CreateEventAsync(string organizerEmail, CreateEventRequest request)
+        public async Task<(CreateEventResult result, Event? evt)> CreateEventAsync(string organizerId, CreateEventRequest request)
         {
-            var user = await _userRepo.GetByEmailAsync(organizerEmail);
+            var user = await _userRepo.GetByIdAsync(organizerId);
             if (user == null)
                 return (CreateEventResult.UserNotFound, null);
 
@@ -57,12 +57,9 @@ namespace BoraLaBackend.Feature.Events.Services
             return (CreateEventResult.Success, created);
         }
 
-        public async Task<IEnumerable<EventFeedResponse>> GetMyEventsAsync(string organizerEmail)
+        public async Task<IEnumerable<EventFeedResponse>> GetMyEventsAsync(string organizerId)
         {
-            var user = await _userRepo.GetByEmailAsync(organizerEmail);
-            if (user == null) return [];
-
-            var events = await _eventRepo.GetByOrganizerIdAsync(user.Id);
+            var events = await _eventRepo.GetByOrganizerIdAsync(organizerId);
 
             return events.Select(e => new EventFeedResponse
             {
@@ -153,17 +150,13 @@ namespace BoraLaBackend.Feature.Events.Services
                     CreatedAt = e.CreatedAt
                 });
         }
-        public async Task<(EventOperationResult result, Event? evt)> UpdateEventAsync(string organizerEmail, string eventId, UpdateEventRequest request)
+        public async Task<(EventOperationResult result, Event? evt)> UpdateEventAsync(string organizerId, string eventId, UpdateEventRequest request)
         {
-            var user = await _userRepo.GetByEmailAsync(organizerEmail);
-            if (user == null)
-                return (EventOperationResult.UserNotFound, null);
-
             var evt = await _eventRepo.GetByIdAsync(eventId);
             if (evt == null)
                 return (EventOperationResult.EventNotFound, null);
 
-            if (evt.OrganizerId != user.Id)
+            if (evt.OrganizerId != organizerId)
                 return (EventOperationResult.NotTheOrganizer, null);
 
             evt.Title = request.Title ?? evt.Title;
@@ -190,17 +183,13 @@ namespace BoraLaBackend.Feature.Events.Services
             return (EventOperationResult.Success, evt);
         }
 
-        public async Task<EventOperationResult> DeleteEventAsync(string organizerEmail, string eventId)
+        public async Task<EventOperationResult> DeleteEventAsync(string organizerId, string eventId)
         {
-            var user = await _userRepo.GetByEmailAsync(organizerEmail);
-            if (user == null)
-                return EventOperationResult.UserNotFound;
-
             var evt = await _eventRepo.GetByIdAsync(eventId);
             if (evt == null)
                 return EventOperationResult.EventNotFound;
 
-            if (evt.OrganizerId != user.Id)
+            if (evt.OrganizerId != organizerId)
                 return EventOperationResult.NotTheOrganizer;
 
             await _eventRepo.DeleteAsync(eventId);

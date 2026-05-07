@@ -1,8 +1,7 @@
 "use server";
 
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getAppToken } from "@/lib/api";
 import { CreateUserResponse, DefaultHttpResponse } from "@/types/http.types";
-import { getToken } from "@/lib/auth";
 
 interface ICreateUserData {
   checkbox: boolean;
@@ -19,9 +18,7 @@ type CreateUserAction = (
 
 export const createUserAction: CreateUserAction = async (data) => {
   try {
-    const AUTH_COOKIE_NAME = "auth-token";
-    const token = await getToken(AUTH_COOKIE_NAME);
-
+    const token = await getAppToken();
     const response = await apiFetch<DefaultHttpResponse<CreateUserResponse>>(
       "/users",
       "POST",

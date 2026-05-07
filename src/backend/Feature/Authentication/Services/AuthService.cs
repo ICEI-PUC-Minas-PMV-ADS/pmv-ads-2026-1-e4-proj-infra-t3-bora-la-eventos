@@ -59,7 +59,7 @@ namespace BoraLaBackend.Feature.Authentication.Services
       bool isValidPassword = _pass.Check(password, usr.Password);
       if (!isValidPassword) return AuthResults.Unauthorized;
 
-      string token = _jwtService.GenerateToken(id, email, usr.TokenVersion);
+      string token = _jwtService.GenerateToken(id, usr.Id, usr.Email, usr.TokenVersion);
 
       var userResponse = new UserResponse
       {
@@ -84,10 +84,10 @@ namespace BoraLaBackend.Feature.Authentication.Services
     {
         var payload = decoder.DecodeToObject<Dictionary<string, object>>(purgedToken, _config["Auth:ServerSecret"], verify: true);
 
-        if (payload != null && payload.TryGetValue("email", out var emailObj))
+        if (payload != null && payload.TryGetValue("sub", out var subObj))
         {
-            var email = emailObj.ToString();
-            var user = await _usrRepository.GetByEmailAsync(email);
+            var userId = subObj.ToString();
+            var user = await _usrRepository.GetByIdAsync(userId!);
 
             if (user != null)
             {
