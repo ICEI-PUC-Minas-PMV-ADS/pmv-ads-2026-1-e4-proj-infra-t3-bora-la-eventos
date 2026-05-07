@@ -81,7 +81,6 @@ export async function apiFetch<T>(
 	const responseText = await res.text();
 
 	if (!res.ok) {
-		console.log(res);
 		throw new Error(extractErrorMessage(res.status, responseText));
 	}
 
