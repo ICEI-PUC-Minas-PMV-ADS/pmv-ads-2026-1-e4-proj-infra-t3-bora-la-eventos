@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Calendar, Edit, Trash2, Eye, Megaphone, PauseCircle, PlayCircle } from "lucide-react";
-import { deleteEventAction, pauseEventAction } from "@/actions/events.action";
+import { pauseEventAction } from "@/actions/events.action";
 import type { EventItem } from "./page";
 
 type Filter = "todos" | "publicados" | "encerrados";
@@ -79,7 +79,6 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q")?.toLowerCase() ?? "";
   const [filter, setFilter] = useState<Filter>("todos");
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
@@ -96,24 +95,10 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
   const totalInteresses = events.reduce((sum, e) => sum + e.participantsCount, 0);
   const publishedCount = events.filter((e) => getVisualStatus(e) === "Publicado").length;
 
-  function handleEdit(event: EventItem) {
-    router.push(`/events/new?id=${event.id}`);
-  }
-
   function handlePause(event: EventItem) {
     setLoadingId(event.id);
     startTransition(async () => {
       await pauseEventAction(event.id, event.status);
-      router.refresh();
-      setLoadingId(null);
-    });
-  }
-
-  function handleDeleteConfirm(id: string) {
-    setLoadingId(id);
-    startTransition(async () => {
-      await deleteEventAction(id);
-      setConfirmDeleteId(null);
       router.refresh();
       setLoadingId(null);
     });
@@ -180,53 +165,26 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
                     {event.participantsCount.toLocaleString("pt-BR")}
                   </td>
                   <td className="px-6 py-4">
-                    {confirmDeleteId === event.id ? (
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500">Excluir?</span>
-                        <button
-                          onClick={() => handleDeleteConfirm(event.id)}
-                          disabled={isPending}
-                          className="text-xs font-medium text-red-600 hover:text-red-800 disabled:opacity-50"
-                        >
-                          Sim
-                        </button>
-                        <button
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="text-xs font-medium text-gray-500 hover:text-gray-700"
-                        >
-                          Não
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => handleEdit(event)}
-                          className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors rounded"
-                          title="Editar"
-                        >
-                          <Edit size={15} />
-                        </button>
-                        <button
-                          onClick={() => handlePause(event)}
-                          disabled={isPast(event.date) || (isPending && loadingId === event.id)}
-                          className="p-1.5 text-gray-400 hover:text-yellow-500 transition-colors rounded disabled:opacity-30 disabled:cursor-not-allowed"
-                          title={event.status === "paused" ? "Publicar" : "Pausar"}
-                        >
-                          {event.status === "paused" ? (
-                            <PlayCircle size={15} />
-                          ) : (
-                            <PauseCircle size={15} />
-                          )}
-                        </button>
-                        <button
-                          onClick={() => setConfirmDeleteId(event.id)}
-                          className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded"
-                          title="Excluir"
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1">
+                      <span className="p-1.5 text-gray-200 cursor-not-allowed">
+                        <Edit size={15} />
+                      </span>
+                      <button
+                        onClick={() => handlePause(event)}
+                        disabled={isPast(event.date) || (isPending && loadingId === event.id)}
+                        className="p-1.5 text-gray-400 hover:text-yellow-500 transition-colors rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                        title={event.status === "paused" ? "Publicar" : "Pausar"}
+                      >
+                        {event.status === "paused" ? (
+                          <PlayCircle size={15} />
+                        ) : (
+                          <PauseCircle size={15} />
+                        )}
+                      </button>
+                      <span className="p-1.5 text-gray-200 cursor-not-allowed">
+                        <Trash2 size={15} />
+                      </span>
+                    </div>
                   </td>
                 </tr>
               ))
