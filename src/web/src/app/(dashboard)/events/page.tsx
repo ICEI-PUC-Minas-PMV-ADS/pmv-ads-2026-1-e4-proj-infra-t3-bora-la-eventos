@@ -18,7 +18,20 @@ async function getMyEvents(token: string): Promise<EventItem[]> {
 
 export default async function EventsPage() {
   const token = await getToken("auth-token");
-  let myEvents: EventItem[] = [];
+  let myEvents: EventItem[] = [
+    {
+      date: (() => {
+        const date = new Date();
+        date.setDate(date.getDate() + 5);
+        return date.toDateString();
+      })(),
+      id: "1",
+      organizerId: "1",
+      participantsCount: 6,
+      status: "21343",
+      title: "teste",
+    },
+  ];
 
   if (token) {
     try {
