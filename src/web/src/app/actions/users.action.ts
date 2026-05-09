@@ -29,10 +29,8 @@ export const createUserAction: CreateUserAction = async (data) => {
 		const response = await apiFetch<
 			DefaultHttpResponse<CreateUserResponse>
 		>("/users", "POST", JSON.stringify(data), token);
-		console.log(response);
 		return response;
 	} catch (error) {
-		console.log(error);
 		const defaultError = error as DefaultHttpResponse<CreateUserResponse>;
 		return defaultError;
 	}
