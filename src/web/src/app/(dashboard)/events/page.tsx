@@ -1,6 +1,9 @@
-import { getToken } from "@/lib/auth";
+"use client"
+
 import { apiFetch } from "@/lib/api";
 import EventsTable from "./EventsTable";
+import { useEffect, useState } from "react";
+import { useCookies } from "next-client-cookies";
 
 export type EventItem = {
   id: string;
@@ -16,30 +19,31 @@ async function getMyEvents(token: string): Promise<EventItem[]> {
   return apiFetch<EventItem[]>("/events/mine", "GET", undefined, token);
 }
 
-export default async function EventsPage() {
-  const token = await getToken("auth-token");
-  let myEvents: EventItem[] = [
-    {
-      date: (() => {
-        const date = new Date();
-        date.setDate(date.getDate() + 5);
-        return date.toDateString();
-      })(),
-      id: "1",
-      organizerId: "1",
-      participantsCount: 6,
-      status: "21343",
-      title: "teste",
-    },
-  ];
+export default function EventsPage() {
+  const [myEvents, setMyEvents] = useState<EventItem[]>([]);
+  const cookies = useCookies();
 
-  if (token) {
-    try {
-      myEvents = await getMyEvents(token);
-    } catch {
-      myEvents = [];
-    }
-  }
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        const token = cookies.get("auth-token")
+
+        if (!token) {
+          setMyEvents([]);
+          return;
+        }
+
+        const events = await getMyEvents(token);
+
+        setMyEvents(events);
+      } catch (error) {
+        console.error(error);
+        setMyEvents([]);
+      }
+    };
+
+    loadEvents();
+  }, []);
 
   return (
     <div className="max-w-5xl mx-auto px-8 py-8">

@@ -14,7 +14,7 @@ export default async function DashboardLayout({
   const APP_TOKEN = "auth-token";
   const token = await getToken(APP_TOKEN);
 
-//   if (!token) redirect("/login");
+	if (!token) redirect("/login");
 
 	return (
 		<AlertProvider>
