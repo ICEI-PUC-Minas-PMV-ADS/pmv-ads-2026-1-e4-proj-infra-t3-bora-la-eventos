@@ -45,10 +45,14 @@ function extractErrorMessage(status: number, responseText: string): string {
 		const body: ApiErrorBody = JSON.parse(responseText);
 		if (body.errors) {
 			const details = Object.entries(body.errors)
-				.map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+				.map(
+					([field, messages]) =>
+						`${field}: ${messages.join(", ")}`,
+				)
 				.join(" | ");
 			return `${fallback} — ${details}`;
 		}
+
 		return body.message ?? body.code ?? fallback;
 	} catch {
 		return `${fallback} — ${responseText.slice(0, MAX_ERROR_PREVIEW_LENGTH)}`;

@@ -54,14 +54,6 @@ export default function LoginForm() {
 				placeholder="Digite sua senha"
 				icon={<Lock size={18} />}
 				error={errors.password?.message}
-				rightLabelAction={
-					<Link
-						href="/forgot-password"
-						className="text-xs font-semibold text-[#f97316] hover:underline"
-					>
-						Esqueci minha senha
-					</Link>
-				}
 				{...register("password")}
 			/>
 

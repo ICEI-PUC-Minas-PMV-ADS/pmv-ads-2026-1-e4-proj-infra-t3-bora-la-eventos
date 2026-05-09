@@ -131,13 +131,13 @@ builder.Services.AddAuthentication(options =>
         {
             var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
 
-            var emailClaim = context.Principal?.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            var userIdClaim = context.Principal?.Claims.FirstOrDefault(c => c.Type == "userId")?.Value;
 
             var tokenVersionClaim = context.Principal?.Claims.FirstOrDefault(c => c.Type == "token_version")?.Value;
 
-            if (!string.IsNullOrEmpty(emailClaim) && int.TryParse(tokenVersionClaim, out int tokenVersion))
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(tokenVersionClaim, out int tokenVersion))
             {
-                var user = await userRepository.GetByEmailAsync(emailClaim);
+                var user = await userRepository.GetByIdAsync(userIdClaim);
 
                 if (user == null || user.TokenVersion != tokenVersion)
                 {

@@ -66,7 +66,13 @@ export default function EventLocationMap({ onLocationSelect, initialLat, initial
 	useEffect(() => {
 		if (typeof window === "undefined" || mapInstanceRef.current) return;
 
+		let isMounted = true;
+		const mapContainer = mapContainerRef.current as LeafletContainer | null;
+		if (!mapContainer) return;
+
 		import("leaflet").then((leaflet) => {
+			if (!isMounted || mapInstanceRef.current) return;
+
 			leafletRef.current = leaflet;
 
 			const defaultIcon = leaflet.icon({
@@ -83,8 +89,10 @@ export default function EventLocationMap({ onLocationSelect, initialLat, initial
 			const defaultLat = initialLat ?? BRAZIL_CENTER_LAT;
 			const defaultLng = initialLng ?? BRAZIL_CENTER_LNG;
 
+			delete mapContainer._leaflet_id;
+
 			const map = leaflet
-				.map(mapContainerRef.current!)
+				.map(mapContainer)
 				.setView([defaultLat, defaultLng], initialLat ? SELECTED_LOCATION_ZOOM : DEFAULT_MAP_ZOOM);
 
 			leaflet
@@ -108,13 +116,13 @@ export default function EventLocationMap({ onLocationSelect, initialLat, initial
 		});
 
 		return () => {
+			isMounted = false;
 			if (mapInstanceRef.current) {
 				mapInstanceRef.current.remove();
 				mapInstanceRef.current = null;
 			}
-			if (mapContainerRef.current) {
-				delete (mapContainerRef.current as LeafletContainer)._leaflet_id;
-			}
+			markerRef.current = null;
+			delete mapContainer._leaflet_id;
 		};
 	}, []);
 
