@@ -1,9 +1,6 @@
-"use client"
-
 import { apiFetch } from "@/lib/api";
 import EventsTable from "./EventsTable";
-import { useEffect, useState } from "react";
-import { useCookies } from "next-client-cookies";
+import { getToken } from "@/lib/auth";
 
 export type EventItem = {
   id: string;
@@ -19,31 +16,18 @@ async function getMyEvents(token: string): Promise<EventItem[]> {
   return apiFetch<EventItem[]>("/events/mine", "GET", undefined, token);
 }
 
-export default function EventsPage() {
-  const [myEvents, setMyEvents] = useState<EventItem[]>([]);
-  const cookies = useCookies();
+export default async function EventsPage() {
+  let myEvents: EventItem[] = [];
 
-  useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const token = cookies.get("auth-token")
+  try {
+    const token = await getToken("auth-token");
 
-        if (!token) {
-          setMyEvents([]);
-          return;
-        }
-
-        const events = await getMyEvents(token);
-
-        setMyEvents(events);
-      } catch (error) {
-        console.error(error);
-        setMyEvents([]);
-      }
-    };
-
-    loadEvents();
-  }, []);
+    if (token) {
+      myEvents = await getMyEvents(token);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-8 py-8">

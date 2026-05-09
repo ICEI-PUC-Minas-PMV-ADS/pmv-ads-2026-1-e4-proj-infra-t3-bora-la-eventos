@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Calendar, Edit, Trash2, Eye, Megaphone, PauseCircle, PlayCircle } from "lucide-react";
-import { pauseEventAction } from "@/actions/events.action";
+import { deleteEventAction, pauseEventAction } from "@/actions/events.action";
 import type { EventItem } from "./page";
 
 type Filter = "todos" | "publicados" | "encerrados";
@@ -104,6 +104,24 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
     });
   }
 
+  function handleEdit(event: EventItem) {
+    setLoadingId(event.id);
+    
+    startTransition(async () => {
+      router.push("/events/new?id=" + event.id);
+      setLoadingId(null);
+    });
+  }
+
+  function handleDelete(event: EventItem) {
+    setLoadingId(event.id);
+    startTransition(async () => {
+      await deleteEventAction(event.id);
+      router.refresh();
+      setLoadingId(null);
+    });
+  }
+
   if (events.length === 0) return <EmptyState />;
 
   return (
@@ -166,7 +184,10 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1">
-                      <span className="p-1.5 text-gray-200 cursor-not-allowed">
+                      <span 
+                        className="p-1.5 text-gray-400 hover:text-yellow-500 transition-colors rounded"
+                        onClick={() => handleEdit(event)}
+                      >
                         <Edit size={15} />
                       </span>
                       <button
@@ -181,7 +202,10 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
                           <PauseCircle size={15} />
                         )}
                       </button>
-                      <span className="p-1.5 text-gray-200 cursor-not-allowed">
+                      <span 
+                        className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded"
+                        onClick={() => handleDelete(event)}
+                      >
                         <Trash2 size={15} />
                       </span>
                     </div>
