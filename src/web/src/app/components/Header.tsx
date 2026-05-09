@@ -57,7 +57,17 @@ export default function Header() {
 				</nav>
 			)}
 
-			{pathname !== "/events" && pathname !== "/events/new" && <div />}
+			{pathname === "/profile" && (
+				<nav className="flex items-center gap-1.5 text-sm">
+					<Link href="/events" className="text-gray-500 hover:text-orange-500 transition-colors">
+						Eventos
+					</Link>
+					<ChevronRight size={14} className="text-gray-400" />
+					<span className="text-gray-900 font-medium">Meu perfil</span>
+				</nav>
+			)}
+
+			{pathname !== "/events" && pathname !== "/events/new" && pathname !== "/profile" && <div />}
 
 			{/* LADO DIREITO */}
 			<div className="flex items-center gap-3">

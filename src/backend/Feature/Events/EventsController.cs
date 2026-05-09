@@ -31,10 +31,10 @@ namespace BoraLaBackend.Feature.Events
         [HttpGet("mine")]
         public async Task<IActionResult> GetMyEvents()
         {
-            var email = User.FindFirst("sub")?.Value;
-            if (string.IsNullOrEmpty(email)) return Unauthorized();
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
-            var events = await _eventsService.GetMyEventsAsync(email);
+            var events = await _eventsService.GetMyEventsAsync(userId);
             return Ok(events);
         }
 
@@ -97,11 +97,11 @@ namespace BoraLaBackend.Feature.Events
         [ProducesResponseType(404)]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventRequest request)
         {
-            var email = User.FindFirst("sub")?.Value;
-            if (string.IsNullOrEmpty(email))
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var (result, evt) = await _eventsService.CreateEventAsync(email, request);
+            var (result, evt) = await _eventsService.CreateEventAsync(userId, request);
 
             return result switch
             {
@@ -126,11 +126,11 @@ namespace BoraLaBackend.Feature.Events
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateEvent(string id, [FromBody] UpdateEventRequest request)
         {
-            var email = User.FindFirst("sub")?.Value;
-            if (string.IsNullOrEmpty(email))
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var (result, evt) = await _eventsService.UpdateEventAsync(email, id, request);
+            var (result, evt) = await _eventsService.UpdateEventAsync(userId, id, request);
 
             return result switch
             {
@@ -156,11 +156,11 @@ namespace BoraLaBackend.Feature.Events
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteEvent(string id)
         {
-            var email = User.FindFirst("sub")?.Value;
-            if (string.IsNullOrEmpty(email))
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var result = await _eventsService.DeleteEventAsync(email, id);
+            var result = await _eventsService.DeleteEventAsync(userId, id);
 
             return result switch
             {

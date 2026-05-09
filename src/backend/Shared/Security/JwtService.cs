@@ -28,12 +28,11 @@ namespace BoraLaBackend.Shared.Security
             _decoder = decoder;
         }
 
-        public string GenerateToken(string appId, string? email, int? tokenVersion = null)
+        public string GenerateToken(string appId, string? email, string? userId = null, int? tokenVersion = null)
         {
             var payload = email == null
                 ? CreateAppPayload(appId)
-                : CreateUserPayload(email, appId, tokenVersion ?? 0);
-
+                : CreateUserPayload(email, appId, tokenVersion ?? 0, userId);
             return _encoder.Encode(payload, _secretKey);
         }
 
@@ -107,13 +106,14 @@ namespace BoraLaBackend.Shared.Security
         { "iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds() }
      };
 
-        private static Dictionary<string, object> CreateUserPayload(string email, string appId, int tokenVersion)
+        private static Dictionary<string, object> CreateUserPayload(string email, string appId, int tokenVersion, string userId)
         {
             return new()
             {
                 { "jti", Guid.NewGuid().ToString() },
+                {"userId", userId },
                 { "email", email },
-                { "sub", email },
+                { "sub", userId },
                 { "app_id", appId },
                 { "token_version", tokenVersion },
                 { "exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds() },
