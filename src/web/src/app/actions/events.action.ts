@@ -105,3 +105,14 @@ export async function getEventByIdAction(id: string) {
 		return null;
 	}
 }
+
+export async function getMyEventsAction() {
+	const token = await getToken("auth-token");
+	if (!token) return [];
+
+	try {
+		return await apiFetch<Record<string, unknown>[]>("/events/mine", "GET", undefined, token);
+	} catch {
+		return [];
+	}
+}
