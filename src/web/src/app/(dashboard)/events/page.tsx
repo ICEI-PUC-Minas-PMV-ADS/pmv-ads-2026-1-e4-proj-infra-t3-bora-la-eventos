@@ -1,6 +1,6 @@
-import { getToken } from "@/lib/auth";
 import { apiFetch } from "@/lib/api";
 import EventsTable from "./EventsTable";
+import { getToken } from "@/lib/auth";
 
 export type EventItem = {
   id: string;
@@ -17,15 +17,16 @@ async function getMyEvents(token: string): Promise<EventItem[]> {
 }
 
 export default async function EventsPage() {
-  const token = await getToken("auth-token");
   let myEvents: EventItem[] = [];
 
-  if (token) {
-    try {
+  try {
+    const token = await getToken("auth-token");
+
+    if (token) {
       myEvents = await getMyEvents(token);
-    } catch {
-      myEvents = [];
     }
+  } catch (error) {
+    console.error(error);
   }
 
   return (

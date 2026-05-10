@@ -128,6 +128,47 @@ namespace BoraLaBackend.Test.Feature.Users
         }
 
         [Test]
+        public async Task GetUserByEmailAsync_UserExists_ReturnsUserResponse()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = "123",
+                Name = "Test Me",
+                Email = "me@teste.com",
+                Document = "12345678909",
+                Role = Role.user
+            };
+
+            _userRepositoryMock
+                .Setup(repo => repo.GetByEmailAsync("me@teste.com"))
+                .ReturnsAsync(user);
+
+            // Act
+            var result = await _usersService.GetUserByEmailAsync("me@teste.com");
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Email, Is.EqualTo("me@teste.com"));
+            Assert.That(result.Name, Is.EqualTo("Test Me"));
+        }
+
+        [Test]
+        public async Task GetUserByEmailAsync_UserNotFound_ReturnsNull()
+        {
+            // Arrange
+            _userRepositoryMock
+                .Setup(repo => repo.GetByEmailAsync("notfound@teste.com"))
+                .ReturnsAsync((User?)null);
+
+            // Act
+            var result = await _usersService.GetUserByEmailAsync("notfound@teste.com");
+
+            // Assert
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
         public async Task UpdateUserAsync_UserExists_UpdatesAndReturnsUser()
         {
             // Arrange

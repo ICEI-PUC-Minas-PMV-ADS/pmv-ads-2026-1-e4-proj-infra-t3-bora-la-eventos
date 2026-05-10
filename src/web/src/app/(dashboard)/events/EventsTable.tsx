@@ -79,9 +79,9 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q")?.toLowerCase() ?? "";
   const [filter, setFilter] = useState<Filter>("todos");
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const filtered = events.filter((e) => {
     const status = getVisualStatus(e);
@@ -96,10 +96,6 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
   const totalInteresses = events.reduce((sum, e) => sum + e.participantsCount, 0);
   const publishedCount = events.filter((e) => getVisualStatus(e) === "Publicado").length;
 
-  function handleEdit(event: EventItem) {
-    router.push(`/events/new?id=${event.id}`);
-  }
-
   function handlePause(event: EventItem) {
     setLoadingId(event.id);
     startTransition(async () => {
@@ -109,11 +105,19 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
     });
   }
 
-  function handleDeleteConfirm(id: string) {
-    setLoadingId(id);
+  function handleEdit(event: EventItem) {
+    setLoadingId(event.id);
+    
     startTransition(async () => {
-      await deleteEventAction(id);
-      setConfirmDeleteId(null);
+      router.push("/events/new?id=" + event.id);
+      setLoadingId(null);
+    });
+  }
+
+  function handleDelete(event: EventItem) {
+    setLoadingId(event.id);
+    startTransition(async () => {
+      await deleteEventAction(event.id);
       router.refresh();
       setLoadingId(null);
     });
@@ -184,7 +188,7 @@ export default function EventsTable({ events }: { events: EventItem[] }) {
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-gray-500">Excluir?</span>
                         <button
-                          onClick={() => handleDeleteConfirm(event.id)}
+                          onClick={() => handleDelete(event)}
                           disabled={isPending}
                           className="text-xs font-medium text-red-600 hover:text-red-800 disabled:opacity-50"
                         >

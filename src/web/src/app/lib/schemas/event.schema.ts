@@ -44,7 +44,7 @@ export const createEventSchema = z.object({
 	capacity: z.coerce.number().int().min(1, "Capacidade deve ser pelo menos 1"),
 	latitude: z.coerce.number().optional(),
 	longitude: z.coerce.number().optional(),
-	bannerBase64: z.string().optional(),
+	bannerBase64: z.string().optional().nullable(),
 });
 
 export type CreateEventSchema = z.infer<typeof createEventSchema>;

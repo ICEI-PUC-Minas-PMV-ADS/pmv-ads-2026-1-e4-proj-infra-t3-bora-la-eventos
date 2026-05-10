@@ -38,7 +38,7 @@ namespace BoraLaBackend.Feature.Authentication.Services
       if (id != internalClientId || secret != internalSecret)
         return TokenResults.Unauthorized;
 
-      var token = _jwtService.GenerateToken(internalClientId, null);
+      var token = _jwtService.GenerateToken(internalClientId, null, null);
 
       return TokenResults.Success(token);
     }
@@ -59,7 +59,7 @@ namespace BoraLaBackend.Feature.Authentication.Services
       bool isValidPassword = _pass.Check(password, usr.Password);
       if (!isValidPassword) return AuthResults.Unauthorized;
 
-      string token = _jwtService.GenerateToken(id, email, usr.TokenVersion);
+      string token = _jwtService.GenerateToken(id, email, usr.Id, usr.TokenVersion);
 
       var userResponse = new UserResponse
       {

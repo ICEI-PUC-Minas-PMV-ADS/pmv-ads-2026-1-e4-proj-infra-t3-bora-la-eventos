@@ -8,6 +8,8 @@ namespace BoraLaBackend.Feature.Users.Services
     {
         Task<RegisterResult> RegisterAsync(RegisterRequest request);
         Task<List<UserResponse>> GetAllUsersAsync();
+
+        Task<UserResponse?> GetUserByEmailAsync(string email);
         Task<UserResponse?> GetUserByIdAsync(string id);
         Task<UserResponse?> UpdateUserAsync(string id, UpdateUserRequest request);
         Task<bool> DeleteUserAsync(string id);

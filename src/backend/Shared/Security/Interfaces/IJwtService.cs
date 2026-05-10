@@ -4,7 +4,7 @@ namespace BoraLaBackend.Shared.Security
     public record ValidateTokenReturnProps(string Jti, DateTime Date);
     public interface IJwtService
     {
-        public string GenerateToken(string appId, string? email, int? tokenVersion = null);
+        public string GenerateToken(string appId, string? email, string? userId, int? tokenVersion = null);
 
         public bool ValidateToken(string token);
 
