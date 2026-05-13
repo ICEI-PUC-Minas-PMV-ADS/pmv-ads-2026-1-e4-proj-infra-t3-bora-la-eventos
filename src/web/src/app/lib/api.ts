@@ -38,6 +38,20 @@ interface ApiErrorBody {
 
 const MAX_ERROR_PREVIEW_LENGTH = 200;
 
+export class ApiError extends Error {
+	constructor(
+		public readonly status: number,
+		message: string,
+	) {
+		super(message);
+		this.name = "ApiError";
+	}
+}
+
+export function isUnauthorizedApiError(error: unknown): boolean {
+	return error instanceof ApiError && [401, 403].includes(error.status);
+}
+
 function extractErrorMessage(status: number, responseText: string): string {
 	const fallback = `HTTP ${status}`;
 	if (!responseText) return fallback;
@@ -67,6 +81,7 @@ export async function apiFetch<T>(
 	options: RequestInit = {},
 ): Promise<T> {
 	const res = await fetch(`${BASE_URL}${path}`, {
+		cache: "no-store",
 		...options,
 		method,
 		headers: {
@@ -81,7 +96,10 @@ export async function apiFetch<T>(
 	const responseText = await res.text();
 
 	if (!res.ok) {
-		throw new Error(extractErrorMessage(res.status, responseText));
+		throw new ApiError(
+			res.status,
+			extractErrorMessage(res.status, responseText),
+		);
 	}
 
 	return (responseText ? JSON.parse(responseText) : undefined) as T;

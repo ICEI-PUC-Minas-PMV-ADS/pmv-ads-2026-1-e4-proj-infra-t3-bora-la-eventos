@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { AlertProvider } from "@/components/ui/Alert/AlertContext";
 import { getCurrentUser } from "@/actions/users.action";
 import { UserInfo } from "@/types/user.types";
+import { isUnauthorizedApiError } from "@/lib/api";
 
 type DashboardProps = {
 	children: React.ReactNode;
@@ -18,7 +19,17 @@ export default async function DashboardLayout({
 
 	if (!token) redirect("/login");
 
-	const userInfo: UserInfo = await getCurrentUser();
+	let userInfo: UserInfo;
+
+	try {
+		userInfo = await getCurrentUser();
+	} catch (error) {
+		if (isUnauthorizedApiError(error)) {
+			redirect("/logout");
+		}
+
+		throw error;
+	}
 
 	return (
 		<AlertProvider>
