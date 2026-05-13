@@ -13,25 +13,25 @@ export interface IHttpListeners<TSuccess, TError> {
 
 /**
  * Método padrão para requisição HTTP
- * @param config Parâmetro com as configurações da requisição como toke, path, etc.
+ * @param config Parâmetro com as configurações da requisição como token, path, etc.
  * @param listeners Funções que serão executadas em caso de sucesso ou de erro
- * @returns 
- * Lembre-se de passar para a função a tipagem dos dados tanto para erro quanto para sucesso. 
+ * @returns void
+ * Lembre-se de passar para a função a tipagem dos dados tanto para erro quanto para sucesso.
  * ```Javascript
  * // exemplo: TUserData é o tipo usado para sucesso e TError é o tipo para error
- * cons data = await request<TUserData, TErrorData>( ... )
+ * const data = await request<TUserData, TErrorData>( ... )
  * ```
- * 
+ *
  * Exemplo de uso da função
  * ```Javascript
  * type TUserData = { .. } // dados do usuário esperados na API
  * type TErrorData = { .. } // dados esperados quando ocorre erro na request
- * 
+ *
  * const listener = {
  *  onSuccess: (data: TUsertData) => console.log(data),
  *  onError: (error: TErrorData) => console.log(`Message: ${error}`)
  * }
- * 
+ *
  * const config: IHttpConfig = {
  *  path: "/user",
  *  headers: {..} // adicione os campos do header como o token, por exemplo
@@ -46,27 +46,32 @@ const request = async <TSuccess, TError>(
   config: IHttpConfig,
   listeners: IHttpListeners<TSuccess, TError>,
 ): Promise<void> => {
-  const response = await fetch(`${BASE_URL}${config.path}`, config);
+  try {
+    const response = await fetch(`${BASE_URL}${config.path}`, config);
+    if (response.ok) {
+      if (config.responseInterceptor) {
+        await config.responseInterceptor(response.clone());
+      }
 
-  if (response.ok) {
-    if (config.responseInterceptor) {
-      await config.responseInterceptor(response.clone());
+      const data: TSuccess = await response.json();
+
+      listeners?.onSuccess(data);
+
+      return;
     }
 
-    const data = await response.json();
+    if (config.errorInterceptor) {
+      await config.errorInterceptor(response.clone());
+    }
 
-    listeners.onSuccess(data);
+    const err: TError = await response.json();
 
-    return;
+    listeners.onError(err);
+  } catch (err) {
+    // O fetch só cai no catch quando acusa erros de rede de modo geral
+    // Pra isso, devo usar um erro global para trackear melhor o tipo de problema
+    listeners.onError(err as TError);
   }
-
-  if (config.errorInterceptor) {
-    await config.errorInterceptor(response.clone());
-  }
-
-  const err = await response.json();
-
-  listeners.onError(err);
 };
 
 export { request };
