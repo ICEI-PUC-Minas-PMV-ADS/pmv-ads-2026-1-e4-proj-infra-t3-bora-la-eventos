@@ -1,0 +1,72 @@
+const BASE_URL = "";
+
+export interface IHttpConfig extends RequestInit {
+  path: string;
+  responseInterceptor?: (param: Response) => Promise<unknown>;
+  errorInterceptor?: (error: Response) => Promise<unknown>;
+}
+
+export interface IHttpListeners<TSuccess, TError> {
+  onError: (error: TError) => unknown;
+  onSuccess: (response: TSuccess) => unknown;
+}
+
+/**
+ * Método padrão para requisição HTTP
+ * @param config Parâmetro com as configurações da requisição como toke, path, etc.
+ * @param listeners Funções que serão executadas em caso de sucesso ou de erro
+ * @returns 
+ * Lembre-se de passar para a função a tipagem dos dados tanto para erro quanto para sucesso. 
+ * ```Javascript
+ * // exemplo: TUserData é o tipo usado para sucesso e TError é o tipo para error
+ * cons data = await request<TUserData, TErrorData>( ... )
+ * ```
+ * 
+ * Exemplo de uso da função
+ * ```Javascript
+ * type TUserData = { .. } // dados do usuário esperados na API
+ * type TErrorData = { .. } // dados esperados quando ocorre erro na request
+ * 
+ * const listener = {
+ *  onSuccess: (data: TUsertData) => console.log(data),
+ *  onError: (error: TErrorData) => console.log(`Message: ${error}`)
+ * }
+ * 
+ * const config: IHttpConfig = {
+ *  path: "/user",
+ *  headers: {..} // adicione os campos do header como o token, por exemplo
+ *  method: 'GET'
+ *  ...
+ * }
+ * // Ao fim da request uma das funções será executada: erro ou sucesso
+ * await request<TUserData, TErrorData>(config, listener);
+ * ```
+ */
+const request = async <TSuccess, TError>(
+  config: IHttpConfig,
+  listeners: IHttpListeners<TSuccess, TError>,
+): Promise<void> => {
+  const response = await fetch(`${BASE_URL}${config.path}`, config);
+
+  if (response.ok) {
+    if (config.responseInterceptor) {
+      await config.responseInterceptor(response.clone());
+    }
+
+    const data = await response.json();
+
+    listeners.onSuccess(data);
+
+    return;
+  }
+
+  if (config.errorInterceptor) {
+    await config.errorInterceptor(response.clone());
+  }
+
+  const err = await response.json();
+
+  listeners.onError(err);
+};
+
+export { request };
