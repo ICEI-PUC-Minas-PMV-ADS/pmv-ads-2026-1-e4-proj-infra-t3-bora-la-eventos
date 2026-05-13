@@ -3,7 +3,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { LoginContainer } from "~/screens/auth/login/";
 import { SignInContainer } from "~/screens/auth/sign-in/";
-import { HomeContainer } from "~/screens/home/home.container";
+import { EventNavigationStack } from "./bottom-navigation/event.navigation";
+import { HomeNavigationStack } from "./bottom-navigation/home.navigation";
+import { UserNavigationStack } from "./bottom-navigation/user.navigation";
 
 const UnauthStack = createNativeStackNavigator();
 const AuthStack = createBottomTabNavigator();
@@ -26,7 +28,9 @@ export const UnauthenticatedStack = () => {
 export const AuthenticatedStack = () => {
   return (
     <AuthStack.Navigator>
-      <AuthStack.Screen name="Home" component={HomeContainer} />
+      <AuthStack.Screen name="Explorar" component={HomeNavigationStack} />
+      <AuthStack.Screen name="Meus Eventos" component={EventNavigationStack} />
+      <AuthStack.Screen name="Perfil" component={UserNavigationStack} />
     </AuthStack.Navigator>
   );
 };
