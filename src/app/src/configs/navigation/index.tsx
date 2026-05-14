@@ -12,7 +12,11 @@ const AuthStack = createBottomTabNavigator();
 
 export const UnauthenticatedStack = () => {
   return (
-    <UnauthStack.Navigator>
+    <UnauthStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <UnauthStack.Screen
         name="LoginScreen"
         component={LoginContainer}
