@@ -1,74 +1,76 @@
 import { StyleSheet } from "react-native";
-import { horizontalScale, scale, verticalScale } from "~/utils/scale";
+
+import { theme } from "~/configs/theme";
+import { horizontalScale, scale, verticalScale } from "~/util/scale";
 
 export const LoginViewStyles = StyleSheet.create({
   // Views
   screen: {
     alignItems: "center",
     flex: 1,
-    paddingHorizontal: horizontalScale(16),
-    backgroundColor: "#F8F6F6",
+    paddingHorizontal: theme.horizontalSpaces.md,
+    backgroundColor: theme.colors.backgroundWhite,
   },
   iconContainer: {
     alignItems: "center",
-    backgroundColor: "#EC5B131A",
+    backgroundColor: theme.colors.primaryTransparent,
     borderRadius: 40,
-    height: verticalScale(80),
+    height: theme.verticalSpaces.xxxl,
     justifyContent: "center",
-    marginBottom: verticalScale(32),
-    marginTop: verticalScale(48),
-    width: horizontalScale(80),
+    marginBottom: theme.verticalSpaces.xs,
+    marginTop: theme.verticalSpaces.xxl,
+    width: theme.horizontalSpaces.xxxl,
   },
   logoWrapper: {
     alignItems: "center",
-    gap: verticalScale(24),
-    marginBottom: verticalScale(32),
+    gap: theme.verticalSpaces.lg,
+    marginBottom: theme.verticalSpaces.xs,
   },
   titleWrapper: {
-    gap: verticalScale(8),
+    gap: theme.verticalSpaces.sm,
   },
   form: {
-    gap: verticalScale(16),
+    gap: theme.verticalSpaces.md,
     width: "100%",
   },
   navigationWrapper: {
     width: "100%",
-    paddingTop: verticalScale(8),
-    gap: verticalScale(45),
+    paddingTop: theme.verticalSpaces.sm,
+    gap: theme.verticalSpaces.xxl,
   },
   calloutWrapper: {
     flexDirection: 'row',
-    gap: horizontalScale(5),
+    gap: theme.horizontalSpaces.xs,
     justifyContent: 'center',
     alignItems: 'center',
   },
   // Fonts
   title: {
-    color: "#0F172A",
-    fontSize: scale(32),
+    color: theme.colors.textPrimary,
+    fontSize: theme.typography.largeTitle,
     fontWeight: 900,
     textAlign: "center",
   },
   description: {
-    color: "#475569",
-    fontSize: scale(16),
+    color: theme.colors.textSecondary,
+    fontSize: theme.typography.body,
     fontWeight: 400,
     textAlign: "center",
   },
   forgotPassword: {
-    color: "#EC5B13",
+    color: theme.colors.primary,
     fontWeight: 500,
-    fontSize: scale(14),
+    fontSize: theme.typography.body,
     alignSelf: "flex-end",
   },
   signUpCommon: {
-    fontSize: scale(14),
+    fontSize: theme.typography.body,
     fontWeight: 400,
-    color: "#475569"
+    color: theme.colors.textSecondary,
   },
   signUpCallout: {
-    fontSize: scale(14),
+    fontSize: theme.typography.body,
     fontWeight: 'bold',
-    color: "#EC5B13"
+    color: theme.colors.primary
   }
 });

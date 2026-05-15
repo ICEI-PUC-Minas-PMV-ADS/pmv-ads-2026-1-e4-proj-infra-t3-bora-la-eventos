@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, Text, TouchableOpacity } from "react-native";
 
-import { scale } from "~/utils/scale";
+import { scale } from "~/util/scale";
 import { Input } from "~/components/input";
 
 import { TLoginViewProps } from "./types";
