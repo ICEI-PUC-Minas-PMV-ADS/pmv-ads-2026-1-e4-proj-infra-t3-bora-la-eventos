@@ -6,7 +6,6 @@ export const LoginViewStyles = StyleSheet.create({
   screen: {
     alignItems: "center",
     flex: 1,
-    gap: verticalScale(32),
     paddingHorizontal: horizontalScale(16),
     backgroundColor: "#F8F6F6",
   },
@@ -16,11 +15,14 @@ export const LoginViewStyles = StyleSheet.create({
     borderRadius: 40,
     height: verticalScale(80),
     justifyContent: "center",
+    marginBottom: verticalScale(32),
+    marginTop: verticalScale(48),
     width: horizontalScale(80),
   },
   logoWrapper: {
     alignItems: "center",
     gap: verticalScale(24),
+    marginBottom: verticalScale(32),
   },
   titleWrapper: {
     gap: verticalScale(8),
@@ -28,6 +30,17 @@ export const LoginViewStyles = StyleSheet.create({
   form: {
     gap: verticalScale(16),
     width: "100%",
+  },
+  navigationWrapper: {
+    width: "100%",
+    paddingTop: verticalScale(8),
+    gap: verticalScale(45),
+  },
+  calloutWrapper: {
+    flexDirection: 'row',
+    gap: horizontalScale(5),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   // Fonts
   title: {
@@ -42,4 +55,20 @@ export const LoginViewStyles = StyleSheet.create({
     fontWeight: 400,
     textAlign: "center",
   },
+  forgotPassword: {
+    color: "#EC5B13",
+    fontWeight: 500,
+    fontSize: scale(14),
+    alignSelf: "flex-end",
+  },
+  signUpCommon: {
+    fontSize: scale(14),
+    fontWeight: 400,
+    color: "#475569"
+  },
+  signUpCallout: {
+    fontSize: scale(14),
+    fontWeight: 'bold',
+    color: "#EC5B13"
+  }
 });

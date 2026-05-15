@@ -1,18 +1,37 @@
 import { Calendar } from "lucide-react-native";
 import { FC } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import { scale } from "~/utils/scale";
 import { Input } from "~/components/input";
 
 import { TLoginViewProps } from "./types";
 import { LoginViewStyles } from "./login.styles";
+import { Button, EButtonTypes } from "~/components/button";
 
-export const LoginView: FC<TLoginViewProps> = () => {
+export const LoginView: FC<TLoginViewProps> = ({
+  handleSubmit,
+  handleForgotPassword,
+  handleSignUp,
+  handleUpdateEmail,
+  handleUpdatePassword,
+}) => {
   const insets = useSafeAreaInsets();
-  const { description, form, iconContainer, logoWrapper, screen, title } =
-    LoginViewStyles;
+  const {
+    description,
+    form,
+    iconContainer,
+    logoWrapper,
+    navigationWrapper,
+    screen,
+    title,
+    titleWrapper,
+    forgotPassword,
+    signUpCommon,
+    signUpCallout,
+    calloutWrapper,
+  } = LoginViewStyles;
 
   const renderIcon = () => {
     return (
@@ -28,7 +47,7 @@ export const LoginView: FC<TLoginViewProps> = () => {
     >
       <View style={logoWrapper}>
         {renderIcon()}
-        <View>
+        <View style={titleWrapper}>
           <Text style={title}>Bem-vindo de volta</Text>
           <Text style={description}>
             Acesse sua conta para gerenciar e descobrir novos eventos.
@@ -42,6 +61,7 @@ export const LoginView: FC<TLoginViewProps> = () => {
           label="Email"
           inputProps={{
             placeholder: "exemplo@email.com",
+            onChangeText: (data) => handleUpdateEmail(data),
           }}
         />
         <Input
@@ -50,8 +70,30 @@ export const LoginView: FC<TLoginViewProps> = () => {
           label="Senha"
           inputProps={{
             placeholder: "Seua senha secreta!",
+            onChangeText: (data) => handleUpdatePassword(data),
           }}
         />
+      </View>
+
+      <View style={navigationWrapper}>
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={forgotPassword}>Esqueci a senha</Text>
+        </TouchableOpacity>
+        <Button
+          label="Entrar"
+          containerProps={{
+            onPress: handleSubmit, // passar os dados do form
+            style: { width: "100%" },
+          }}
+          type={EButtonTypes.PRIMARY}
+        />
+
+        <View style={calloutWrapper}>
+          <Text style={signUpCommon}>Não tem conta?</Text>
+          <TouchableOpacity onPress={handleSignUp}>
+            <Text style={signUpCallout}>Crie agora!</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
