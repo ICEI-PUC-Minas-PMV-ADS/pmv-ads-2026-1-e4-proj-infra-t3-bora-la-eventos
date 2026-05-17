@@ -1,15 +1,6 @@
-const BASE_URL = "";
+import { IHttpConfig, IHttpListeners } from "./types";
 
-export interface IHttpConfig extends RequestInit {
-  path: string;
-  responseInterceptor?: (param: Response) => Promise<unknown>;
-  errorInterceptor?: (error: Response) => Promise<unknown>;
-}
-
-export interface IHttpListeners<TSuccess, TError> {
-  onError: (error: TError) => unknown;
-  onSuccess: (response: TSuccess) => unknown;
-}
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 /**
  * Método padrão para requisição HTTP
@@ -45,9 +36,19 @@ export interface IHttpListeners<TSuccess, TError> {
 const request = async <TSuccess, TError>(
   config: IHttpConfig,
   listeners: IHttpListeners<TSuccess, TError>,
-): Promise<void> => {
+): Promise<unknown> => {
   try {
-    const response = await fetch(`${BASE_URL}${config.path}`, config);
+    if (config.requestInterceptor) {
+      config.requestInterceptor({
+        ...config,
+        url: `${BASE_URL}${config.path}`,
+      });
+    }
+    const response = await fetch(`${BASE_URL}${config.path}`, {
+      ...config,
+      signal: config.controller?.signal,
+    });
+
     if (response.ok) {
       if (config.responseInterceptor) {
         await config.responseInterceptor(response.clone());
@@ -55,9 +56,7 @@ const request = async <TSuccess, TError>(
 
       const data: TSuccess = await response.json();
 
-      listeners?.onSuccess(data);
-
-      return;
+      return listeners?.onSuccess(data);
     }
 
     if (config.errorInterceptor) {
@@ -67,10 +66,15 @@ const request = async <TSuccess, TError>(
     const err: TError = await response.json();
 
     listeners.onError(err);
-  } catch (err) {
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.name === "AbortError") {
+        return listeners.onAbort && listeners.onAbort(error);
+      }
+    }
     // O fetch só cai no catch quando acusa erros de rede de modo geral
     // Pra isso, devo usar um erro global para trackear melhor o tipo de problema
-    listeners.onError(err as TError);
+    return listeners.onError(error as TError);
   }
 };
 
