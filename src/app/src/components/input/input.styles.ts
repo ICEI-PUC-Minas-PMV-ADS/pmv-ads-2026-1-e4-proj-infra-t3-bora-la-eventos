@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { horizontalScale, scale, verticalScale } from "~/utils/scale";
+import { horizontalScale, scale, verticalScale } from "~/util/scale";
 
 export const InputStyles = StyleSheet.create({
   label: {

@@ -4,7 +4,7 @@ import { Eye, EyeClosed } from "lucide-react-native";
 
 import { TInputProps } from "./types";
 import { InputStyles } from "./input.styles";
-import { scale } from "~/utils/scale";
+import { scale } from "~/util/scale";
 
 export const Input: FC<TInputProps> = (props) => {
   const [isSecureContent, setIsSecureContent] = useState(props.isPassword);

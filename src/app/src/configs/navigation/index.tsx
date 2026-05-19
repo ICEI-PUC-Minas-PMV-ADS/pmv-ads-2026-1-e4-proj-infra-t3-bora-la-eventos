@@ -7,12 +7,21 @@ import { EventNavigationStack } from "./bottom-navigation/event.navigation";
 import { HomeNavigationStack } from "./bottom-navigation/home.navigation";
 import { UserNavigationStack } from "./bottom-navigation/user.navigation";
 
-const UnauthStack = createNativeStackNavigator();
+export type TUnauthRouteParams = {
+  LoginScreen: undefined,
+  SignInScreen: undefined,
+}
+
+const UnauthStack = createNativeStackNavigator<TUnauthRouteParams>();
 const AuthStack = createBottomTabNavigator();
 
 export const UnauthenticatedStack = () => {
   return (
-    <UnauthStack.Navigator>
+    <UnauthStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <UnauthStack.Screen
         name="LoginScreen"
         component={LoginContainer}
