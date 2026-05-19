@@ -2,6 +2,7 @@ export interface IThemeColors {
   primary: string;
   primaryTransparent: string;
   textPrimary: string;
+  textPrimaryTransparent: string;
   textSecondary: string;
   backgroundWhite: string;
 }

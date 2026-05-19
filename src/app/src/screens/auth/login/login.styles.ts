@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 import { theme } from "~/configs/theme";
-import { horizontalScale, scale, verticalScale } from "~/util/scale";
 
 export const LoginViewStyles = StyleSheet.create({
   // Views

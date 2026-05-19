@@ -1,6 +1,11 @@
 import { IUser } from "~/configs/state/user-store";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TUnauthRouteParams } from "~/configs/navigation";
 
-export type TLoginContainerProps = {}
+export type TLoginContainerProps = NativeStackScreenProps<
+  TUnauthRouteParams,
+  "LoginScreen"
+> & {};
 
 export type TLoginResponseData = {
   currentUser: IUser;
@@ -21,13 +26,13 @@ export type TLoginResponseError = { code?: string; message: LoginErrorMessage };
 
 export type TLoginData = {
   email: string;
-  password: string; 
-}
+  password: string;
+};
 
 export type TLoginViewProps = {
-  handleSubmit: () => void,
-  handleForgotPassword: () => void,
-  handleSignUp: () => void,
-  handleUpdateEmail: React.Dispatch<React.SetStateAction<string>>,
-  handleUpdatePassword: React.Dispatch<React.SetStateAction<string>>,
-}
+  handleSubmit: () => void;
+  handleForgotPassword: () => void;
+  handleSignUp: () => void;
+  handleUpdateEmail: React.Dispatch<React.SetStateAction<string>>;
+  handleUpdatePassword: React.Dispatch<React.SetStateAction<string>>;
+};
