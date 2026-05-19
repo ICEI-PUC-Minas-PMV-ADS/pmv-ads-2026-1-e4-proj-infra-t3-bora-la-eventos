@@ -82,7 +82,7 @@ export const LoginView: FC<TLoginViewProps> = ({
         <Button
           label="Entrar"
           containerProps={{
-            onPress: handleSubmit, // passar os dados do form
+            onPress: handleSubmit,
             style: { width: "100%" },
           }}
           type={EButtonTypes.PRIMARY}

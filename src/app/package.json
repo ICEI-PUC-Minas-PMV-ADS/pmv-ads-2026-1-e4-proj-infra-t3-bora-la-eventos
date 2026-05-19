@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
     "android": "npx expo run:android",
-    "android:clean-build": "rm -fr ./android/app/cxx/* ./android/app/build/* ./android/build/*",
-    "android:fresh-build": "yarn android:clean-build && yarn android",
+    "android:clean": "rm -fr ./android/app/.cxx/* ./android/app/build/* ./android/build/*",
+    "android:clean-build": "yarn android:clean && yarn android",
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
@@ -27,6 +27,7 @@
     "react-native-svg": "^15.15.5",
     "react-native-toast-message": "^2.3.3",
     "react-native-web": "^0.21.0",
+    "zod": "^4.4.3",
     "zustand": "^5.0.13"
   },
   "devDependencies": {

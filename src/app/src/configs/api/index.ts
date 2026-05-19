@@ -79,3 +79,4 @@ const request = async <TSuccess, TError>(
 };
 
 export { request };
+export {IHttpConfig} from './types'
