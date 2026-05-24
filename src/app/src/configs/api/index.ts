@@ -37,25 +37,26 @@ const request = async <TSuccess, TError>(
   config: IHttpConfig,
   listeners: IHttpListeners<TSuccess, TError>,
 ): Promise<unknown> => {
+  const url = `${BASE_URL}${config.path}`;
+  console.log(`[http] ${config.method} ${url}`);
+
   try {
     if (config.requestInterceptor) {
-      config.requestInterceptor({
-        ...config,
-        url: `${BASE_URL}${config.path}`,
-      });
+      config.requestInterceptor({ ...config, url });
     }
-    const response = await fetch(`${BASE_URL}${config.path}`, {
+
+    const response = await fetch(url, {
       ...config,
       signal: config.controller?.signal,
     });
+
+    console.log(`[http] ${config.method} ${config.path} → ${response.status}`);
 
     if (response.ok) {
       if (config.responseInterceptor) {
         await config.responseInterceptor(response.clone());
       }
-
       const data: TSuccess = await response.json();
-
       return listeners?.onSuccess(data);
     }
 
@@ -63,17 +64,19 @@ const request = async <TSuccess, TError>(
       await config.errorInterceptor(response.clone());
     }
 
-    const err: TError = await response.json();
-
+    const contentType = response.headers.get("content-type") ?? "";
+    const err: TError = contentType.includes("application/json")
+      ? await response.json()
+      : ({} as TError);
+    console.error(`[http] erro ${response.status}:`, JSON.stringify(err));
     listeners.onError(err);
   } catch (error) {
     if (error instanceof Error) {
+      console.error(`[http] exceção:`, error.name, error.message);
       if (error.name === "AbortError") {
         return listeners.onAbort && listeners.onAbort(error);
       }
     }
-    // O fetch só cai no catch quando acusa erros de rede de modo geral
-    // Pra isso, devo usar um erro global para trackear melhor o tipo de problema
     return listeners.onError(error as TError);
   }
 };
