@@ -53,6 +53,12 @@ export const HomeViewStyles = StyleSheet.create({
     color: "#334155",
     height: "100%",
   },
+  searchButton: {
+    paddingHorizontal: 12,
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   chipsScroll: {
     height: 56,
   },
@@ -124,5 +130,8 @@ export const HomeViewStyles = StyleSheet.create({
     fontSize: scale(16),
     color: "#64748B",
     textAlign: "center",
+  },
+  listFooter: {
+    paddingVertical: verticalScale(24),
   },
 });

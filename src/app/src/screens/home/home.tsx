@@ -84,13 +84,16 @@ export const HomeView: FC<THomeViewProps> = ({
   events,
   isLoading,
   isSearching,
+  hasMore,
   searchQuery,
   selectedCategory,
   likedEventIds,
   location,
   isLocationModalOpen,
   onSearchChange,
+  onSubmitSearch,
   onCategoryChange,
+  onLoadMore,
   onToggleLike,
   onOpenLocationModal,
   onCloseLocationModal,
@@ -106,6 +109,7 @@ export const HomeView: FC<THomeViewProps> = ({
     searchContainer,
     searchBar,
     searchInput,
+    searchButton,
     chipsScroll,
     chipsContent,
     chip,
@@ -119,6 +123,7 @@ export const HomeView: FC<THomeViewProps> = ({
     separator,
     emptyContainer,
     emptyText,
+    listFooter,
   } = HomeViewStyles;
 
   const renderListHeader = () => (
@@ -142,9 +147,15 @@ export const HomeView: FC<THomeViewProps> = ({
             placeholderTextColor="#64748B"
             value={searchQuery}
             onChangeText={onSearchChange}
+            returnKeyType="search"
+            onSubmitEditing={onSubmitSearch}
           />
-          {isSearching && (
-            <ActivityIndicator size="small" color="#EC5B13" />
+          {isSearching ? (
+            <ActivityIndicator size="small" color="#EC5B13" style={searchButton} />
+          ) : (
+            <TouchableOpacity style={searchButton} onPress={onSubmitSearch}>
+              <Search size={scale(18)} color="#EC5B13" />
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -194,8 +205,9 @@ export const HomeView: FC<THomeViewProps> = ({
         style={screen}
         data={events}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderListHeader}
+        ListHeaderComponent={renderListHeader()}
         ListEmptyComponent={!isLoading ? renderEmpty : null}
+        ListFooterComponent={hasMore ? <ActivityIndicator color="#EC5B13" style={listFooter} /> : null}
         contentContainerStyle={{ paddingBottom: 32 }}
         renderItem={({ item }) => (
           <View style={cardWrapper}>
@@ -212,6 +224,8 @@ export const HomeView: FC<THomeViewProps> = ({
           </View>
         )}
         ItemSeparatorComponent={() => <View style={separator} />}
+        onEndReached={onLoadMore}
+        onEndReachedThreshold={0.5}
         keyboardShouldPersistTaps="handled"
       />
       <LocationModal

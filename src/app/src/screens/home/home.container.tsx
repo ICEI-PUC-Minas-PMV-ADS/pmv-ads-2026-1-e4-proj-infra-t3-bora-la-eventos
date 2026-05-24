@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ToastAndroid } from "react-native";
 
 import { IHttpConfig, request } from "~/configs/api";
@@ -9,11 +9,13 @@ import { TEvent, THomeContainerProps } from "./types";
 type TFeedError = { message: string };
 
 const VIACEP_BASE_URL = "https://viacep.com.br/ws";
+const PAGE_SIZE = 10;
 
 export const HomeContainer: FC<THomeContainerProps> = () => {
   const [events, setEvents] = useState<TEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [displayedCount, setDisplayedCount] = useState(PAGE_SIZE);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [likedEventIds, setLikedEventIds] = useState<Set<string>>(new Set());
@@ -21,14 +23,20 @@ export const HomeContainer: FC<THomeContainerProps> = () => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
   const { userToken } = useUserStore();
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isInitialMount = useRef(true);
+
+  const displayedEvents = useMemo(
+    () => events.slice(0, displayedCount),
+    [events, displayedCount],
+  );
+  const hasMore = displayedCount < events.length;
 
   const fetchFeed = useCallback(async () => {
     setIsLoading(true);
     const config: IHttpConfig = { path: "/events", method: "GET" };
     await request<TEvent[], TFeedError>(config, {
       onSuccess: (data) => {
-        setEvents(data);
+        setEvents(Array.isArray(data) ? data : []);
         setIsLoading(false);
       },
       onError: () => {
@@ -63,34 +71,37 @@ export const HomeContainer: FC<THomeContainerProps> = () => {
     });
   }, []);
 
-  const loadEvents = useCallback(
-    (name: string, category: string) => {
-      const needsSearch = name.trim() !== "" || category !== "Todos";
-      if (needsSearch) {
-        fetchSearch(name.trim(), category);
-      } else {
-        fetchFeed();
-      }
-    },
-    [fetchFeed, fetchSearch],
-  );
+  useEffect(() => {
+    setDisplayedCount(PAGE_SIZE);
+  }, [events]);
+
 
   useEffect(() => {
     fetchFeed();
   }, [fetchFeed]);
 
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      loadEvents(query, selectedCategory);
-    }, 700);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (searchQuery.trim() !== "" || selectedCategory !== "Todos") {
+      fetchSearch(searchQuery.trim(), selectedCategory);
+    } else {
+      fetchFeed();
+    }
+  }, [selectedCategory]);
+
+  const handleSubmitSearch = () => {
+    if (searchQuery.trim() !== "" || selectedCategory !== "Todos") {
+      fetchSearch(searchQuery.trim(), selectedCategory);
+    } else {
+      fetchFeed();
+    }
   };
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    loadEvents(searchQuery, category);
+  const handleLoadMore = () => {
+    if (hasMore) setDisplayedCount((c) => c + PAGE_SIZE);
   };
 
   const handleToggleLike = async (eventId: string) => {
@@ -141,16 +152,19 @@ export const HomeContainer: FC<THomeContainerProps> = () => {
 
   return (
     <HomeView
-      events={events}
+      events={displayedEvents}
       isLoading={isLoading}
       isSearching={isSearching}
+      hasMore={hasMore}
       searchQuery={searchQuery}
       selectedCategory={selectedCategory}
       likedEventIds={likedEventIds}
       location={location}
       isLocationModalOpen={isLocationModalOpen}
-      onSearchChange={handleSearchChange}
-      onCategoryChange={handleCategoryChange}
+      onSearchChange={setSearchQuery}
+      onSubmitSearch={handleSubmitSearch}
+      onCategoryChange={setSelectedCategory}
+      onLoadMore={handleLoadMore}
       onToggleLike={handleToggleLike}
       onOpenLocationModal={() => setIsLocationModalOpen(true)}
       onCloseLocationModal={() => setIsLocationModalOpen(false)}
