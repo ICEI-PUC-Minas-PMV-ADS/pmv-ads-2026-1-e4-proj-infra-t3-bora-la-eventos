@@ -26,13 +26,16 @@ export type THomeViewProps = {
   events: TEvent[];
   isLoading: boolean;
   isSearching: boolean;
+  hasMore: boolean;
   searchQuery: string;
   selectedCategory: string;
   likedEventIds: Set<string>;
   location: string;
   isLocationModalOpen: boolean;
   onSearchChange: (query: string) => void;
+  onSubmitSearch: () => void;
   onCategoryChange: (category: string) => void;
+  onLoadMore: () => void;
   onToggleLike: (eventId: string) => void;
   onOpenLocationModal: () => void;
   onCloseLocationModal: () => void;
