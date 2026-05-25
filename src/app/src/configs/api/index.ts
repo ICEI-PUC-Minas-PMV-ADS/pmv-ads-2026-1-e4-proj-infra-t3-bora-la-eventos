@@ -38,7 +38,6 @@ const request = async <TSuccess, TError>(
   listeners: IHttpListeners<TSuccess, TError>,
 ): Promise<unknown> => {
   const url = `${BASE_URL}${config.path}`;
-  console.log(`[http] ${config.method} ${url}`);
 
   try {
     if (config.requestInterceptor) {
@@ -49,8 +48,6 @@ const request = async <TSuccess, TError>(
       ...config,
       signal: config.controller?.signal,
     });
-
-    console.log(`[http] ${config.method} ${config.path} → ${response.status}`);
 
     if (response.ok) {
       if (config.responseInterceptor) {
@@ -68,11 +65,10 @@ const request = async <TSuccess, TError>(
     const err: TError = contentType.includes("application/json")
       ? await response.json()
       : ({} as TError);
-    console.error(`[http] erro ${response.status}:`, JSON.stringify(err));
+
     listeners.onError(err);
   } catch (error) {
     if (error instanceof Error) {
-      console.error(`[http] exceção:`, error.name, error.message);
       if (error.name === "AbortError") {
         return listeners.onAbort && listeners.onAbort(error);
       }

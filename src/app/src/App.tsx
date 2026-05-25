@@ -28,7 +28,6 @@ const App = () => {
   const ClientSecret = process.env.EXPO_PUBLIC_API_CLIENT_SECRET;
 
   const onSuccess = async (response: TRequestSuccess) => {
-    console.log("[pre-login] sucesso, token recebido:", response.token?.substring(0, 20) + "...");
     const LOCAL_TOKEN_NAME = "app-token";
     const doesTokenExist = await getItem(LOCAL_TOKEN_NAME);
 
@@ -50,7 +49,6 @@ const App = () => {
     });
   };
   const onError = () => {
-    console.error("[pre-login] falhou — verifique EXPO_PUBLIC_API_URL, CLIENT_ID e CLIENT_SECRET no .env");
     setHasError(true);
     ToastAndroid.show(
       "Tivemos uma falha com nosso serviço. Feche o app e tente novamente.",
