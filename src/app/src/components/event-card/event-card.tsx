@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text, ImageBackground, TouchableOpacity } from "react-native";
 import { Calendar, Heart, MapPin } from "lucide-react-native";
 
 import { Button, EButtonTypes } from "~/components/button";
@@ -21,6 +21,7 @@ export const EventCard: FC<TEventCardProps> = ({
   bannerBase64,
   isLiked,
   onToggleLike,
+  onViewDetail,
 }) => {
   const {
     card,
@@ -28,6 +29,9 @@ export const EventCard: FC<TEventCardProps> = ({
     dateBadge,
     monthText,
     dayText,
+    topRightRow,
+    viewAllButton,
+    viewAllText,
     heartButton,
     content,
     titleRow,
@@ -58,8 +62,13 @@ export const EventCard: FC<TEventCardProps> = ({
         <Text style={monthText}>{month}</Text>
         <Text style={dayText}>{day}</Text>
       </View>
-      <View style={heartButton}>
-        <Heart size={scale(12)} color="#FFFFFF" />
+      <View style={topRightRow}>
+        <TouchableOpacity style={viewAllButton} onPress={() => onViewDetail(id)}>
+          <Text style={viewAllText}>VER TUDO</Text>
+        </TouchableOpacity>
+        <View style={heartButton}>
+          <Heart size={scale(12)} color="#FFFFFF" />
+        </View>
       </View>
     </>
   );

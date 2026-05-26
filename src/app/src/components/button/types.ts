@@ -20,6 +20,7 @@ export enum EButtonTypes {
   SECONDARY = "secondary",
   TERTIARY = "tertiary",
   PRIMARY_OUTLINE = "primary-outline",
+  DARK = "dark",
 }
 
 /**

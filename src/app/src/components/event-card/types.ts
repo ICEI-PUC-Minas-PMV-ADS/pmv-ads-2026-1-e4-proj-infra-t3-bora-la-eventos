@@ -7,4 +7,5 @@ export type TEventCardProps = {
   bannerBase64?: string;
   isLiked: boolean;
   onToggleLike: (id: string) => void;
+  onViewDetail: (id: string) => void;
 };

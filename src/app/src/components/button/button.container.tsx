@@ -7,6 +7,7 @@ import {
   SecondaryStyles,
   TertiaryStyles,
   PrimaryStylesOutline,
+  DarkStyles,
 } from "./button.styles";
 
 /**
@@ -31,6 +32,8 @@ export const Button: FC<TButtonProps> = ({
         return TertiaryStyles;
       case EButtonTypes.PRIMARY_OUTLINE:
         return PrimaryStylesOutline;
+      case EButtonTypes.DARK:
+        return DarkStyles;
     }
   };
   // onPress={props.onPress} style={getButtonStyle()}
