@@ -10,7 +10,7 @@ export interface IUseAuthStore {
 
 export const useAuthStore = create<IUseAuthStore>((set) => {
   return {
-    isAuthenticated: false,
+    isAuthenticated: true,
     hasError: false,
     token: '',
     setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
