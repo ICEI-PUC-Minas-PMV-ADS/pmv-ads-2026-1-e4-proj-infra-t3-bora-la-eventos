@@ -8,8 +8,18 @@ import { EventCardStyles } from "./event-card.styles";
 import { TEventCardProps } from "./types";
 
 const MONTH_LABELS = [
-  "JAN","FEV","MAR","ABR","MAI","JUN",
-  "JUL","AGO","SET","OUT","NOV","DEZ",
+  "JAN",
+  "FEV",
+  "MAR",
+  "ABR",
+  "MAI",
+  "JUN",
+  "JUL",
+  "AGO",
+  "SET",
+  "OUT",
+  "NOV",
+  "DEZ",
 ];
 
 export const EventCard: FC<TEventCardProps> = ({
@@ -73,20 +83,17 @@ export const EventCard: FC<TEventCardProps> = ({
     </>
   );
 
-  const bannerUri = bannerBase64
-    ? bannerBase64.startsWith("data:")
-      ? bannerBase64
-      : `data:image/jpeg;base64,${bannerBase64}`
-    : null;
+  const getBannerUri = () => {
+    if (!bannerBase64) return;
+    if (bannerBase64.startsWith("data:")) return bannerBase64;
+    return `data:image/jpeg;base64,${bannerBase64}`;
+  };
+  const bannerURI = getBannerUri();
 
   return (
     <View style={card}>
-      {bannerUri ? (
-        <ImageBackground
-          source={{ uri: bannerUri }}
-          style={banner}
-          onError={() => console.warn("[EventCard] falha ao carregar banner:", bannerUri?.substring(0, 40))}
-        >
+      {bannerURI ? (
+        <ImageBackground source={{ uri: bannerURI }} style={banner}>
           {renderBannerOverlays()}
         </ImageBackground>
       ) : (
