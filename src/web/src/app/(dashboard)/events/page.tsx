@@ -25,8 +25,9 @@ export default async function EventsPage() {
     if (token) {
       myEvents = await getMyEvents(token);
     }
-  } catch (error) {
-    console.error(error);
+  } catch {
+    // Precisa ser endereçado corretamente para 
+    // dar feedback ao usuário
   }
 
   return (
