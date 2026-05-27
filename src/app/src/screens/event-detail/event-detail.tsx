@@ -145,9 +145,16 @@ export const EventDetailView: FC<TEventDetailViewProps> = ({
           {event.address && (
             <>
               <View style={divider} />
-              <View>
+              <View style={{ gap: 10 }}>
                 <Text style={sectionTitle}>Localização</Text>
                 <EventMap address={event.address} />
+                <View style={infoRow}>
+                  <MapPin size={scale(14)} color="#475569" />
+                  <Text style={infoText}>
+                    {event.address.street}{event.address.number ? `, ${event.address.number}` : ""} — {event.address.city}, {event.address.state}
+                    {event.address.zipCode ? ` • CEP ${event.address.zipCode}` : ""}
+                  </Text>
+                </View>
               </View>
             </>
           )}

@@ -64,7 +64,7 @@ export const EventCard: FC<TEventCardProps> = ({
       </View>
       <View style={topRightRow}>
         <TouchableOpacity style={viewAllButton} onPress={() => onViewDetail(id)}>
-          <Text style={viewAllText}>VER TUDO</Text>
+          <Text style={viewAllText}>VER MAIS</Text>
         </TouchableOpacity>
         <View style={heartButton}>
           <Heart size={scale(12)} color="#FFFFFF" />

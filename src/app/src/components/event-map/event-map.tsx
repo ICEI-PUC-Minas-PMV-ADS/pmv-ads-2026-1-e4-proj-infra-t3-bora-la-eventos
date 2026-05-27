@@ -1,34 +1,97 @@
 import { FC, useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import WebView from "react-native-webview";
 
 import { EventMapStyles } from "./event-map.styles";
 import { TEventMapProps } from "./types";
 
 const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
-const DEFAULT_DELTA = 0.01;
+
+function buildLeafletHtml(lat: number, lng: number): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body, #map { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map', { zoomControl: false, dragging: false, scrollWheelZoom: false })
+      .setView([${lat}, ${lng}], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    var icon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    L.marker([${lat}, ${lng}], { icon: icon }).addTo(map);
+  </script>
+</body>
+</html>
+`;
+}
 
 export const EventMap: FC<TEventMapProps> = ({ address }) => {
-  const { container, map, loadingContainer, loadingText } = EventMapStyles;
+  const { container, loadingContainer, loadingText } = EventMapStyles;
 
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    const query = `${address.street}, ${address.number}, ${address.city}, ${address.state}, ${address.zipCode}`;
-    fetch(
-      `${NOMINATIM_URL}?q=${encodeURIComponent(query)}&format=json&limit=1`,
-      { headers: { "Accept-Language": "pt-BR" } },
-    )
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchCoords = async () => {
+      const headers = {
+        "Accept-Language": "pt-BR",
+        "User-Agent": "BoraLaEventos/1.0 (contato@borala.app)",
+      };
+
+      // Tenta primeiro com endereço completo
+      const fullQuery = `${address.street}, ${address.number}, ${address.city}, ${address.state}, Brasil`;
+      try {
+        const res = await fetch(
+          `${NOMINATIM_URL}?q=${encodeURIComponent(fullQuery)}&format=json&limit=1&countrycodes=br`,
+          { headers },
+        );
+        const data = await res.json();
         if (data.length > 0) {
           setCoords({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
-        } else {
-          setFailed(true);
+          return;
         }
-      })
-      .catch(() => setFailed(true));
+      } catch {}
+
+      // Fallback: busca só pela cidade e estado
+      const fallbackQuery = `${address.city}, ${address.state}, Brasil`;
+      try {
+        const res = await fetch(
+          `${NOMINATIM_URL}?q=${encodeURIComponent(fallbackQuery)}&format=json&limit=1&countrycodes=br`,
+          { headers },
+        );
+        const data = await res.json();
+        if (data.length > 0) {
+          setCoords({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+          return;
+        }
+      } catch {}
+
+      setFailed(true);
+    };
+
+    fetchCoords();
   }, [address]);
 
   if (failed) {
@@ -49,19 +112,12 @@ export const EventMap: FC<TEventMapProps> = ({ address }) => {
 
   return (
     <View style={container}>
-      <MapView
-        style={map}
-        region={{
-          latitude: coords.lat,
-          longitude: coords.lng,
-          latitudeDelta: DEFAULT_DELTA,
-          longitudeDelta: DEFAULT_DELTA,
-        }}
+      <WebView
+        source={{ html: buildLeafletHtml(coords.lat, coords.lng) }}
+        style={{ flex: 1 }}
         scrollEnabled={false}
-        zoomEnabled={false}
-      >
-        <Marker coordinate={{ latitude: coords.lat, longitude: coords.lng }} />
-      </MapView>
+        originWhitelist={["*"]}
+      />
     </View>
   );
 };
