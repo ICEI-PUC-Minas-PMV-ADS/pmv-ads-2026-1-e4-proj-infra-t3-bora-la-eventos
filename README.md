@@ -1,25 +1,25 @@
 # TÍTULO DO PROJETO
 
-`CURSO`
+`ANÁLISE E DESENVOLVIMENTO DE SISTEMAS`
 
-`DISCIPLINA`
+`DESENVOLVIMENTO DE UMA APLICAÇÃO DISTRIBUÍDA`
 
-`SEMESTRE`
+`4º SEMESTRE 2026/1`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+O projeto propõe o desenvolvimento de uma aplicação para centralizar a divulgação de eventos locais, facilitando que usuários encontrem opções de lazer com base em localização e interesses. A solução busca reduzir a fragmentação das informações em redes sociais e aumentar a visibilidade de eventos e estabelecimentos.
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
-* Nome completo do aluno 5
+* Gustavo Viana de Souza
+* Willy Christian de Oliveira Teixeira
+* Michelle Lourenço Mendonça
+* Miréia Torres Lima
+* Samuel Ribeiro de Lima
 * Nome completo do aluno 6
 
 ## Orientador
 
-* Nome completo do professor 1
+* Carolina Stephanie Jerônimo de Almeida
 
 ## Instruções de utilização
 
