@@ -37,14 +37,14 @@ const request = async <TSuccess, TError>(
   config: IHttpConfig,
   listeners: IHttpListeners<TSuccess, TError>,
 ): Promise<unknown> => {
+  const url = `${BASE_URL}${config.path}`;
+
   try {
     if (config.requestInterceptor) {
-      config.requestInterceptor({
-        ...config,
-        url: `${BASE_URL}${config.path}`,
-      });
+      config.requestInterceptor({ ...config, url });
     }
-    const response = await fetch(`${BASE_URL}${config.path}`, {
+
+    const response = await fetch(url, {
       ...config,
       signal: config.controller?.signal,
     });
@@ -66,7 +66,10 @@ const request = async <TSuccess, TError>(
       await config.errorInterceptor(response.clone());
     }
 
-    const err: TError = await response.json();
+    const contentType = response.headers.get("content-type") ?? "";
+    const err: TError = contentType.includes("application/json")
+      ? await response.json()
+      : ({} as TError);
 
     listeners.onError(err);
   } catch (error) {
@@ -75,8 +78,6 @@ const request = async <TSuccess, TError>(
         return listeners.onAbort && listeners.onAbort(error);
       }
     }
-    // O fetch só cai no catch quando acusa erros de rede de modo geral
-    // Pra isso, devo usar um erro global para trackear melhor o tipo de problema
     return listeners.onError(error as TError);
   }
 };

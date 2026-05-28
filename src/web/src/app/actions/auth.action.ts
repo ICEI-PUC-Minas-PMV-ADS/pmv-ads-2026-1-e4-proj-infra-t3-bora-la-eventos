@@ -57,8 +57,9 @@ export async function logoutAction() {
 		const token = await getToken(COOKIE_NAME);
 		const appToken = await getAppToken();
 		await apiFetch("/auth/logout", "POST", undefined, token || appToken);
-	} catch (error) {
-		console.error("Erro ao deslogar na API:", error);
+	} catch  {
+		// Endereçar corretamente os casos de erro para que o usuário tenha um 
+		// feedback visual do que esta ocorrendo
 	} finally {
 		await removeToken(COOKIE_NAME);
 		redirect("/login");
