@@ -6,6 +6,11 @@ export type TAddress = {
   zipCode: string;
 };
 
+export type TGeoLocation = {
+  type: string;
+  coordinates: [number, number]; // [longitude, latitude]
+};
+
 export type TEvent = {
   id: string;
   title: string;
@@ -18,6 +23,7 @@ export type TEvent = {
   capacity: number;
   participantsCount: number;
   status: string;
+  geoLocation?: TGeoLocation;
 };
 
 export type THomeContainerProps = {};

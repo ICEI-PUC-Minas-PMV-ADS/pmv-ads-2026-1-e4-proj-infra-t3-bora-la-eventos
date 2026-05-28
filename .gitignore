@@ -5,3 +5,5 @@ obj/
 .vs/
 **/*/appsettings.Development.json
 /src/backend/Models/Comment.cs
+node_modules/
+package-lock.json
