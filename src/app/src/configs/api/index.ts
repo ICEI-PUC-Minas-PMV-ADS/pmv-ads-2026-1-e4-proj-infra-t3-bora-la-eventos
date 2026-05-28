@@ -53,7 +53,12 @@ const request = async <TSuccess, TError>(
       if (config.responseInterceptor) {
         await config.responseInterceptor(response.clone());
       }
-      const data: TSuccess = await response.json();
+
+      const responseText = await response.text();
+      const data: TSuccess = responseText
+        ? JSON.parse(responseText)
+        : (undefined as TSuccess);
+
       return listeners?.onSuccess(data);
     }
 
@@ -78,4 +83,4 @@ const request = async <TSuccess, TError>(
 };
 
 export { request };
-export {IHttpConfig} from './types'
+export { IHttpConfig } from "./types";
