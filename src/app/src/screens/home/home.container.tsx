@@ -1,8 +1,11 @@
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ToastAndroid } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { IHttpConfig, request } from "~/configs/api";
 import { useUserStore } from "~/configs/state/user-store";
+import { THomeRouteParams } from "~/configs/navigation/bottom-navigation/home.navigation";
 import { HomeView } from "./home";
 import { TEvent, THomeContainerProps } from "./types";
 
@@ -12,6 +15,7 @@ const VIACEP_BASE_URL = "https://viacep.com.br/ws";
 const PAGE_SIZE = 10;
 
 export const HomeContainer: FC<THomeContainerProps> = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<THomeRouteParams>>();
   const [events, setEvents] = useState<TEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -166,6 +170,10 @@ export const HomeContainer: FC<THomeContainerProps> = () => {
       onCategoryChange={setSelectedCategory}
       onLoadMore={handleLoadMore}
       onToggleLike={handleToggleLike}
+      onViewDetail={(eventId) => {
+        const event = events.find((e) => e.id === eventId);
+        if (event) navigation.navigate("EventDetailScreen", { event });
+      }}
       onOpenLocationModal={() => setIsLocationModalOpen(true)}
       onCloseLocationModal={() => setIsLocationModalOpen(false)}
       onConfirmLocation={handleConfirmLocation}

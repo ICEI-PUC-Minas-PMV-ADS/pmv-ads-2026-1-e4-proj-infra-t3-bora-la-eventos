@@ -6,6 +6,11 @@ export type TAddress = {
   zipCode: string;
 };
 
+export type TGeoLocation = {
+  type: string;
+  coordinates: [number, number]; // [longitude, latitude]
+};
+
 export type TEvent = {
   id: string;
   title: string;
@@ -18,6 +23,7 @@ export type TEvent = {
   capacity: number;
   participantsCount: number;
   status: string;
+  geoLocation?: TGeoLocation;
 };
 
 export type THomeContainerProps = {};
@@ -37,6 +43,7 @@ export type THomeViewProps = {
   onCategoryChange: (category: string) => void;
   onLoadMore: () => void;
   onToggleLike: (eventId: string) => void;
+  onViewDetail: (eventId: string) => void;
   onOpenLocationModal: () => void;
   onCloseLocationModal: () => void;
   onConfirmLocation: (cep: string) => void;

@@ -95,6 +95,7 @@ export const HomeView: FC<THomeViewProps> = ({
   onCategoryChange,
   onLoadMore,
   onToggleLike,
+  onViewDetail,
   onOpenLocationModal,
   onCloseLocationModal,
   onConfirmLocation,
@@ -220,6 +221,7 @@ export const HomeView: FC<THomeViewProps> = ({
               bannerBase64={item.bannerBase64}
               isLiked={likedEventIds.has(item.id)}
               onToggleLike={onToggleLike}
+              onViewDetail={onViewDetail}
             />
           </View>
         )}
