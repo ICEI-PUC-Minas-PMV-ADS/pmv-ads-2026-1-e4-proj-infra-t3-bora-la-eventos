@@ -16,5 +16,6 @@ namespace BoraLaBackend.Feature.Events.Services
         Task<EventOperationResult> DeleteEventAsync(string organizerId, string eventId);
         Task ToggleLikeAsync(string userId, string eventId);
         Task<int> CountLikesAsync(string eventId);
+        Task<IEnumerable<EventFeedResponse>> GetLiked(string userId);
     }
 }

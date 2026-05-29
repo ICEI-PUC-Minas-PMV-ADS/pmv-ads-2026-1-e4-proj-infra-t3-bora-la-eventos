@@ -12,5 +12,6 @@ namespace BoraLaBackend.Feature.Events.Repository
         Task<IEnumerable<Event>> GetByOrganizerIdAsync(string organizerId);
         Task UpdateAsync(string id, Event evt);
         Task DeleteAsync(string id);
+        Task<IEnumerable<Event>> GetLiked(string userId);
     }
 }
