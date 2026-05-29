@@ -46,6 +46,22 @@ export const TertiaryStyles = StyleSheet.create({
   },
 });
 
+export const DarkStyles = StyleSheet.create({
+  labelStyle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: 500,
+    textAlign: 'center',
+    width: '100%',
+  },
+  containerStyle: {
+    backgroundColor: "#0F172A",
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+});
+
 export const PrimaryStylesOutline = StyleSheet.create({
   labelStyle: {
     color: "#EC5B13",

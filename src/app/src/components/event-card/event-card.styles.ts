@@ -44,10 +44,27 @@ export const EventCardStyles = StyleSheet.create({
     lineHeight: scale(28),
     textAlign: "center",
   },
-  heartButton: {
+  topRightRow: {
     position: "absolute",
     right: 12,
     top: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  viewAllButton: {
+    backgroundColor: "rgba(0,0,0,0.4)",
+    borderRadius: 9999,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  viewAllText: {
+    fontSize: scale(10),
+    fontWeight: "700",
+    color: "#FFFFFF",
+    letterSpacing: 0.5,
+  },
+  heartButton: {
     width: 24,
     height: 24,
     borderRadius: 9999,
