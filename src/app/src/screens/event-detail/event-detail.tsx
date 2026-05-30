@@ -39,20 +39,6 @@ const MONTH_SHORT = [
   "Dez",
 ];
 
-//Mock de comentarios apenas para fins de teste! Apagar depois de configurar.
-const MOCK_COMMENTS = [
-  {
-    id: "1",
-    text: "Evento muito bom!",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    text: "Quero participar 🔥",
-    createdAt: new Date().toISOString(),
-  },
-];
-
 export const EventDetailView: FC<TEventDetailViewProps> = ({
   event,
   isLiked,
