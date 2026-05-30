@@ -18,7 +18,7 @@ namespace BoraLaBackend.Feature.Comments.Repositories
 
     public async Task<List<Comment>> GetAllComments(string id)
     {
-      return await _comments
+        return await _comments
                 .Find(c => c.EventId == id)
                 .SortByDescending(c => c.CreatedAt)
                 .ToListAsync();
