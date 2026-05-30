@@ -10,11 +10,13 @@ namespace BoraLaBackend.Feature.Events.Repository
     public class EventRepository : IEventRepository
     {
         private readonly IMongoCollection<Event> _events;
+        private readonly IMongoCollection<EventLike> _eventLikes;
 
         public EventRepository(IMongoClient client, IOptions<MongoSettings> settings)
         {
             var db = client.GetDatabase(settings.Value.DatabaseName);
             _events = db.GetCollection<Event>("events");
+            _eventLikes = db.GetCollection<EventLike>("event_likes");
         }
 
         public async Task<Event> CreateAsync(Event evt)
@@ -100,6 +102,17 @@ namespace BoraLaBackend.Feature.Events.Repository
             await _events.DeleteOneAsync(e => e.Id == id);
         }
 
+        public async Task<IEnumerable<Event>> GetLiked(string userId)
+        {
+            var likedIds = await _eventLikes
+                .Find(x => x.UserId == userId)
+                .Project(x => x.EventId)
+                .ToListAsync();
+
+            return await _events
+                .Find(x => likedIds.Contains(x.Id))
+                .ToListAsync();
+        }
 
     }
 }

@@ -120,7 +120,7 @@ export const HomeContainer: FC<THomeContainerProps> = () => {
     const config: IHttpConfig = {
       path: `/events/${eventId}/like`,
       method: "POST",
-      headers: { Authorization: `Bearer ${userToken}` },
+      headers: { Authorization: userToken },
     };
 
     await request<{ message: string }, TFeedError>(config, {
