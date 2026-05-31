@@ -11,12 +11,13 @@ export const EventView: FC<TEventViewProps> = ({
   isLoading,
   onToggleLike
 }) => {
-  const { container } = EventStyles;
+  const { container, screen } = EventStyles;
 
   return (
     <View style={container}>
             <Loading show={isLoading} />
             <FlatList
+              // Adicionei o estilo à lista para corrigir
               style={screen}
               data={events}
               keyExtractor={(item) => item.id}
