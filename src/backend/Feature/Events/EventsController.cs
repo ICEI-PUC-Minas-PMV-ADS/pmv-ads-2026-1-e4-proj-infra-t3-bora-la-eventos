@@ -195,5 +195,16 @@ namespace BoraLaBackend.Feature.Events
             var count = await _eventsService.CountLikesAsync(eventId);
             return Ok(new {likes = count});
         }
+
+        [HttpGet("/liked")]
+        public async Task<IActionResult> GetLiked()
+        {
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            var events = await _eventsService.GetLiked(userId);
+
+            return Ok(events);
+        }
     }
 }

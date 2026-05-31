@@ -52,7 +52,7 @@ export default function NewEventPage() {
 				return;
 			}
 
-			const e = event as Record<string, unknown>;
+			const e: Record<string, unknown> = event;
 
 			reset({
 				title: e.title as string,
@@ -68,7 +68,7 @@ export default function NewEventPage() {
 			if (e.bannerBase64) setBannerPreview(e.bannerBase64 as string);
 			setLoadingEvent(false);
 		});
-	}, [editId]);
+	}, [editId, reset, showAlert]);
 
 	function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];

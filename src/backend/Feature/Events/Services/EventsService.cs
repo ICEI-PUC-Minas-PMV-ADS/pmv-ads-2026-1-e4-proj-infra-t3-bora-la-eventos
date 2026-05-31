@@ -254,5 +254,29 @@ namespace BoraLaBackend.Feature.Events.Services
                     GeoLocation = e.GeoLocation
                 });
         }
+        public async Task<IEnumerable<EventFeedResponse>> GetLiked(string userId)
+        {
+            var events = await _eventRepo.GetLiked(userId);
+
+            return events
+                .OrderBy(e => e.Date)
+                .ThenByDescending(e => e.Participants.Count)
+                .Select(e => new EventFeedResponse
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    Date = e.Date,
+                    Address = e.Address,
+                    Location = e.Location,
+                    Category = e.Category,
+                    BannerBase64 = e.BannerBase64,
+                    Capacity = e.Capacity,
+                    ParticipantsCount = e.Participants.Count,
+                    OrganizerId = e.OrganizerId,
+                    CreatedAt = e.CreatedAt,
+                    Status = e.Status
+                });
+        }
     }
 }

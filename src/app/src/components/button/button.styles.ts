@@ -2,57 +2,80 @@ import { StyleSheet } from "react-native";
 
 export const PrimaryStyles = StyleSheet.create({
   labelStyle: {
+    color: "#FFFFFF",
     fontSize: 14,
     fontWeight: 500,
-    color: "#FFFFFF"
+    textAlign: 'center',
+    width: '100%',
   },
   containerStyle: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 12,
     backgroundColor: "#EC5B13",
-  }
-})
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+});
 
 export const SecondaryStyles = StyleSheet.create({
   labelStyle: {
+    color: "#EC5B13",
     fontSize: 14,
     fontWeight: 500,
-    color: "#EC5B13"
+    textAlign: 'center',
+    width: '100%',
   },
   containerStyle: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 12,
     backgroundColor: "#ec5b136c",
-  }
-})
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+});
 
 export const TertiaryStyles = StyleSheet.create({
   labelStyle: {
+    color: "#EC5B13",
     fontSize: 14,
     fontWeight: 700,
-    color: "#EC5B13",
-    textTransform: 'uppercase',
+    textAlign: 'center',
+    width: '100%',
   },
   containerStyle: {
-    paddingVertical: 10,
     paddingHorizontal: 20,
-  }
-})
+    paddingVertical: 10,
+  },
+});
+
+export const DarkStyles = StyleSheet.create({
+  labelStyle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: 500,
+    textAlign: 'center',
+    width: '100%',
+  },
+  containerStyle: {
+    backgroundColor: "#0F172A",
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+});
 
 export const PrimaryStylesOutline = StyleSheet.create({
   labelStyle: {
+    color: "#EC5B13",
     fontSize: 14,
     fontWeight: 500,
-    color: "#EC5B13",
+    textAlign: 'center',
+    width: '100%',
   },
   containerStyle: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: "#FFFFFF",
+    borderColor: "#EC5B13",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#EC5B13",
-    backgroundColor: "#FFFFFF",
-  }
-})
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+});

@@ -1,0 +1,115 @@
+import { StyleSheet } from "react-native";
+import { scale, verticalScale } from "~/util/scale";
+
+export const EventCardStyles = StyleSheet.create({
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    borderRadius: 12,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  banner: {
+    width: "100%",
+    height: verticalScale(192),
+    backgroundColor: "#E2E8F0",
+  },
+  dateBadge: {
+    position: "absolute",
+    left: 12,
+    top: 12,
+    backgroundColor: "rgba(255,255,255,0.9)",
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    minWidth: 45,
+    alignItems: "center",
+  },
+  monthText: {
+    fontSize: scale(10),
+    fontWeight: "700",
+    color: "#EC5B13",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  dayText: {
+    fontSize: scale(18),
+    fontWeight: "700",
+    color: "#0F172A",
+    lineHeight: scale(28),
+    textAlign: "center",
+  },
+  topRightRow: {
+    position: "absolute",
+    right: 12,
+    top: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  viewAllButton: {
+    backgroundColor: "rgba(0,0,0,0.4)",
+    borderRadius: 9999,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  viewAllText: {
+    fontSize: scale(10),
+    fontWeight: "700",
+    color: "#FFFFFF",
+    letterSpacing: 0.5,
+  },
+  heartButton: {
+    width: 24,
+    height: 24,
+    borderRadius: 9999,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    padding: 16,
+    gap: 8,
+  },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  titleText: {
+    fontSize: scale(18),
+    fontWeight: "700",
+    color: "#0F172A",
+    flex: 1,
+    marginRight: 8,
+  },
+  categoryBadge: {
+    backgroundColor: "rgba(236,91,19,0.1)",
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  categoryText: {
+    fontSize: scale(12),
+    fontWeight: "600",
+    color: "#EC5B13",
+  },
+  infoBlock: {
+    gap: 6,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  infoText: {
+    fontSize: scale(14),
+    color: "#475569",
+    flex: 1,
+  },
+});

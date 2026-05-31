@@ -7,18 +7,23 @@ import {
   SecondaryStyles,
   TertiaryStyles,
   PrimaryStylesOutline,
+  DarkStyles,
 } from "./button.styles";
 
 /**
  * O arquivo .container sempre irá conter apenas lógica. Procure manter tomadas
- * de decisão, manipulação de dados e estados ou qualquer outro tipo de lógica dentro desse 
+ * de decisão, manipulação de dados e estados ou qualquer outro tipo de lógica dentro desse
  * arquivo, quando julgar necessário.
  */
-export const Button: FC<TButtonProps> = (props) => {
-  
+export const Button: FC<TButtonProps> = ({
+  containerProps,
+  label,
+  labelProps,
+  type,
+}) => {
   // Exemplo de tomada de decisão baseada no tipo de botão enviado
   const getButtonStyle = () => {
-    switch (props.type) {
+    switch (type) {
       case EButtonTypes.PRIMARY:
         return PrimaryStyles;
       case EButtonTypes.SECONDARY:
@@ -27,12 +32,18 @@ export const Button: FC<TButtonProps> = (props) => {
         return TertiaryStyles;
       case EButtonTypes.PRIMARY_OUTLINE:
         return PrimaryStylesOutline;
+      case EButtonTypes.DARK:
+        return DarkStyles;
     }
   };
-
+  // onPress={props.onPress} style={getButtonStyle()}
   return (
-    <ButtonView onPress={props.onPress} style={getButtonStyle()}>
-      {props.label}
+    <ButtonView
+      containerProps={containerProps}
+      labelProps={labelProps}
+      typeStyle={getButtonStyle()}
+    >
+      {label}
     </ButtonView>
   );
 };

@@ -1,35 +1,82 @@
-import React from "react";
-import { View} from "react-native";
-import { Button, EButtonTypes } from "./components/button";
+import React, { useEffect } from "react";
+import { ToastAndroid } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+
+import {
+  AuthenticatedStack,
+  UnauthenticatedStack,
+} from "~/configs/navigation/";
+import { useAuthStore } from "~/configs/state/auth-store";
+import { request } from "./configs/api";
+import { IHttpConfig } from "./configs/api/types";
+import { useLocalStorage } from "./util/local-storage";
+
+type TRequestSuccess = {
+  token: string;
+};
+
+type TRequestError = {
+  code: string;
+  message: string;
+};
 
 const App = () => {
+  const { isAuthenticated, setHasError } = useAuthStore();
+  const { setItem, getItem, updateItem } = useLocalStorage();
+  const controller = new AbortController();
+  const ClientID = process.env.EXPO_PUBLIC_API_CLIENT_ID;
+  const ClientSecret = process.env.EXPO_PUBLIC_API_CLIENT_SECRET;
 
-  /**
-   *  Lógicas de ação costumam situar-se nos arquivos de maior hierarquia (tela)
-   * devido à necessidade, muitas vezes, de interação entre diversos tipos de dados.
-   * É preciso avaliar caso a caso, mas lembre-se de manter componentes o mais
-   * agnósticos possível.
-   */
-  const handleButtonPress = () => {
-    console.log("E não é que tu clicou mesmo! =O")
-  }
+  const onSuccess = async (response: TRequestSuccess) => {
+    const LOCAL_TOKEN_NAME = "app-token";
+    const doesTokenExist = await getItem(LOCAL_TOKEN_NAME);
+
+    if (!doesTokenExist || typeof doesTokenExist !== "string") {
+      await setItem("app-token", response.token).catch(() => {
+        setHasError(true);
+        ToastAndroid.show(
+          "Tivemos uma falha com nosso serviço. Feche o app e tente novamente.",
+          ToastAndroid.LONG,
+        );
+      });
+    }
+    await updateItem(LOCAL_TOKEN_NAME, response.token).catch(() => {
+      setHasError(true);
+      ToastAndroid.show(
+        "Tivemos uma falha com nosso serviço. Feche o app e tente novamente.",
+        ToastAndroid.LONG,
+      );
+    });
+  };
+  const onError = () => {
+    setHasError(true);
+    ToastAndroid.show(
+      "Tivemos uma falha com nosso serviço. Feche o app e tente novamente.",
+      ToastAndroid.LONG,
+    );
+  };
+
+  useEffect(() => {
+    const config: IHttpConfig = {
+      path: "/auth/pre-login",
+      method: "POST",
+      controller,
+      body: JSON.stringify({ ClientID, ClientSecret }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    request<TRequestSuccess, TRequestError>(config, {
+      onSuccess,
+      onError,
+    });
+  }, []);
 
   return (
-    <View style={{
-      flex: 1,
-      backgroundColor: '#ff8888',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-    }}>
-      {/* Exemplo de uso do botão, passando apenas os dados que realmente são necessários */}
-      <Button
-        onPress={handleButtonPress} // lógica de ação
-        label="Olha esse Botão"
-        type={EButtonTypes.PRIMARY}
-      />
-    </View>
-  )
-}
+    <NavigationContainer>
+      {isAuthenticated ? <AuthenticatedStack /> : <UnauthenticatedStack />}
+    </NavigationContainer>
+  );
+};
 
 export default App;
