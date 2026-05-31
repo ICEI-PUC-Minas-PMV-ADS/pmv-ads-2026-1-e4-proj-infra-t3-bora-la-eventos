@@ -15,6 +15,16 @@ export type TEventDetailContainerProps = TEventDetailScreenProps;
 export type TEventDetailViewProps = {
   event: TEvent;
   isLiked: boolean;
+  comments: TComment[]
   onToggleLike: () => void;
   onBack: () => void;
+  sendComment: (text: string) => void
+};
+
+export type TComment = {
+  id: string
+  text: string;
+  eventId: string
+  userId: string
+  createdAt: Date
 };
