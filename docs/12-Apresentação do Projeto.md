@@ -31,3 +31,25 @@ Mesmo com essas limitações, o projeto proporcionou uma experiência prática r
 Como evolução futura do projeto, seria interessante implementar mecanismos mais avançados de recomendação de eventos com base nos interesses e histórico de interação dos usuários. Também poderiam ser adicionadas funcionalidades como recuperação de senha, notificações em tempo real e integração com serviços de geolocalização mais completos.
 
 Do ponto de vista arquitetural, seria possível ampliar a utilização de serviços especializados para autenticação, armazenamento de arquivos e monitoramento da aplicação, aumentando a escalabilidade e a confiabilidade da solução. Outra melhoria relevante seria a implementação de testes automatizados mais abrangentes, tanto no frontend quanto no backend, contribuindo para a qualidade e manutenção do sistema a longo prazo.
+
+
+### Willy Christian O. Teixeira
+
+### Avaliação dos frameworks e tecnologias utilizados
+As tecnologias que utilizamos foram de grande proveito educacional e prosfissional, ja que servem para propósitos gerais. Senti falta de termos algumas outras tecnologias de mercado para utilizar, como AWS ou GPC além de um espaço para criar ferramentas de ampla utilização profissional, como microsservices ou mesmo elementos mais complexos como load balancer ou mensageria. De modo geral foi um trabalho bastante proveitoso e abriu as portas para muitas possibilidades
+
+### Comentários sobre a participação individual
+Em todas as etapas fiquei responsável por elementos mais basais do projeto, que envolviam o processo de login. Alguns exemplos:
+- Implementar os serviços de autenticação (API) 
+- Implementar o ciclo de vida dos artefatos envolvidos no processo autenticação/autorização de usuário. (mobile)
+Além dos frontend envolvidos nessas mesmas etapas. 
+
+Essas são etapas cruciais em termos de segurança e proteção de dados, e que me ajudou em muito a dimensionar melhor algumas decisões de projeto para o futuro.
+
+### Análise crítica do projeto desenvolvido
+O projeto como um todo foi exelente, desde a concepção à execução. O ponto mais crucial foi termos alguns contratempos com a nossa idéia de usar um mapa interativo e que incorreu em alguns problemas com a API do google (custo) que nos tirou um pouco dos trilhos. Houve, também, alguns contratempos com o volume demandado para termos uma aplicação usável. Ampliamos muito o escopo e acabamos precisando cortar parte do planejado
+
+Em linhas gerais, foi um projeto audacioso e com uma proposta bastante diferenciada. O pessoal se empenhou e conseguimos entrar um MVP bastante robusto. Aplicamos conhecimentos variados e aposto que todos sairão dessa etapa com uma boa bagagem para o mercado.
+
+### Propostas de melhorias para a arquitetura e implementação da solução
+Ao final, o uso do mapa por meio de uma webview limitou muito as nossas idéias iniciais. Acredito que usar uma API mais robusta (mediante ao pagamento) deixaria o visual da aplicação mais interessante, com features diferenciadas, como uso de pins e banners ao logo do mapa (como pequenos outdoors para os eventos próximos). Uma outra mudança que poderia ser interessante na arquitetura sera a adoção de microserviços em algumas das responsabilidades da aplicação. Ajudaria a amplicar a escalabilidade de elementos de maior demanda e os outros, menos complexos, poderiam ficar no monolito.
