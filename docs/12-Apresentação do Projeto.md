@@ -53,3 +53,18 @@ Em linhas gerais, foi um projeto audacioso e com uma proposta bastante diferenci
 
 ### Propostas de melhorias para a arquitetura e implementação da solução
 Ao final, o uso do mapa por meio de uma webview limitou muito as nossas idéias iniciais. Acredito que usar uma API mais robusta (mediante ao pagamento) deixaria o visual da aplicação mais interessante, com features diferenciadas, como uso de pins e banners ao logo do mapa (como pequenos outdoors para os eventos próximos). Uma outra mudança que poderia ser interessante na arquitetura sera a adoção de microserviços em algumas das responsabilidades da aplicação. Ajudaria a amplicar a escalabilidade de elementos de maior demanda e os outros, menos complexos, poderiam ficar no monolito.
+
+
+### Miréia Torres 
+
+### Avaliação dos frameworks e tecnologias utilizados
+As tecnologias utilizadas no projeto atenderam adequadamente aos objetivos propostos, permitindo o desenvolvimento integrado das aplicações web, mobile e backend. O uso do ASP.NET, Next.js, React Native e TypeScript contribuiu para a organização do código, a produtividade da equipe e a padronização das implementações. Além disso, a utilização dessas ferramentas proporcionou uma experiência prática alinhada às tecnologias amplamente utilizadas no mercado.
+
+### Comentários sobre a participação individual
+Minha principal contribuição foi o apoio na organização e acompanhamento das atividades da equipe, por meio da elaboração do fluxo do usuário e da gestão das tarefas utilizando o quadro Kanban. No desenvolvimento técnico, fui responsável pela implementação do CRUD de eventos no backend, pela funcionalidade de criação de eventos na aplicação web e pelo desenvolvimento do feed de eventos na versão mobile, contribuindo para a integração entre as diferentes plataformas do sistema.
+
+### Análise crítica do projeto desenvolvido
+O projeto atingiu seu objetivo de criar uma plataforma para centralizar a divulgação e a descoberta de eventos locais. Apesar dos desafios relacionados ao tempo e ao escopo, a equipe conseguiu entregar um MVP funcional e consistente. A experiência proporcionou a aplicação prática de conhecimentos em desenvolvimento de software, integração entre sistemas e trabalho colaborativo, além de evidenciar a importância do planejamento e da comunicação entre os membros da equipe.
+
+### Propostas de melhorias para a arquitetura e implementação da solução
+Como melhorias futuras, seria interessante ampliar as funcionalidades de personalização da experiência do usuário, incluindo recomendações de eventos, notificações e recursos mais avançados de geolocalização.
