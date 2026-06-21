@@ -93,3 +93,32 @@ Para versões futuras, acredito que o feed de eventos poderia evoluir para um si
 Em relação à geolocalização, o mapa interativo já está implementado e permite a visualização de eventos próximos, mas poderia ser evoluído com recursos como filtros diretamente no mapa, clustering de marcadores em regiões com muitos eventos e maior precisão na definição do raio de busca. Por fim, notificações push com base na localização em tempo real poderiam aumentar significativamente o engajamento dos usuários com a plataforma.
 
 Outro caminho interessante seria a criação de eventos fechados, compartilhados apenas com um grupo de amigos para organizar festas e reuniões privadas. A partir dessa funcionalidade, seria possível desenvolver recursos específicos por tipo de evento: para um casamento, por exemplo, faria sentido disponibilizar uma lista de presentes integrada; para qualquer evento fechado, uma pasta compartilhada onde os convidados pudessem enviar fotos tiradas durante o evento seria uma adição bastante valorizada, criando um álbum colaborativo de memórias.
+
+### Samuel Ribeiro de Lima
+### Avaliação dos frameworks e tecnologias utilizados
+
+As tecnologias utilizadas durante o projeto se mostraram adequadas para a proposta da aplicação e permitiram que a equipe trabalhasse de forma integrada entre as diferentes plataformas. Um dos pontos que mais chamou minha atenção foi a facilidade de encontrar documentação, exemplos e soluções para problemas que surgiam durante o desenvolvimento, o que contribuiu bastante para o andamento do projeto.
+
+Além de possibilitar a entrega das funcionalidades planejadas, o uso dessas ferramentas proporcionou uma experiência prática muito próxima dos cenários encontrados no mercado de trabalho. Isso tornou o projeto uma oportunidade importante para desenvolver habilidades técnicas e ganhar mais familiaridade com tecnologias amplamente utilizadas na área de desenvolvimento de software.
+
+### Comentários sobre a participação individual
+
+Minha principal contribuição esteve relacionada às funcionalidades de interação entre os usuários e os eventos da plataforma. Trabalhei no desenvolvimento dos recursos de curtidas e comentários, ajudando a tornar a experiência dos usuários mais dinâmica e participativa. Também participei da integração dessas funcionalidades com as demais partes do sistema, realizando testes e ajustes para garantir seu funcionamento adequado.
+
+Durante o projeto, tive a oportunidade de aprofundar meus conhecimentos em desenvolvimento de aplicações e integração entre diferentes camadas do sistema. Além da implementação das funcionalidades, participei das discussões técnicas da equipe, colaborando na busca por soluções para os desafios que surgiram ao longo do desenvolvimento.
+
+### Análise crítica do projeto desenvolvido
+
+O projeto representou uma experiência muito enriquecedora, pois permitiu aplicar na prática diversos conceitos estudados ao longo do curso. A proposta de criar uma plataforma para divulgação e descoberta de eventos locais trouxe desafios interessantes, principalmente relacionados à integração entre as diferentes aplicações e à definição das funcionalidades mais importantes para os usuários.
+
+Apesar das limitações de tempo e da necessidade de adaptar algumas ideias ao longo do caminho, a equipe conseguiu entregar um resultado consistente e funcional. O processo também demonstrou a importância do planejamento, da comunicação e da colaboração entre os integrantes para superar obstáculos e alcançar os objetivos definidos.
+
+### Propostas de melhorias para a arquitetura e implementação da solução
+
+Embora o projeto tenha alcançado os objetivos propostos, acredito que ainda existam diversas possibilidades para torná-lo mais completo. Uma melhoria interessante seria oferecer mais recursos para os organizadores de eventos, permitindo que eles acompanhem melhor o alcance de suas publicações e entendam como os usuários estão interagindo com seus eventos.
+
+Também acredito que a experiência dos usuários poderia ser refinada com base no feedback obtido durante o uso da plataforma. Pequenos ajustes na interface, na navegação e na forma como as informações são apresentadas poderiam tornar a utilização mais intuitiva e agradável.
+
+Além disso, seria interessante dedicar mais tempo à realização de testes e validações em diferentes cenários de uso. Durante o desenvolvimento acadêmico, muitas vezes precisamos priorizar a entrega das funcionalidades principais, mas em uma versão futura seria importante investir em melhorias que aumentem a estabilidade, a confiabilidade e a qualidade geral da aplicação.
+
+Por fim, considero que o projeto possui potencial para continuar evoluindo com novas funcionalidades e adaptações conforme as necessidades dos usuários forem sendo identificadas, tornando a plataforma cada vez mais útil para a divulgação e descoberta de eventos locais.
