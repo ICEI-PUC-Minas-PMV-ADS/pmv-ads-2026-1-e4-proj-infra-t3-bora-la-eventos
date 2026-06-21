@@ -1,3 +1,3 @@
 # Apresentação da Solução
 
-Faça uma apresentação de um resumo de todos o processo de desenvolvimento e no final apresente a solução desenvolvida, usando um pequeno vídeo.
+[Assistir ao Pitch de apresentação do projeto](https://drive.google.com/file/d/1v4qGFbnsMA8YoXPgYmTqAiLQHd5q8V8f/view?usp=sharing)

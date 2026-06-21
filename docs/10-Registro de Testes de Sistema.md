@@ -1,87 +1,76 @@
 # Testes de Sistema no Backend
 
-## O que são Testes de Sistema?
+| **Caso de Teste** 	| **CT01 – Cadastrar perfil (usuário comum)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-001 - Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis. |
+|Registro de evidência | https://drive.google.com/file/d/1fNK89ODqZSPrMQNulwz0cXGEh_cWCkRv/view?usp=sharing |
 
-Testes de sistema são testes automatizados que verificam o comportamento completo de um sistema, validando que ele funciona conforme esperado em um ambiente real ou próximo do real. Eles englobam a verificação de todas as funcionalidades do sistema, desde a interface do usuário até a integração com bancos de dados, APIs externas e outros serviços.
+| **Caso de Teste** 	| **CT02 – Gerenciar perfil (usuário comum)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-001 - Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis. |
+|Registro de evidência | https://drive.google.com/file/d/1h6Bf3Vnepjow213HHE6jWumJwCx_Kv4P/view?usp=sharing |
 
-## Por que são Importantes?
+| **Caso de Teste** 	| **CT03 – Gerenciar perfil (usuário organizador)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-001 - Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis. |
+|Registro de evidência | https://drive.google.com/file/d/1ZJ_-tq3jQGJGZ9BEp8M6aNgS01R1DzUF/view?usp=sharing |
 
-Testes de sistema ajudam a:
+| **Caso de Teste** 	| **CT04 – Cadastrar perfil (usuário organizador)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-001 - Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis. |
+|Registro de evidência | https://drive.google.com/file/d/13h1ro7KB6xehGOzTxyfTGGWo9a9wuWMN/view?usp=sharing |
 
-- Garantir que o sistema como um todo atende aos requisitos especificados.
-- Identificar problemas que surgem em interações complexas entre componentes.
-- Validar a funcionalidade completa em um ambiente que simula o uso real.
-- Garantir que as mudanças no código não causem regressões em áreas não diretamente relacionadas.
 
-## Configuração do Ambiente
+| **Caso de Teste** 	| **CT05 – Login de usuário** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-001 - Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis. |
+|Registro de evidência |  [Usuário comum (mobile)](https://drive.google.com/file/d/170gTjdHNz4kSNG5cpgsvCQ1je0_21jn5/view?usp=sharing)
+| - | [Usuário Organizador de eventos (web)](https://drive.google.com/file/d/1HUbx_ThWwN4fJHLZa6T6WFW0eQyk6FOb/view?usp=sharing)  |
 
-Para começar a escrever testes de sistema em um projeto backend utilizando C#, siga os passos abaixo:
 
-1. **Instale o .NET SDK**: Certifique-se de ter o [.NET SDK](https://dotnet.microsoft.com/download) instalado.
+| **Caso de Teste** 	| **CT06 – Criar Evento (web)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-002 - Permitir que organizadores cadastrem eventos com data, hora e local |
+|Registro de evidência | https://drive.google.com/file/d/1UrnkdlGn6ohAEB1J3_TE4QPFfae4uAZC/view?usp=sharing |
 
-2. **Crie um projeto de testes de sistema**: No terminal, navegue até o diretório do seu projeto e execute o seguinte comando para criar um projeto de testes:
 
-    ```bash
-    dotnet new xunit -o tests
-    ```
+| **Caso de Teste** 	| **CT07 – Exibir feed de eventos (mobile)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-003 - Exibir feed de eventos disponíveis com base na data e relevância |
+|Registro de evidência | https://drive.google.com/file/d/1-ViCYy45j4YOXtPkrpMRACjVGZtpvMxU/view?usp=sharing |
 
-3. **Adicione uma referência ao seu projeto principal**: No diretório do projeto de testes, adicione uma referência ao seu projeto principal:
 
-    ```bash
-    dotnet add reference ../src/MyProject.csproj
-    ```
+| **Caso de Teste** 	| **CT08 – Busca de eventos por nome ou categoria (mobile)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-004 - Implementar busca de eventos por nome ou categoria |
+|Registro de evidência | https://drive.google.com/file/d/1Kkcvcbwx7EYVJYvxcqCHgyem-VK4NxEh/view?usp=sharing |
 
-4. **Configure o ambiente de teste**: Isso pode incluir a configuração de servidores, bancos de dados, e outros serviços necessários para que o sistema funcione como um todo.
 
-5. **Organize sua estrutura de diretórios**: Uma estrutura comum de projeto é a seguinte:
+| **Caso de Teste** 	| **CT09 – Filtro de eventos por geolocalização (mobile)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-010 - Disponibilizar filtros por geolocalização (raio de distância) |
+|Registro de evidência | https://drive.google.com/file/d/1kCVZOHgH6iGPb8e-GZ1xrW7qaeMtio-x/view?usp=sharing |
 
-    ```
-    MyProject/
-    ├── src/
-    │   └── MyProject.cs
-    └── tests/
-        └── MyProject.SystemTests.cs
-    ```
 
-## Exemplo de Teste de Sistema
+| **Caso de Teste** 	| **CT10 – Curtir um evento** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-007 - Permitir que o usuário curta um evento |
+|Registro de evidência | https://drive.google.com/file/d/1Ew2-PpG5gbITRfhr_fQ4IOIt-tSRuAt6/view?usp=sharing |
 
-Vamos supor que temos um serviço web que gerencia usuários e oferece uma API REST para adicionar e consultar usuários. Vamos criar um teste de sistema para garantir que a API funciona corretamente.
 
-### Código de Exemplo
+| **Caso de Teste** 	| **CT11 – Comentar evento** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-008 - Permitir a inserção e edição de comentários nas páginas de eventos |
+|Registro de evidência | https://drive.google.com/file/d/13QSmDIUHlSBrqDvjctRdg8Z1SSdUef_1/view?usp=sharing |
 
-Aqui está uma implementação simplificada do serviço:
 
-```csharp
-// src/MyProject.cs
+| **Caso de Teste** 	| **CT12 – Edição de evento (organizador) ** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-005 - Permitir a edição e exclusão de eventos pelo organizador |
+|Registro de evidência | https://drive.google.com/file/d/1HYHQdFqpTOnvEgE5rpK4vm5B3cPZVngD/view?usp=sharing |
 
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-namespace MyProject
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
-    {
-        private static List<User> Users = new List<User>();
-
-        [HttpPost]
-        public IActionResult AddUser(User user)
-        {
-            Users.Add(user);
-            return Ok();
-        }
-
-        [HttpGet]
-        public IActionResult GetUsers()
-        {
-            return Ok(Users);
-        }
-    }
-
-    public class User
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-    }
-}
+| **Caso de Teste** 	| **CT13 – Exclusão de evento (organizador) ** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-005 - Permitir a edição e exclusão de eventos pelo organizador |
+|Registro de evidência | https://drive.google.com/file/d/1irNgc1Is4R0YBVETrBKKhIvnM3ufAcPT/view?usp=sharing |
