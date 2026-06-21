@@ -52,5 +52,25 @@
 |Registro de evidência | https://drive.google.com/file/d/1kCVZOHgH6iGPb8e-GZ1xrW7qaeMtio-x/view?usp=sharing |
 
 
+| **Caso de Teste** 	| **CT10 – Curtir um evento** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-007 - Permitir que o usuário curta um evento |
+|Registro de evidência | https://drive.google.com/file/d/1Ew2-PpG5gbITRfhr_fQ4IOIt-tSRuAt6/view?usp=sharing |
 
 
+| **Caso de Teste** 	| **CT11 – Comentar evento** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-008 - Permitir a inserção e edição de comentários nas páginas de eventos |
+|Registro de evidência | https://drive.google.com/file/d/13QSmDIUHlSBrqDvjctRdg8Z1SSdUef_1/view?usp=sharing |
+
+
+| **Caso de Teste** 	| **CT12 – Edição de evento (organizador) ** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-005 - Permitir a edição e exclusão de eventos pelo organizador |
+|Registro de evidência | https://drive.google.com/file/d/1HYHQdFqpTOnvEgE5rpK4vm5B3cPZVngD/view?usp=sharing |
+
+
+| **Caso de Teste** 	| **CT13 – Exclusão de evento (organizador) ** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-005 - Permitir a edição e exclusão de eventos pelo organizador |
+|Registro de evidência | https://drive.google.com/file/d/1irNgc1Is4R0YBVETrBKKhIvnM3ufAcPT/view?usp=sharing |
