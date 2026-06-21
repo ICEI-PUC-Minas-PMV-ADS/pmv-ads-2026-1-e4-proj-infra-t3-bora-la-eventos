@@ -68,3 +68,28 @@ O projeto atingiu seu objetivo de criar uma plataforma para centralizar a divulg
 
 ### Propostas de melhorias para a arquitetura e implementação da solução
 Como melhorias futuras, seria interessante ampliar as funcionalidades de personalização da experiência do usuário, incluindo recomendações de eventos, notificações e recursos mais avançados de geolocalização.
+
+
+### Michelle Lourenço Mendonça
+
+### Avaliação dos frameworks e tecnologias utilizados
+
+O React Native com TypeScript foi, na minha visão, uma das escolhas mais acertadas do projeto. Trabalhar com uma única base de código para mobile, mantendo a tipagem estática do TypeScript, reduziu bastante o número de erros durante o desenvolvimento e facilitou a comunicação entre os membros do time, já que todos falavam a mesma linguagem de tipos. A curva de aprendizado foi presente, especialmente nas integrações com recursos nativos como geolocalização, mas a documentação da comunidade ajudou a superar os desafios.
+
+### Comentários sobre a participação individual
+
+No backend, implementei o feed de eventos ordenado por data e relevância, a busca por nome ou categoria e a busca por proximidade geográfica. Na aplicação web, desenvolvi a página de eventos com as ações de edição e exclusão na tabela, o template do menu lateral e melhorias no painel de criação de eventos, incluindo tooltips e confirmação de exclusão para evitar ações acidentais. No aplicativo mobile, trabalhei na tela de exploração com mapa OSM e geolocalização, e na tela de detalhes do evento.
+
+Além do desenvolvimento direto, apoiei o time avaliando pull requests, testando funcionalidades implementadas por outros membros e sugerindo ajustes de código. No gerenciamento do board, fui responsável por criar as atividades com base nas demandas passadas pela professora, garantindo que nada ficasse esquecido, e por atualizar o quadro à medida que problemas e pendências eram identificados ao longo do projeto.
+
+### Análise crítica do projeto desenvolvido
+
+A funcionalidade de geolocalização foi a mais complexa de implementar no mobile, tanto pela variação no comportamento entre dispositivos quanto pelas limitações impostas pelas permissões do sistema operacional. Apesar disso, conseguimos entregar uma solução funcional que atende ao objetivo principal de aproximar o usuário dos eventos ao seu redor.
+
+### Propostas de melhorias para a arquitetura e implementação da solução
+
+Para versões futuras, acredito que o feed de eventos poderia evoluir para um sistema de recomendação personalizado, levando em conta o histórico de interações e preferências do usuário, tornando a descoberta de eventos mais relevante para cada perfil. A busca também poderia ser aprimorada com filtros combinados, como categoria + distância + faixa de horário, oferecendo mais controle ao usuário.
+
+Em relação à geolocalização, o mapa interativo já está implementado e permite a visualização de eventos próximos, mas poderia ser evoluído com recursos como filtros diretamente no mapa, clustering de marcadores em regiões com muitos eventos e maior precisão na definição do raio de busca. Por fim, notificações push com base na localização em tempo real poderiam aumentar significativamente o engajamento dos usuários com a plataforma.
+
+Outro caminho interessante seria a criação de eventos fechados, compartilhados apenas com um grupo de amigos para organizar festas e reuniões privadas. A partir dessa funcionalidade, seria possível desenvolver recursos específicos por tipo de evento: para um casamento, por exemplo, faria sentido disponibilizar uma lista de presentes integrada; para qualquer evento fechado, uma pasta compartilhada onde os convidados pudessem enviar fotos tiradas durante o evento seria uma adição bastante valorizada, criando um álbum colaborativo de memórias.

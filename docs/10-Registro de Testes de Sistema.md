@@ -40,5 +40,17 @@
 |Registro de evidência | https://drive.google.com/file/d/1-ViCYy45j4YOXtPkrpMRACjVGZtpvMxU/view?usp=sharing |
 
 
+| **Caso de Teste** 	| **CT08 – Busca de eventos por nome ou categoria (mobile)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-004 - Implementar busca de eventos por nome ou categoria |
+|Registro de evidência | https://drive.google.com/file/d/1Kkcvcbwx7EYVJYvxcqCHgyem-VK4NxEh/view?usp=sharing |
+
+
+| **Caso de Teste** 	| **CT09 – Filtro de eventos por geolocalização (mobile)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-010 - Disponibilizar filtros por geolocalização (raio de distância) |
+|Registro de evidência | https://drive.google.com/file/d/1kCVZOHgH6iGPb8e-GZ1xrW7qaeMtio-x/view?usp=sharing |
+
+
 
 
