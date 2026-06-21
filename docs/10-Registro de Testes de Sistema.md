@@ -26,5 +26,19 @@
 |	Requisito Associado 	| RF-001 - Permitir o cadastro e login de usuários (comum e organizador) além do gerencimaneto dos seus perfis. |
 |Registro de evidência |  [Usuário comum (mobile)](https://drive.google.com/file/d/170gTjdHNz4kSNG5cpgsvCQ1je0_21jn5/view?usp=sharing)
 | - | [Usuário Organizador de eventos (web)](https://drive.google.com/file/d/1HUbx_ThWwN4fJHLZa6T6WFW0eQyk6FOb/view?usp=sharing)  |
-|||
+
+
+| **Caso de Teste** 	| **CT06 – Criar Evento (web)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-002 - Permitir que organizadores cadastrem eventos com data, hora e local |
+|Registro de evidência | https://drive.google.com/file/d/1UrnkdlGn6ohAEB1J3_TE4QPFfae4uAZC/view?usp=sharing |
+
+
+| **Caso de Teste** 	| **CT07 – Exibir feed de eventos (mobile)** 	|
+|:---:	|:---:	|
+|	Requisito Associado 	| RF-003 - Exibir feed de eventos disponíveis com base na data e relevância |
+|Registro de evidência | https://drive.google.com/file/d/1-ViCYy45j4YOXtPkrpMRACjVGZtpvMxU/view?usp=sharing |
+
+
+
 
