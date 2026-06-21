@@ -1,18 +1,6 @@
-# Borá Lá Eventos
+# Videos de acompanhamento/apresentação das etapas
 
-## Sobre o projeto
-
-**Borá Lá Eventos** é uma plataforma para descoberta e divulgação de eventos locais, conectando frequentadores a experiências culturais, shows, festas e muito mais — tudo em um único lugar.
-
----
-
-## Apresentação final
-
-[Assistir ao Pitch de apresentação do projeto](https://drive.google.com/file/d/1v4qGFbnsMA8YoXPgYmTqAiLQHd5q8V8f/view?usp=sharing)
-
----
-
-## Vídeos de acompanhamento por etapa
+# Apresentação da primeira etapa do eixo 4.
 
 [Assistir vídeo de acompanhamento da primeira etapa do eixo 4](https://drive.google.com/drive/folders/11i9coarhA-wbRyGpXFAiqNDjaJAfdWq0?usp=drive_link) 
 
