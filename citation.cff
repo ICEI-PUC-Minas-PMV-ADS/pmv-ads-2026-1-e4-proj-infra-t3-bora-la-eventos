@@ -1,29 +1,23 @@
-message: Please cite this software using these metadata.
-title:
+message: O projeto propõe o desenvolvimento de uma aplicação para centralizar a divulgação de eventos locais, facilitando que usuários encontrem opções de lazer com base em localização e interesses. A solução busca reduzir a fragmentação das informações em redes sociais e aumentar a visibilidade de eventos e estabelecimentos.
+title: BoraLá Eventos
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
+  - family-names: Viana de Souza
+    given-names: Gustavo
+  - family-names: de Oliveira Teixeira
+    given-names: Willy Christian
+  - family-names: Lourenço Mendonça
+    given-names: Michelle
+  - family-names: Torres Lima
+    given-names: Miréia
+  - family-names: Ribeiro de Lima
+    given-names: Samuel
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
-  - name-suffix: Professor
-    affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Jerônimo de Almeida
+    given-names: Carolina Stephanie
 keywords:
-  - 
-  - 
-repository-code: 
+  - eventos
+  - lazer
+repository-code: https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2026-1-e4-proj-infra-t3-bora-la-eventos
 version: 1.0.0
-date-released: 2023-10-31
+date-released: 2026-07-01
